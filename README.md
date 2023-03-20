@@ -1,16 +1,6 @@
-# 275-Final-Project Description
+# ShopMate
 
-If you use this repository as the main repo for your final project feel free to modify/change the readme.md as you see fit.
-
-Come up with an idea for a database final project that will showcase what you have learned during your time at the Medicine Hat College.  Database systems are at the core of most software applications that run locally or on the web, come up with a system that you can implement in a 3-4 week period.
-
-## Come up with a highlevel idea and update this readme before March 23, 2023.
-
-Idea:
-
-### Project Idea Title:
-
-Details:
+### A web application that allows you to connect with others to buy, sell, and advertise items, services, real estate, and many more... 
 
 ### Complete the project proposal and Database design (or at least your first rough draft) and upload a database diagram before March 27, 2023.
 
