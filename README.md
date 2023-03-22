@@ -1,4 +1,4 @@
-# marketplace.io
+# market.io
 ### A web application that allows you to connect with others to buy, sell, and advertise items, services, real estate, and many more... 
 
 ## Project technologies
