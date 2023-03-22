@@ -24,24 +24,24 @@ There will be 4 separate projects in the solution: Client (Blazor client side ap
 - Chat page / component: A chat page to display chat messages, an input to send a chat; If I can, I will try to make chat feature a static hovering component that follows you on every page (if I can successfully manage this with Blazor)
 
 ### WebAPI server
--Will contain REST Operation for data contained in the SQL database
--To save time, I will most likely scaffold this with Entity Framework
--I will use RestSharp (https://restsharp.dev/) for my client-side HTTP requests
+- Will contain REST Operation for data contained in the SQL database
+- To save time, I will most likely scaffold this with Entity Framework
+- I will use RestSharp (https://restsharp.dev/) for my client-side HTTP requests
 
 ### Common libary 
--Contains models, helper classes/methods
+- Contains models, helper classes/methods
 
 ### Testing
--xUnit or MSTest
--Contains all the tests for this project
+- xUnit or MSTest
+- Contains all the tests for this project
 
 ## Quality assurance
--testing will be done with xUnit or MSTest
--Tests will include RestSharp methods and trying to make them function without any bugs
+- Testing will be done with xUnit or MSTest
+- Tests will mostly include Http helper methods, classes
 
 ## For the future
--The database will be set up so the there is room for enhancements
--The project is using up-to-date technology and software
+- The database will be set up so the there is room for enhancements
+- The project is using up-to-date technology and software
 
-### Conclusion
--This project is going to be a step forward in my web development and database designing skills. I also see this as a great resume project.
+## Conclusion
+- This project is going to be a step forward in my web development and database designing skills. I also see this as a great resume project.
