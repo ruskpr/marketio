@@ -198,15 +198,15 @@
       "mscorlib.dll": "sha256-mvS0gmCEk3NPPJPuIX5UWyIRyNxQ4WYYES39CBT9CK0=",
       "netstandard.dll": "sha256-6NXprR7wyUZxpdXxaSPHSoC5uOL5UCc7bsZG3TSuVxE=",
       "System.Private.CoreLib.dll": "sha256-igtwZSR0\/lrbmwL\/XiTsEkIeSL+736GHTZPReYguZCQ=",
-      "MarketIO.Shared.dll": "sha256-LYe02I5AtbNKFFpKxiH5nZ69R3rVI89lGZ6R6fqAOGY=",
-      "MarketIO.Client.dll": "sha256-CJngbqbBs+GbcLG1NVeLj\/6V0pZQp92yvz\/COMBZjoA="
+      "MarketIO.Shared.dll": "sha256-MyhbR5LKtP8qRucmbx1KgD9Z9ohz5atUW\/cU6DSY3Hs=",
+      "MarketIO.Client.dll": "sha256-xDj9Rs2KypZW+5B1B+VpkbwFVbtsf451z2zxljTmVZw="
     },
     "extensions": null,
     "lazyAssembly": null,
     "libraryInitializers": null,
     "pdb": {
-      "MarketIO.Shared.pdb": "sha256-3NpqRc\/xy1pX44ptfEtS7\/NXdYZDZJxK2ZlShZOHdeI=",
-      "MarketIO.Client.pdb": "sha256-H0ff80XxZ1XoOO\/LZJQnulqDbaqUwjFEE6oorl2cXuk="
+      "MarketIO.Shared.pdb": "sha256-WX2bN3qEtudeTJQ3TxOA4EwQjyrfy1qgdNO56X\/N7nk=",
+      "MarketIO.Client.pdb": "sha256-0REejDJALQzhQfGu+I66peKWqP9fr2fPFABuAN\/kr3M="
     },
     "runtime": {
       "dotnet.6.0.14.w00w34qz2g.js": "sha256-54cJ6JdGhGbKaLWxHfRYzYbuyRq2wlK\/ZDzfSXD3FEs=",

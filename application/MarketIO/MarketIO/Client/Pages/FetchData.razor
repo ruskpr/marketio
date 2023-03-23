@@ -1,6 +1,8 @@
 ﻿@page "/fetchdata"
 @using MarketIO.Shared
 @inject HttpClient Http
+@using RestSharp
+@inject RestClient _restClient
 
 <PageTitle>Weather forecast</PageTitle>
 
@@ -40,8 +42,10 @@ else
 @code {
     private WeatherForecast[]? forecasts;
 
-    protected override async Task OnInitializedAsync()
-    {
-        forecasts = await Http.GetFromJsonAsync<WeatherForecast[]>("WeatherForecast");
+    protected override async Task OnInitializedAsync() {
+                //forecasts = await Http.GetFromJsonAsync<WeatherForecast[]>("WeatherForecast");
+        forecasts = await _restClient.GetJsonAsync<WeatherForecast[]>("https://localhost:7031/weatherforecast");
     }
+
+   
 }

@@ -5,6 +5,7 @@ using MarketIO.Server.Data;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using RestSharp;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +15,9 @@ var key = Encoding.ASCII.GetBytes(jwtSettings["Key"]);
 
 // Add services to the container.
 
+// add RestSharp support
+builder.Services.AddHttpClient();
+builder.Services.AddSingleton(new RestClient(new HttpClient()));
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 builder.Services.AddDbContext<MarketIOContext>(options =>

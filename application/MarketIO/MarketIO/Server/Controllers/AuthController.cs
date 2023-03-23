@@ -1,8 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Text.Json.Serialization;
-using Newtonsoft.Json;
-using System.Reflection.Metadata.Ecma335;
 using System.Security.Claims;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
@@ -20,11 +17,11 @@ namespace MarketIO.Server.Controllers
         private readonly IConfiguration _config;
         private readonly MarketIOContext _context;
 
-        public AuthController(IConfiguration config, MarketIOContext context)
+        public AuthController(IConfiguration config)
         {
             // dependency injection that comes from program.cs
             _config = config;
-            _context = context;
+            //_context = context;
 
         }
 
@@ -33,15 +30,15 @@ namespace MarketIO.Server.Controllers
         [HttpPost("register")]
         public IActionResult Register(RegisterDTO userDTO)
         {
-            if (userDTO.PasswordHash != userDTO.ConfirmPasswordHash)
-            {
-                return BadRequest("Passwords do not match");
-            }
+            //if (userDTO.PasswordHash != userDTO.ConfirmPasswordHash)
+            //{
+            //    return BadRequest("Passwords do not match");
+            //}
 
-            if (_context.Users.Where(u => u.Email == userDTO.Email).Any())
-            {
-                return BadRequest($"User with {userDTO.Email} already exists");
-            }
+            //if (_context.Users.Where(u => u.Email == userDTO.Email).Any())
+            //{
+            //    return BadRequest($"User with {userDTO.Email} already exists");
+            //}
 
             var newUser = new User()
             {
@@ -52,7 +49,7 @@ namespace MarketIO.Server.Controllers
                 RegisterDate = userDTO.RegisterDate
             };
 
-            _context.Users.Add(newUser);
+            //_context.Users.Add(newUser);
             //_context.SaveChanges();
 
             return Ok("User has been registered!");
@@ -64,7 +61,7 @@ namespace MarketIO.Server.Controllers
         {
             var userToCompare = _context.Users.Where(u => u.Email == userDTO.Email).First();
 
-            if (userToCompare == null) return BadRequest();
+            if (userToCompare == null) return BadRequest("User does not exist.");
 
             if (userDTO.Email == userToCompare.Email &&
                 userDTO.PasswordHash == userToCompare.PasswordHash)

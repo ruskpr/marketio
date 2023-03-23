@@ -1,9 +1,74 @@
 ﻿@page "/"
-
+@using MarketIO.Shared.DTO;
+@using MarketIO.Shared.Helpers;
+@using MarketIO.Shared.Models;
+@using MarketIO.Shared;
+@using RestSharp;
 <PageTitle>Index</PageTitle>
 
 <h1>Hello, world!</h1>
 
 Welcome to your new app.
 
+<button @onclick="TestLogin" class="btn btn-primary">Login</button>
+<span>@Message</span>
+<br/>
+
+<button @onclick="TestRegister" class="btn btn-primary">Register</button>
 <SurveyPrompt Title="How is Blazor working for you?" />
+
+@code {
+    public string Message { get; set; } = "message";
+
+    protected void TestLogin()
+    {
+        try
+        {
+            var api = new ApiClient();
+
+            var user = new User
+            {
+                Email = "rus",
+                PasswordHash = "asdf",
+            };
+
+            RestResponse res = api.LogUserIn(user);
+            var x = res.Content;
+            Message = x;
+
+        }
+        catch (Exception ex)
+        {
+            Message = ex.Message;
+        }
+        
+
+    }
+    protected void TestRegister()
+    {
+        try
+        {
+            var api = new ApiClient();
+
+            var user = new RegisterDTO
+            {
+                Email = "russ@email.com",
+                FirstName = "russ",
+                LastName = "koprulu",
+                PasswordHash = SHA256.Hash("password"),
+                ConfirmPasswordHash = SHA256.Hash("password"),
+            };
+
+            RestResponse res = api.RegisterUser(user);
+            var x = res.Content;
+            Message = x;
+
+        }
+        catch (Exception ex)
+        {
+            Message = ex.Message;
+        }
+        
+
+    }
+}

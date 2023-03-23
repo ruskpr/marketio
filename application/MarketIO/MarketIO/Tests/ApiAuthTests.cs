@@ -1,5 +1,8 @@
 using MarketIO.Shared;
+using MarketIO.Shared.DTO;
+using MarketIO.Shared.Helpers;
 using MarketIO.Shared.Models;
+using RestSharp;
 
 namespace MarketIO.Tests
 {
@@ -21,11 +24,10 @@ namespace MarketIO.Tests
 
         #region login
 
-        #endregion
         [Fact]
-        public void Test_Login_User()
+        public void Test_Login()
         {
-            ApiClient api = new ApiClient("https://localhost:44370/api/Auth/login");
+            ApiClient api = new ApiClient("https://localhost:7031/");
 
             var u = new User()
             {
@@ -33,9 +35,37 @@ namespace MarketIO.Tests
                 PasswordHash = "123456",
             };
 
-            var res = api.LogUserInAsync(u);
+            RestResponse res = api.LogUserIn(u);
 
-            Assert.True(res.Result.IsSuccessStatusCode);
+            Assert.True(res.IsSuccessStatusCode);
+
+            //Assert.Equal("", res.Content);
         }
+
+        #endregion
+
+        // create test method to register user
+        #region register
+        [Fact]
+        public void Test_Register()
+        {
+            ApiClient api = new ApiClient("https://localhost:7031");
+
+            var user = new RegisterDTO
+            {
+                Email = "russ@email.com",
+                FirstName = "russ",
+                LastName = "koprulu",
+                PasswordHash = SHA256.Hash("password"),
+                ConfirmPasswordHash = SHA256.Hash("password"),
+            };
+
+            RestResponse res = api.RegisterUser(user);
+
+            Assert.True(res.IsSuccessful);
+        }
+
+        #endregion
+
     }
 }
