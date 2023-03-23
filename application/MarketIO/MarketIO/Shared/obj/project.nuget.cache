@@ -1,8 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "FOYZEQFcP+3zalzZXnTR4L+mQOSumoGPA4ZtGFSPx0i5JfIVDftqTbRDgeIdS5iDFjPIpkq0DpTaX+dEsYMsEA==",
+  "dgSpecHash": "GIfilzZ4rhFOs1EKW3i3v/gHUZyWFLbE4Dd6mIegx3ReMsmi+9PreIBUbtuOddoXhQQyomsx6RGW/LTod1rWyQ==",
   "success": true,
   "projectFilePath": "E:\\russ\\repos\\buy-and-sell-marketplace-webapp\\application\\MarketIO\\MarketIO\\Shared\\MarketIO.Shared.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "C:\\Users\\rustu.koprulu\\.nuget\\packages\\newtonsoft.json\\13.0.3\\newtonsoft.json.13.0.3.nupkg.sha512",
+    "C:\\Users\\rustu.koprulu\\.nuget\\packages\\restsharp\\109.0.1\\restsharp.109.0.1.nupkg.sha512"
+  ],
   "logs": []
 }

@@ -9,7 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MarketIO.Client", "MarketIO
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MarketIO.Shared", "MarketIO\Shared\MarketIO.Shared.csproj", "{62B028AB-A276-4A6C-A94E-47ACA473E6EF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MarketIO.Tests", "MarketIO.Tests\MarketIO.Tests.csproj", "{95526CC9-252A-409D-B200-BBAECB5ECFCB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MarketIO.Tests", "MarketIO\Tests\MarketIO.Tests.csproj", "{02CF398D-A822-4D13-AAAC-9FA93BC74CF0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,10 +29,10 @@ Global
 		{62B028AB-A276-4A6C-A94E-47ACA473E6EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{62B028AB-A276-4A6C-A94E-47ACA473E6EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{62B028AB-A276-4A6C-A94E-47ACA473E6EF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{95526CC9-252A-409D-B200-BBAECB5ECFCB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{95526CC9-252A-409D-B200-BBAECB5ECFCB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{95526CC9-252A-409D-B200-BBAECB5ECFCB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{95526CC9-252A-409D-B200-BBAECB5ECFCB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{02CF398D-A822-4D13-AAAC-9FA93BC74CF0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{02CF398D-A822-4D13-AAAC-9FA93BC74CF0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{02CF398D-A822-4D13-AAAC-9FA93BC74CF0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{02CF398D-A822-4D13-AAAC-9FA93BC74CF0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
