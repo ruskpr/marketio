@@ -1,0 +1,77 @@
+{
+  "Files": [
+    {
+      "Id": "E:\\russ\\repos\\buy-and-sell-marketplace-webapp\\application\\marketioBlazor\\obj\\Debug\\net6.0\\scopedcss\\projectbundle\\marketioBlazor.bundle.scp.css",
+      "PackagePath": "staticwebassets\\marketioBlazor.bundle.scp.css"
+    },
+    {
+      "Id": "E:\\russ\\repos\\buy-and-sell-marketplace-webapp\\application\\marketioBlazor\\wwwroot\\css\\bootstrap\\bootstrap.min.css",
+      "PackagePath": "staticwebassets\\css\\bootstrap\\bootstrap.min.css"
+    },
+    {
+      "Id": "E:\\russ\\repos\\buy-and-sell-marketplace-webapp\\application\\marketioBlazor\\wwwroot\\css\\bootstrap\\bootstrap.min.css.map",
+      "PackagePath": "staticwebassets\\css\\bootstrap\\bootstrap.min.css.map"
+    },
+    {
+      "Id": "E:\\russ\\repos\\buy-and-sell-marketplace-webapp\\application\\marketioBlazor\\wwwroot\\css\\open-iconic\\FONT-LICENSE",
+      "PackagePath": "staticwebassets\\css\\open-iconic"
+    },
+    {
+      "Id": "E:\\russ\\repos\\buy-and-sell-marketplace-webapp\\application\\marketioBlazor\\wwwroot\\css\\open-iconic\\ICON-LICENSE",
+      "PackagePath": "staticwebassets\\css\\open-iconic"
+    },
+    {
+      "Id": "E:\\russ\\repos\\buy-and-sell-marketplace-webapp\\application\\marketioBlazor\\wwwroot\\css\\open-iconic\\README.md",
+      "PackagePath": "staticwebassets\\css\\open-iconic\\README.md"
+    },
+    {
+      "Id": "E:\\russ\\repos\\buy-and-sell-marketplace-webapp\\application\\marketioBlazor\\wwwroot\\css\\open-iconic\\font\\css\\open-iconic-bootstrap.min.css",
+      "PackagePath": "staticwebassets\\css\\open-iconic\\font\\css\\open-iconic-bootstrap.min.css"
+    },
+    {
+      "Id": "E:\\russ\\repos\\buy-and-sell-marketplace-webapp\\application\\marketioBlazor\\wwwroot\\css\\open-iconic\\font\\fonts\\open-iconic.eot",
+      "PackagePath": "staticwebassets\\css\\open-iconic\\font\\fonts\\open-iconic.eot"
+    },
+    {
+      "Id": "E:\\russ\\repos\\buy-and-sell-marketplace-webapp\\application\\marketioBlazor\\wwwroot\\css\\open-iconic\\font\\fonts\\open-iconic.otf",
+      "PackagePath": "staticwebassets\\css\\open-iconic\\font\\fonts\\open-iconic.otf"
+    },
+    {
+      "Id": "E:\\russ\\repos\\buy-and-sell-marketplace-webapp\\application\\marketioBlazor\\wwwroot\\css\\open-iconic\\font\\fonts\\open-iconic.svg",
+      "PackagePath": "staticwebassets\\css\\open-iconic\\font\\fonts\\open-iconic.svg"
+    },
+    {
+      "Id": "E:\\russ\\repos\\buy-and-sell-marketplace-webapp\\application\\marketioBlazor\\wwwroot\\css\\open-iconic\\font\\fonts\\open-iconic.ttf",
+      "PackagePath": "staticwebassets\\css\\open-iconic\\font\\fonts\\open-iconic.ttf"
+    },
+    {
+      "Id": "E:\\russ\\repos\\buy-and-sell-marketplace-webapp\\application\\marketioBlazor\\wwwroot\\css\\open-iconic\\font\\fonts\\open-iconic.woff",
+      "PackagePath": "staticwebassets\\css\\open-iconic\\font\\fonts\\open-iconic.woff"
+    },
+    {
+      "Id": "E:\\russ\\repos\\buy-and-sell-marketplace-webapp\\application\\marketioBlazor\\wwwroot\\css\\site.css",
+      "PackagePath": "staticwebassets\\css\\site.css"
+    },
+    {
+      "Id": "E:\\russ\\repos\\buy-and-sell-marketplace-webapp\\application\\marketioBlazor\\wwwroot\\favicon.ico",
+      "PackagePath": "staticwebassets\\favicon.ico"
+    },
+    {
+      "Id": "obj\\Debug\\net6.0\\staticwebassets\\msbuild.build.marketioBlazor.props",
+      "PackagePath": "build\\marketioBlazor.props"
+    },
+    {
+      "Id": "obj\\Debug\\net6.0\\staticwebassets\\msbuild.buildMultiTargeting.marketioBlazor.props",
+      "PackagePath": "buildMultiTargeting\\marketioBlazor.props"
+    },
+    {
+      "Id": "obj\\Debug\\net6.0\\staticwebassets\\msbuild.buildTransitive.marketioBlazor.props",
+      "PackagePath": "buildTransitive\\marketioBlazor.props"
+    },
+    {
+      "Id": "obj\\Debug\\net6.0\\staticwebassets\\msbuild.marketioBlazor.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    }
+  ],
+  "ElementsToRemove": []
+}
