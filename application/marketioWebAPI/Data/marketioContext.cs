@@ -16,5 +16,6 @@ namespace marketioWebAPI.Data
 
         public DbSet<User> Users { get; set; } = default!;
         public DbSet<Transaction> Transactions { get; set; } = default!;
+        public DbSet<UserRating> UserRatings { get; set; } = default!;
     }
 }
