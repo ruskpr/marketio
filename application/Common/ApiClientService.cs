@@ -101,9 +101,9 @@ namespace Common
             return ret;
         }
 
-        public async Task<T?> GetByIdAsync<T>(int id) where T : IDbModel
+        public async Task<T?> GetByIdAsync<T>(T obj) where T : IDbModel
         {
-            var request = new RestRequest($"api/{typeof(T).Name}s/{id}");
+            var request = new RestRequest($"api/{typeof(T).Name}s/{obj.Id}");
 
             var response = await _client.GetAsync(request);
             if (response.StatusCode == HttpStatusCode.OK)
@@ -111,7 +111,7 @@ namespace Common
                 return JsonConvert.DeserializeObject<T>(response.Content);
             }
 
-            return default(T?);
+            return default;
         }
 
         #endregion
