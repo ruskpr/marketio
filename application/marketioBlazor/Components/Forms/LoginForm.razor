@@ -1,6 +1,7 @@
 ﻿@using Common;
 @using Common.DTO;
 @using Newtonsoft.Json;
+@using marketioBlazor.Authentication;
 @inject IJSRuntime js
 @inject AuthenticationStateProvider authStateProvider
 @inject NavigationManager navManager
@@ -10,7 +11,7 @@
 
     <div class="form-group">
         <label for="email">Email address</label>
-        <input @bind="loginDTO.Email" type="email" class="form-control" id="email" placeholder="Enter email">
+        <input @bind="loginDTO.Email" type="text" class="form-control" id="email" placeholder="Enter email">
     </div>
 
     <div class="form-group">
@@ -29,8 +30,8 @@
 </form>
 
 @code {
-    private LoginDTO loginDTO = new LoginDTO();
 
+    private LoginDTO loginDTO = new LoginDTO();
 
     private async Task Authenticate()
     {
@@ -40,8 +41,9 @@
         if (loginResponse.IsSuccessStatusCode)
         {
             var userSession = JsonConvert.DeserializeObject<UserSessionDTO>(loginResponse.Content);
-            var customAuthStateProvider = (CustomAuthStateProvider)authStateProvider;
-
+            var customAuthStateProvider = (CustomAuthenticationStateProvider)authStateProvider;
+            await customAuthStateProvider.UpdateAuthenticationState(userSession);
+            navManager.NavigateTo("/", true);
         }
         else
         {
