@@ -50,6 +50,7 @@ namespace Common
 
             return response;
         }
+
         public async Task<HttpResponseMessage> LogUserInAsyncx(LoginDTO u)
         {
             var payload = new StringContent(JsonConvert.SerializeObject(u),
