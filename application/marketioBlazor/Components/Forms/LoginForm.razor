@@ -1,0 +1,51 @@
+﻿@using Common;
+@using Common.DTO;
+@using Newtonsoft.Json;
+@inject IJSRuntime js
+@inject AuthenticationStateProvider authStateProvider
+@inject NavigationManager navManager
+@inject ApiClientService ApiClient
+
+<form>
+
+    <div class="form-group">
+        <label for="email">Email address</label>
+        <input @bind="loginDTO.Email" type="email" class="form-control" id="email" placeholder="Enter email">
+    </div>
+
+    <div class="form-group">
+        <label for="password">Password</label>
+        <input @bind="loginDTO.PasswordHash" type="password" class="form-control" id="password" placeholder="Password">
+    </div>
+
+    <button type="submit" @onclick="Authenticate" class="btn btn-primary my-3">
+        Login
+    </button>
+    <br/>
+    <NavLink class="" href="register">
+        Go to register page
+    </NavLink>
+
+</form>
+
+@code {
+    private LoginDTO loginDTO = new LoginDTO();
+
+
+    private async Task Authenticate()
+    {
+        var loginResponse = await ApiClient.LogUserInAsync(loginDTO);
+
+
+        if (loginResponse.IsSuccessStatusCode)
+        {
+            var userSession = JsonConvert.DeserializeObject<UserSessionDTO>(loginResponse.Content);
+            var customAuthStateProvider = (CustomAuthStateProvider)authStateProvider;
+
+        }
+        else
+        {
+            await js.InvokeVoidAsync("alert", loginResponse.Content);
+        }   
+    }
+}
