@@ -14,6 +14,7 @@ namespace Common
 {
     public class ApiClientService
     {
+
         private RestClient _client;
         private const string DEFAULT_ENDPOINT = "https://localhost:7031/";
 
