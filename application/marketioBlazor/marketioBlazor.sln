@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "marketioBlazor", "marketioB
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common", "..\Common\Common.csproj", "{D8D01B2A-7C16-4680-A93F-A9D1E782053E}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "marketioWebAPI", "..\marketioWebAPI\marketioWebAPI.csproj", "{90B705C4-F699-40D2-8733-86858B87E86A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{D8D01B2A-7C16-4680-A93F-A9D1E782053E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D8D01B2A-7C16-4680-A93F-A9D1E782053E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D8D01B2A-7C16-4680-A93F-A9D1E782053E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{90B705C4-F699-40D2-8733-86858B87E86A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{90B705C4-F699-40D2-8733-86858B87E86A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{90B705C4-F699-40D2-8733-86858B87E86A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{90B705C4-F699-40D2-8733-86858B87E86A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

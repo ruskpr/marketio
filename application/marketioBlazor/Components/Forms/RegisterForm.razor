@@ -1,0 +1,34 @@
+
+<form>
+
+    <div class="form-group">
+        <label for="email">Email address</label>
+        <input type="email" class="form-control" id="email" placeholder="Enter email">
+    </div>
+
+    <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" class="form-control" id="password" placeholder="Password">
+    </div>
+
+    <div class="form-group">
+        <label for="confirmPassword">Confirm Password</label>
+        <input type="password" class="form-control" id="confirmPassword" placeholder="Confirm Password">
+    </div>
+
+    <button type="submit" @onclick="HandleRegister" class="btn btn-primary my-3">
+        Register
+    </button>
+    <br/>
+    <NavLink class="" href="login">
+        Go to login page
+    </NavLink>
+
+</form>
+
+@code {
+    private void HandleRegister()
+    {
+        throw new NotImplementedException();
+    }
+}

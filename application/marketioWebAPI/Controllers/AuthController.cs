@@ -6,6 +6,7 @@ using System.IdentityModel.Tokens.Jwt;
 using marketioWebAPI.Data;
 using Common.DTO;
 using Common.Models;
+using Newtonsoft.Json;
 
 namespace MarketIO.Server.Controllers
 {
@@ -132,7 +133,17 @@ namespace MarketIO.Server.Controllers
                 var token = tokenHandler.CreateToken(tokenDescriptor);
                 var jwt = tokenHandler.WriteToken(token);
 
-                return Ok(jwt); 
+                UserSessionDTO userSessionDTO = new UserSessionDTO() {
+
+                    Email = userDTO.Email,
+                    Token = jwt,
+                    Role = userToCompare.IsSuperuser ? "Administrator" : "User",
+                    ExpiresIn = 12,
+                    ExpiryTimeStamp = DateTime.UtcNow.AddHours(12)
+
+                };
+
+                return Ok(JsonConvert.SerializeObject(userSessionDTO)); 
             }
 
 

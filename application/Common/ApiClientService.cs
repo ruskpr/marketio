@@ -40,26 +40,12 @@ namespace Common
 
         #endregion
 
-        public async Task<RestResponse> LogUserInAsync(User u)
+        public async Task<RestResponse> LogUserInAsync(LoginDTO u)
         {
             var bodyContent = new StringContent(JsonConvert.SerializeObject(u),
                                Encoding.UTF8, "application/json");
             var request = new RestRequest("api/Auth/login").AddJsonBody(bodyContent);
             var response = await _client.PostAsync(request);
-
-            //var payload = new StringContent(JsonConvert.SerializeObject(u),
-            //    Encoding.UTF8, "application/json");
-
-            //HttpResponseMessage response = await _client.PostAsync("/api/Auth/login", payload);
-
-            return response;
-        }
-
-        public RestResponse LogUserIn(User u)
-        {
-            var bodyContent = new StringContent(JsonConvert.SerializeObject(u), Encoding.UTF8, "application/json");
-            var request = new RestRequest("api/Auth/login").AddJsonBody(bodyContent);
-            var response = _client.Post(request);
 
             return response;
         }
