@@ -48,8 +48,6 @@ namespace Common.Models
 
         public bool IsSuperuser { get; set; }
 
-        //public List<Transaction> Transactions { get; set; } = new List<Transaction>();  
-
         #region not mapped
 
         [NotMapped]

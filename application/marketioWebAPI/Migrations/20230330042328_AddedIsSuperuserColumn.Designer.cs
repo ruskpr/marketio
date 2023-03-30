@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using marketioWebAPI.Data;
 
@@ -11,9 +12,11 @@ using marketioWebAPI.Data;
 namespace marketioWebAPI.Migrations
 {
     [DbContext(typeof(marketioContext))]
-    partial class marketioContextModelSnapshot : ModelSnapshot
+    [Migration("20230330042328_AddedIsSuperuserColumn")]
+    partial class AddedIsSuperuserColumn
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
