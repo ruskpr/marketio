@@ -14,6 +14,7 @@ namespace Common
 {
     public class ApiClientService
     {
+
         private RestClient _client;
         private const string DEFAULT_ENDPOINT = "https://localhost:7031/";
 
@@ -86,7 +87,7 @@ namespace Common
         #region get
 
         // create a method to get all users
-        public async Task<List<T>>? GetAllAsync<T>() where T : IDbModel
+        public async Task<List<T>> GetAllAsync<T>() where T : IDbModel
         {
             List<T>? ret = new List<T>();
 
