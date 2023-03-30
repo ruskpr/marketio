@@ -16,11 +16,11 @@ namespace MarketIO.Server.Controllers
         private readonly IConfiguration _config;
         private readonly marketioContext _context;
 
-        public AuthController(IConfiguration config)
+        public AuthController(IConfiguration config, marketioContext context)
         {
             // dependency injection that comes from program.cs
             _config = config;
-            //_context = context;
+            _context = context;
 
         }
 
@@ -29,6 +29,10 @@ namespace MarketIO.Server.Controllers
         [HttpPost("register")]
         public IActionResult Register(RegisterDTO userDTO)
         {
+            if (_context == null || !_context.Database.CanConnect())
+            {
+                return BadRequest("Could not connect to database server.");
+            }
             //if (userDTO.PasswordHash != userDTO.ConfirmPasswordHash)
             //{
             //    return BadRequest("Passwords do not match");
@@ -58,6 +62,11 @@ namespace MarketIO.Server.Controllers
         [HttpPost("login")]
         public IActionResult Login(LoginDTO userDTO)
         {
+            if (_context == null || !_context.Database.CanConnect())
+            {
+                return BadRequest("Could not connect to database server.");
+            }
+
             var userToCompare = _context.Users.Where(u => u.Email == userDTO.Email).First();
 
             if (userToCompare == null) return BadRequest("User does not exist.");

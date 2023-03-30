@@ -15,26 +15,29 @@ namespace Common
     public class ApiClientService
     {
         private RestClient _client;
+        private const string DEFAULT_ENDPOINT = "https://localhost:7031/";
 
-        public ApiClientService(string endpointUrl)
-        {
-            var httpClient = new HttpClient()
-            {
-                BaseAddress = new Uri(endpointUrl),
-            };
+        #region constructors
 
-            _client = new RestClient(httpClient);
-        }
-
+        // default constructor
         public ApiClientService()
         {
-            var httpClient = new HttpClient()
-            {
-                BaseAddress = new Uri("https://localhost:7031/"),
-            };
+            var httpClient = new HttpClient();
+            httpClient.BaseAddress = new Uri(DEFAULT_ENDPOINT);
 
             _client = new RestClient(httpClient);
         }
+
+        // overload that takes endpoint url as parameter
+        public ApiClientService(string endpointUrl)
+        {
+            var httpClient = new HttpClient();
+            httpClient.BaseAddress = new Uri(endpointUrl);
+
+            _client = new RestClient(httpClient);
+        }
+
+        #endregion
 
         public async Task<RestResponse> LogUserInAsync(User u)
         {
