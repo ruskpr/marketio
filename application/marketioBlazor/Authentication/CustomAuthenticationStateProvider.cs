@@ -56,7 +56,7 @@ namespace marketioBlazor.Authentication
                     new Claim(ClaimTypes.Role, userSession.Role),
                 }));
 
-                userSession.ExpiryTimeStamp = DateTime.Now.AddSeconds(userSession.ExpiresIn);
+                userSession.ExpiryTimeStamp = DateTime.Now.AddMinutes(userSession.ExpiresIn);
                 //await _sessionStorage.SaveItemEncryptedAsync("UserSession", userSession);
 
                 try

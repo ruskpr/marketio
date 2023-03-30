@@ -39,6 +39,7 @@
     private async Task Authenticate()
     {
         ApiClient = new ApiClientService();
+
         var loginResponse = await ApiClient.LogUserInAsync(loginDTO);
 
         if (loginResponse.IsSuccessStatusCode)

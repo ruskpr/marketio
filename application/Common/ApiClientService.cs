@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using System.Text;
 using Common.DTO;
+using Common.Helpers;
 using Common.Models;
 using Newtonsoft.Json;
 using RestSharp;
@@ -44,47 +45,37 @@ namespace Common
         /// </summary>
         public async Task<RestResponse> LogUserInAsync(LoginDTO u)
         {
-            var bodyContent = JsonConvert.SerializeObject(u);
-            var request = new RestRequest("api/Auth/login").AddJsonBody(u);
-            //request.AddStringBody(bodyContent, ContentType.Json);
+            // hash password
+            var loginDTO = new LoginDTO
+            {
+                Email = u.Email,
+                PasswordHash = SHA256.Hash(u.PasswordHash)
+            };
+
+            // send request to api
+            var request = new RestRequest("api/Auth/login").AddJsonBody(loginDTO);
 
             var response = await _client.PostAsync(request);
-
-            return response;
-        }
-
-        public async Task<HttpResponseMessage> LogUserInAsyncx(LoginDTO u)
-        {
-            var payload = new StringContent(JsonConvert.SerializeObject(u),
-                Encoding.UTF8, "application/json");
-
-            var client = new HttpClient()
-            {
-                BaseAddress = new Uri(DEFAULT_ENDPOINT),
-            };
-            
-            HttpResponseMessage response = await client.PostAsync("/api/Auth/login", payload);
-
-            return response;
-        }
-
-        // create a method to register user
-        public RestResponse RegisterUser(RegisterDTO regDTO)
-        {
-            var bodyContent = new StringContent(JsonConvert.SerializeObject(regDTO),
-                              Encoding.UTF8, "application/json");
-            var request = new RestRequest("api/Auth/register").AddJsonBody(bodyContent);
-            var response = _client.Post(request);
 
             return response;
         }
 
         public async Task<RestResponse> RegisterUserAsync(RegisterDTO regDTO)
         {
-            var bodyContent = new StringContent(JsonConvert.SerializeObject(regDTO),
-                                             Encoding.UTF8, "application/json");
-            var request = new RestRequest("api/Auth/register").AddJsonBody(bodyContent);
+            var newUser = new RegisterDTO()
+            {
+                Email = regDTO.Email,
+                FirstName = regDTO.FirstName,
+                LastName = regDTO.LastName,
+                PasswordHash = SHA256.Hash(regDTO.PasswordHash),
+                ConfirmPasswordHash = SHA256.Hash(regDTO.ConfirmPasswordHash),
+                RegisterDate = DateTime.Now,
+            };
+
+            var request = new RestRequest("api/Auth/register").AddJsonBody(newUser);
+
             var response = await _client.PostAsync(request);
+
             return response;
         }
 

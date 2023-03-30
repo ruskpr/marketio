@@ -58,7 +58,7 @@ namespace MarketIO.Server.Controllers
             // validate email address
             if (!registerDTO.Email.Contains('@'))
             {
-                //return BadRequest("Invalid email address.");
+                return BadRequest("Invalid email address.");
             }
 
             // check if any fields are null
