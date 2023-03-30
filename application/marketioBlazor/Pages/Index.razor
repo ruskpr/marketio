@@ -1,6 +1,7 @@
 ﻿@page "/"
 @using Common
 @using Common.Models;
+@using marketioBlazor.Components
 @inject ApiClientService ApiClient
 
 <PageTitle>Index</PageTitle>
@@ -11,13 +12,48 @@ Welcome to your new app.
 
 <SurveyPrompt Title="How is Blazor working for you?" />
 
+<TableTemplate Items="users" Context="user">
+    <TableHeader>
+        <th>Id</th>
+        <th>Email</th>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>PasswordHash</th>
+        <th>Address</th>
+        <th>City</th>
+        <th>Country</th>
+        <th>PostalCode</th>
+        <th>Phone</th>
+        <th>DOB</th>
+        <th>RegisterDate</th>
+        <th>LastLogin</th>
+        <th>LastLogout</th>
+    </TableHeader>
+    <RowTemplate>
+        <td>@user.Id</td>
+        <td>@user.Email</td>
+        <td>@user.FirstName</td>
+        <td>@user.LastName</td>
+        <td>@user.PasswordHash</td>
+        <td>@user.Address</td>
+        <td>@user.City</td>
+        <td>@user.Country</td>
+        <td>@user.PostalCode</td>
+        <td>@user.Phone</td>
+        <td>@user.DOB</td>
+        <td>@user.RegisterDate</td>
+        <td>@user.LastLogin</td>
+        <td>@user.LastLogout</td>
+    </RowTemplate>
+    
+</TableTemplate>
+
 @code {
-    private List<User> users;
+    private List<User> users = new List<User>();
 
     protected override async Task OnInitializedAsync()
     {
         ApiClient = new ApiClientService("https://localhost:7244/");
-        users = await ApiClient.GetAllAsync();
-
+        users = await ApiClient.GetAllAsync<User>();
     }
 }

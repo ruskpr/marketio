@@ -46,6 +46,8 @@ namespace Common.Models
 
         public DateTime? LastLogout { get; set;}
 
+        public bool IsSuperuser { get; set; }
+
         //public List<Transaction> Transactions { get; set; } = new List<Transaction>();  
 
         #region not mapped
