@@ -27,7 +27,8 @@ namespace MarketIO.Server.Controllers
 
         /// <summary>
         /// 
-        /// Will take RegisterDTO and create a new user in the database if all validation is passed.
+        /// Will take the RegisterDTO from the request body 
+        /// and create a new user in the database if all validation is passed.
         /// 
         /// </summary>
         [HttpPost("register")]
