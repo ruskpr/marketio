@@ -25,40 +25,73 @@ namespace MarketIO.Server.Controllers
         }
 
 
-
+        /// <summary>
+        /// 
+        /// Will take RegisterDTO and create a new user in the database if all validation is passed.
+        /// 
+        /// </summary>
         [HttpPost("register")]
-        public IActionResult Register(RegisterDTO userDTO)
+        public IActionResult Register(RegisterDTO registerDTO)
         {
+            // check if database is connected
             if (_context == null || !_context.Database.CanConnect())
             {
                 return BadRequest("Could not connect to database server.");
             }
-            //if (userDTO.PasswordHash != userDTO.ConfirmPasswordHash)
-            //{
-            //    return BadRequest("Passwords do not match");
-            //}
 
-            //if (_context.Users.Where(u => u.Email == userDTO.Email).Any())
-            //{
-            //    return BadRequest($"User with {userDTO.Email} already exists");
-            //}
+            #region validation
+
+            // check if passwords match
+            if (registerDTO.PasswordHash != registerDTO.ConfirmPasswordHash)
+            {
+                return BadRequest("Passwords do not match");
+            }
+
+            // check if user already exists
+            if (_context.Users.Where(u => u.Email == registerDTO.Email).Any())
+            {
+                return BadRequest($"User with the email '{registerDTO.Email}' already exists");
+            }
+
+            // validate email address
+            if (!registerDTO.Email.Contains('@'))
+            {
+                //return BadRequest("Invalid email address.");
+            }
+
+            // check if any fields are null
+            if (string.IsNullOrWhiteSpace(registerDTO.Email) || 
+            string.IsNullOrWhiteSpace(registerDTO.FirstName) || 
+            string.IsNullOrWhiteSpace(registerDTO.LastName) || 
+            string.IsNullOrEmpty(registerDTO.PasswordHash))
+            {
+                return BadRequest("Please fill out all fields.");
+            }
+
+            #endregion
 
             var newUser = new User()
             {
-                Email = userDTO.Email,
-                FirstName = userDTO.FirstName,
-                LastName = userDTO.LastName,
-                PasswordHash = userDTO.PasswordHash,
-                RegisterDate = userDTO.RegisterDate
+                Email = registerDTO.Email,
+                FirstName = registerDTO.FirstName,
+                LastName = registerDTO.LastName,
+                PasswordHash = registerDTO.PasswordHash,
+                RegisterDate = registerDTO.RegisterDate
             };
 
-            //_context.Users.Add(newUser);
-            //_context.SaveChanges();
+            _context.Users.Add(newUser);
+            _context.SaveChanges();
 
-            return Ok("User has been registered!");
+            return Ok($"Successfully registered {newUser.Email}");
         }
 
-        // http post login
+        /// <summary>
+        /// 
+        /// If the LoginDTO credentials match an existing user, 
+        /// the user will be granted a JWT token.
+        /// The token will be used to authenticate the user inside the client application. (Session token)
+        /// 
+        /// </summary>
         [HttpPost("login")]
         public IActionResult Login(LoginDTO userDTO)
         {
@@ -98,7 +131,7 @@ namespace MarketIO.Server.Controllers
                 var token = tokenHandler.CreateToken(tokenDescriptor);
                 var jwt = tokenHandler.WriteToken(token);
 
-                return Ok(jwt);
+                return Ok(jwt); 
             }
 
 
