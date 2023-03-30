@@ -1,7 +1,7 @@
 # market.io
 ### A web application that allows you to connect with others to buy, sell, and advertise items, services, real estate, and many more... 
 
-## Project technologies
+## Project Technologies
 - Backend: SQL Entity Framework Core / SQL design with stored proecdures and LINQ
 - Frontend: Blazor Web App
 - Web API: ASP.NET Core Web API (to handle REST/HTTP operations, token authentication) 
@@ -15,17 +15,17 @@ marketplace.io will allow users to register and login to personal accounts to li
 - Bootstrap will handle frontend styling
 
 ## Software Architechture
-###There will be 4 separate projects in the solution
+There will be 4 separate projects in the solution
 - Client (Blazor client side app)
 - Web API (to handle CRUD/REST operations with SQL database)
 - Common class library (for models, helper classes, etc.)
 - Test project (xUnit to perform logic test and ensure the code has no bugs)
 
-### Client-Side Blazor app
+### Client-Side Blazor Application
 - Home page: contains information about site, links for listings, profile, login, register)
 - Listings page: list of listings, (filter options if I have time to implement) 
 - Listing detail page: brief information about listing, buttons to inquires, save
-- Chat page / component: A chat page to display chat messages, an input to send a chat; If I can, I will try to make chat feature a static hovering component that follows you on every page (if I can successfully manage this with Blazor)
+- Chat page / chat component: A chat page to display chat messages, an input to send a chat; If I can, I will try to make chat feature a static hovering component that follows you on every page (if I can successfully manage this with Blazor)
 
 ### ASP.NET Core WebAPI Server
 - Will contain REST Operation for data contained in the SQL database
