@@ -140,10 +140,9 @@ namespace MarketIO.Server.Controllers
                     Role = userToCompare.IsSuperuser ? "Administrator" : "User",
                     ExpiresIn = 12,
                     ExpiryTimeStamp = DateTime.UtcNow.AddHours(12)
-
                 };
 
-                return Ok(JsonConvert.SerializeObject(userSessionDTO)); 
+                return Ok(userSessionDTO); 
             }
 
 

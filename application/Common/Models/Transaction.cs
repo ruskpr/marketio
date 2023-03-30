@@ -13,6 +13,9 @@ namespace Common.Models
         public int BuyerId { get; set; }
         public User Buyer { get; set; }
 
+        public int ListingId { get; set; }
+        public Listing Listing { get; set; }
+
         public DateTime DateCreated { get; set; }
 
     }

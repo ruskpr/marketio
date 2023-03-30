@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using marketioWebAPI.Data;
 
@@ -11,9 +12,11 @@ using marketioWebAPI.Data;
 namespace marketioWebAPI.Migrations
 {
     [DbContext(typeof(marketioContext))]
-    partial class marketioContextModelSnapshot : ModelSnapshot
+    [Migration("20230330164405_1")]
+    partial class _1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -145,9 +148,6 @@ namespace marketioWebAPI.Migrations
 
                     b.Property<int>("BuyerId")
                         .HasColumnType("int");
-
-                    b.Property<DateTime>("DateCreated")
-                        .HasColumnType("datetime2");
 
                     b.Property<int>("ListingId")
                         .HasColumnType("int");

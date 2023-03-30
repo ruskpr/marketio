@@ -1,0 +1,81 @@
+﻿@page "/admin"
+@attribute [Authorize(Roles = "Administrator")]
+@using Common;
+@using Common.Models;
+@using marketioBlazor.Components
+@inject ApiClientService ApiClient
+
+<h3>Admin Page</h3>
+
+<TableTemplate Items="_users" Context="user">
+    <TableHeader>
+        <th>Id</th>
+        <th>Email</th>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>PasswordHash</th>
+        <th>Address</th>
+        <th>City</th>
+        <th>Country</th>
+        <th>PostalCode</th>
+        <th>Phone</th>
+        <th>DOB</th>
+        <th>RegisterDate</th>
+        <th>LastLogin</th>
+        <th>LastLogout</th>
+        <th>IsSuperuser</th>
+        <th>Actions</th>
+    </TableHeader>
+    <RowTemplate>
+        <td>@user.Id</td>
+        <td>@user.Email</td>
+        <td>@user.FirstName</td>
+        <td>@user.LastName</td>
+        <td>@user.PasswordHash</td>
+        <td>@user.Address</td>
+        <td>@user.City</td>
+        <td>@user.Country</td>
+        <td>@user.PostalCode</td>
+        <td>@user.Phone</td>
+        <td>@user.DOB</td>
+        <td>@user.RegisterDate</td>
+        <td>@user.LastLogin</td>
+        <td>@user.LastLogout</td>
+        <td>@user.IsSuperuser</td>
+        <td>
+            <a href="/profile/@user.Id" class="btn btn-primary">View Profile</a>
+            <a href="/profile/edit/@user.Id" class="btn btn-primary">Edit</a>
+            <a href="/profile/delete/@user.Id" class="btn btn-danger">Delete</a>
+        </td>
+    </RowTemplate>
+</TableTemplate>
+
+<TableTemplate Items="_transactions" Context="transaction">
+    <TableHeader>
+        <th>Id</th>
+        <th>SellerId</th>
+        <th>BuyerId</th>
+        <th>ListingId</th>
+        <th>DateCreated</th>
+    </TableHeader>
+    <RowTemplate>
+        <td>@transaction.Id</td>
+        <td>@transaction.SellerId</td>
+        <td>@transaction.BuyerId</td>
+        <td>@transaction.ListingId</td>
+        <td>@transaction.DateCreated</td>
+    </RowTemplate>
+</TableTemplate>
+
+@code {
+    private List<User> _users = new List<User>();
+    private List<Transaction> _transactions = new List<Transaction>();
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        ApiClient = new ApiClientService();
+        _users = await ApiClient.GetAllAsync<User>();
+        _transactions = await ApiClient.GetAllAsync<Transaction>();
+    }
+}

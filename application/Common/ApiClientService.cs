@@ -1,14 +1,9 @@
-﻿using Common.DTO;
+﻿using System.Net;
+using System.Text;
+using Common.DTO;
 using Common.Models;
 using Newtonsoft.Json;
 using RestSharp;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Common
 {
@@ -16,7 +11,7 @@ namespace Common
     {
 
         private RestClient _client;
-        private const string DEFAULT_ENDPOINT = "https://localhost:7031/";
+        private const string DEFAULT_ENDPOINT = "https://localhost:7244/";
 
         #region constructors
 
@@ -40,11 +35,18 @@ namespace Common
 
         #endregion
 
+        /// <summary>
+        /// 
+        /// If the user successfully logs in, 
+        /// the HTTP response will return a UserSessionDTO object
+        /// as JSON that includes a valid JWT token. 
+        /// 
+        /// </summary>
         public async Task<RestResponse> LogUserInAsync(LoginDTO u)
-        { 
-            var bodyContent = new StringContent(JsonConvert.SerializeObject(u),
-                               Encoding.UTF8, "application/json");
-            var request = new RestRequest("api/Auth/login").AddJsonBody(bodyContent);
+        {
+            var bodyContent = JsonConvert.SerializeObject(u);
+            var request = new RestRequest("api/Auth/login").AddJsonBody(u);
+            //request.AddStringBody(bodyContent, ContentType.Json);
 
             var response = await _client.PostAsync(request);
 

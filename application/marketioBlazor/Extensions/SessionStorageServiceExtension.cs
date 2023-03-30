@@ -6,20 +6,6 @@ namespace marketioBlazor.Extensions
 {
     public static class SessionStorageServiceExtension
     {
-        public static async Task SetObjectAsync<T>(this ISessionStorageService service, string key, T value)
-        {
-            await service.SetItemAsync(key, JsonConvert.SerializeObject(value));
-        }
-        public static async Task<T> GetObjectAsync<T>(this ISessionStorageService service, string key)
-        {
-            var value = await service.GetItemAsync<string>(key);
-            if (value == null)
-            {
-                return default(T);
-            }
-            return JsonConvert.DeserializeObject<T>(value);
-        }
-
         public static async Task SaveItemEncryptedAsync<T>(this ISessionStorageService sessionStorageService, string key, T item)
         {
             var itemJson = JsonConvert.SerializeObject(item);
