@@ -5,56 +5,43 @@
 @inject IJSRuntime js
 @inject AuthenticationStateProvider authStateProvider
 @inject Blazored.SessionStorage.ISessionStorageService session
-<PageTitle>Index</PageTitle>
+<PageTitle>Welcome to marketio</PageTitle>
 
-<div class="container-fluid">
-<h1>Hello, world!</h1>
+<div class="">
+    <div class="d-flex flex-column justify-content-center align-items-center bg-secondary">
 
-<AuthorizeView>
-    <Authorized>
-        <p>Hello, @context.User.Identity.Name!</p>
-    </Authorized>
-    <NotAuthorized>
-        <p>Hi, Guest!</p>
-    </NotAuthorized>
-</AuthorizeView>
-<br />
-<br />
-<AuthorizeView>
-    <Authorized>
-      <button class="btn btn-outline-primary" @onclick="DisplayGreetingMessage">Display Greeting Alert</button>  
-    </Authorized>
-</AuthorizeView>
+        <AuthorizeView>
+            <Authorized>
+                <h1>Hello, @context.User.Identity.Name!</h1>
+            </Authorized>
+            <NotAuthorized>
+                <h1>Welcome to market.io!</h1>
+            </NotAuthorized>
+        </AuthorizeView>
 
-<button class="btn btn-success" @onclick="SetSessionUser">Set User</button>
-<h2>@message</h2>
+        <br />
+        <br />
 
+        <div>
+            <AuthorizeView>
+                <Authorized>
+                    <a class="btn btn-primary" href="/listings">View Listings</a>
+                    <a class="btn btn-primary" href="/login">Login</a>
+                </Authorized>
+                <NotAuthorized>
+                    <a class="btn btn-primary" href="/login">Login</a>
+                    <a class="btn btn-primary" href="/register">Register</a>
+                </NotAuthorized>
+            </AuthorizeView>
+
+        </div>
+   </div>
 
 
 </div>
 
 @code {
-    
 
-    string message;
-    public void SetSessionUser()
-    {
-        var user = new User()
-        {
-            FirstName = "russ",
-            LastName = "koprulu"
-        };
-
-        session.SetItemAsync("user", user);
-        message = "session set successfully";
-
-    }
-
-
-    //====================
-
-    //[CascadingParameter]
-    //private Task<AuthenticationState> AuthenticationStateTask { get; set; }
     private async Task DisplayGreetingMessage()
     {
         var authState = await authStateProvider.GetAuthenticationStateAsync();

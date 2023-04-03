@@ -1,4 +1,8 @@
 ﻿@inherits LayoutComponentBase
+@using marketioBlazor.Authentication;
+@inject AuthenticationStateProvider authStateProvider
+@inject NavigationManager navManager
+
 
 <PageTitle>marketioBlazor</PageTitle>
 
@@ -9,11 +13,31 @@
 
     <main>
         <div class="top-row px-4">
-            <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
+            <AuthorizeView>
+                <Authorized>
+                    <span>Hello, @context.User.Identity.Name!</span>
+                    <button @onclick="Logout">Logout</button>
+                </Authorized>
+                <NotAuthorized>
+                    <a href="/login">Login</a>
+                    <a href="/register">Register</a>
+                </NotAuthorized>
+            </AuthorizeView>
         </div>
 
-        <article class="content px-4">
+        <div class="content m-0 p-0">
             @Body
-        </article>
+        </div>
     </main>
 </div>
+
+@code {
+
+    private async Task Logout()
+    {
+        var customAuthStateProvider = (CustomAuthenticationStateProvider)authStateProvider;
+        await customAuthStateProvider.UpdateAuthenticationState(null);
+        navManager.NavigateTo("/", true);
+    }
+
+}

@@ -20,6 +20,8 @@
         <input @bind="loginDTO.PasswordHash" type="password" class="form-control" id="password" placeholder="Password">
     </div>
 
+    <span class="text-danger fw-bold">@message</span>
+
     <button type="submit" @onclick="Authenticate" class="btn btn-primary my-3">
         Login
     </button>
@@ -34,32 +36,33 @@
 
     private LoginDTO loginDTO = new LoginDTO();
 
+    private string message;
     // create method 
 
     private async Task Authenticate()
     {
         ApiClient = new ApiClientService();
-
-        var loginResponse = await ApiClient.LogUserInAsync(loginDTO);
-
-        if (loginResponse.IsSuccessStatusCode)
+        try
         {
-            try
+            var loginResponse = await ApiClient.LogUserInAsync(loginDTO);
+
+            if (loginResponse.IsSuccessStatusCode)
             {
+            
                 var userSession = JsonConvert.DeserializeObject<UserSessionDTO>(loginResponse.Content);
                 var customAuthStateProvider = (CustomAuthenticationStateProvider)authStateProvider;
                 await customAuthStateProvider.UpdateAuthenticationState(userSession);
                 navManager.NavigateTo("/", true);
-            }
-            catch
+            }    
+            else
             {
-                await js.InvokeVoidAsync("alert", "An error occured.");
+                await js.InvokeVoidAsync("alert", loginResponse.Content);
             }
-           
         }
-        else
+        catch
         {
-            await js.InvokeVoidAsync("alert", loginResponse.Content);
-        }   
+            await js.InvokeVoidAsync("alert", "Failed to login.");
+        }
+          
     }
 }

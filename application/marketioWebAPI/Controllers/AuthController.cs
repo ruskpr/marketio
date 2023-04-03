@@ -58,7 +58,7 @@ namespace MarketIO.Server.Controllers
             // validate email address
             if (!registerDTO.Email.Contains('@'))
             {
-                return BadRequest("Invalid email address.");
+                //return BadRequest("Invalid email address.");
             }
 
             // check if any fields are null
@@ -114,7 +114,6 @@ namespace MarketIO.Server.Controllers
                 {
                     new Claim(ClaimTypes.NameIdentifier, "User Id"),
                     new Claim(ClaimTypes.Name, "Username"),
-
                 };
 
                 var jwtSettings = _config.GetSection("Jwt");
