@@ -4,82 +4,108 @@
 @using Newtonsoft.Json;
 @using marketioBlazor.Authentication;
 @using RestSharp;
+@using marketioBlazor.Components.UI
 @inject IJSRuntime js
 @inject AuthenticationStateProvider authStateProvider
 @inject NavigationManager navManager
 @inject ApiClientService ApiClient
 
-<div>
-    <div class="form-group">
+<EditForm Model="registerDTO" OnValidSubmit="@HandleValidSubmit">
+    <DataAnnotationsValidator />
+    @*<ValidationSummary />*@
+
+    <div class="form-group d-grid gap-2">
+        @*email*@
         <label for="email">Email address</label>
-        <input @bind="registerDTO.Email" type="text" class="form-control" id="email">
-    </div>
+        <InputText class="form-control" id="email" @bind-Value="registerDTO.Email" placeholder="someone@example.com" />
+        <ValidationMessage For="@(() => registerDTO.Email)" />
 
-    <div class="form-group">
+        @*first name*@
         <label for="firstName">First name</label>
-        <input @bind="registerDTO.FirstName" type="text" class="form-control" id="firstName" placeholder="John">
-    </div>
+        <InputText class="form-control" id="firstName" @bind-Value="registerDTO.FirstName" placeholder="John" />
+        <ValidationMessage For="@(() => registerDTO.FirstName)" />
 
-    <div class="form-group">
+        @*last name*@
         <label for="lastName">Last name</label>
-        <input @bind="registerDTO.LastName" type="text" class="form-control" id="lastName" placeholder="Smith">
-    </div>
+        <InputText class="form-control" id="lastName" @bind-Value="registerDTO.LastName" placeholder="Smith" />
+        <ValidationMessage For="@(() => registerDTO.LastName)" />
 
-    <div class="form-group">
+        @*password*@
         <label for="password">Password</label>
-        <input @bind="registerDTO.PasswordHash" type="password" class="form-control" id="password">
-    </div>
+        <InputText class="form-control" id="password" @bind-Value="registerDTO.PasswordHash" placeholder="password" />
+        <ValidationMessage For="@(() => registerDTO.PasswordHash)" />
 
-    <div class="form-group">
+        @*confirm password*@
         <label for="confirmPassword">Confirm Password</label>
-        <input @bind="registerDTO.ConfirmPasswordHash" type="password" class="form-control" id="confirmPassword">
-    </div>
+        <InputText class="form-control" id="confirmPassword" @bind-Value="registerDTO.ConfirmPasswordHash" placeholder="confirm password" />
+        <ValidationMessage For="@(() => registerDTO.ConfirmPasswordHash)" />
 
-    <button type="submit" @onclick="HandleRegister" class="btn btn-primary my-3">
-        Register
+    </div>
+    
+    @*submit button*@
+    <button type="submit" class="btn btn-outline-primary my-3">
+        Register @*<Spinner />*@
     </button>
+
     <br/>
-    <label class="text-danger fw-bold">@message</label>
-    <br/>
-    <NavLink class="login" href="login">
+
+    @*error message display *@
+    <label class="text-danger fw-bold">@errorMessage</label>
+    
+    Already have an account?
+    <NavLink class="" href="login">
         Go to login page
     </NavLink>
 
-</div>
+</EditForm>
 
 @code {
-
-    private string message = "";
+    private EditContext? editContext;
+    private string errorMessage = "";
     private RegisterDTO registerDTO = new RegisterDTO();
     private LoginDTO loginDTO = new LoginDTO();
 
-    private async void HandleRegister()
+    protected override void OnInitialized()
+    {
+        editContext = new(registerDTO);
+    }
+
+    private async void HandleValidSubmit()
     {
         try
         {
-            ApiClient = new ApiClientService();
-            var registerResponse = await ApiClient.RegisterUserAsync(registerDTO);
-
-            message = registerResponse.Content ?? "";
-
-            if (registerResponse.IsSuccessStatusCode)
+            if (editContext != null && editContext.Validate())
             {
-                loginDTO = new LoginDTO()
+                await Register();
+            }
+            else
+            {
+                errorMessage = "Failed to register.";
+            }
+        }
+        catch { }
+    }
+
+    public async Task Register()
+    {
+        ApiClient = new ApiClientService();
+        var registerResponse = await ApiClient.RegisterUserAsync(registerDTO);
+
+        errorMessage = registerResponse.Content ?? "";
+
+        if (registerResponse.IsSuccessStatusCode)
+        {
+            loginDTO = new LoginDTO()
                 {
                     Email = registerDTO.Email,
                     PasswordHash = registerDTO.PasswordHash,
                 };
-                await Authenticate();
-                navManager.NavigateTo("/", true);
-            }
-            else if (registerResponse.StatusCode == System.Net.HttpStatusCode.BadRequest)
-            {
-                message = registerResponse.Content;
-            }
+            await Authenticate();
+            navManager.NavigateTo("/", true);
         }
-        catch 
+        else if (registerResponse.StatusCode == System.Net.HttpStatusCode.BadRequest)
         {
-            message = "Failed to register.";
+            errorMessage = registerResponse.Content;
         }
     }
 

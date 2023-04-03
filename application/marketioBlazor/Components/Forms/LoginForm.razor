@@ -8,36 +8,60 @@
 @inject NavigationManager navManager
 @inject ApiClientService ApiClient
 
-<div>
+<EditForm Model="loginDTO" OnValidSubmit="@HandleValidSubmit">
+    <DataAnnotationsValidator />
 
     <div class="form-group">
         <label for="email">Email address</label>
-        <input @bind="loginDTO.Email" type="text" class="form-control" id="email" placeholder="Enter email">
+        <InputText @bind-Value="loginDTO.Email" type="text" class="form-control" id="email" placeholder="Enter email"/>
+        <ValidationMessage For="@(() => loginDTO.Email)" />
     </div>
 
     <div class="form-group">
         <label for="password">Password</label>
-        <input @bind="loginDTO.PasswordHash" type="password" class="form-control" id="password" placeholder="Password">
+        <input @bind="loginDTO.PasswordHash" type="password" class="form-control" id="password" placeholder="Password"/>
+        <ValidationMessage For="@(() => loginDTO.PasswordHash)" />
     </div>
 
-    <span class="text-danger fw-bold">@message</span>
-
-    <button type="submit" @onclick="Authenticate" class="btn btn-primary my-3">
+    @*submit button*@
+    <button type="submit" class="btn btn-secondary my-3">
         Login
     </button>
+
     <br/>
+
+    @*error message display *@
+    <label class="text-danger fw-bold">@errorMessage</label>
+
+    Don't have an account?
     <NavLink class="" href="register">
-        Go to register page
+        Register
     </NavLink>
 
-</div>
+</EditForm>
 
 @code {
 
+    private EditContext? editContext;
     private LoginDTO loginDTO = new LoginDTO();
+    private string errorMessage = "";
 
-    private string message;
-    // create method 
+    protected override void OnInitialized()
+    {
+        editContext = new(loginDTO);
+    }
+
+    private async void HandleValidSubmit()
+    {
+        try
+        {
+            if (editContext != null && editContext.Validate())
+            {
+                await Authenticate();
+            }
+        }
+        catch { }
+    }
 
     private async Task Authenticate()
     {
@@ -48,20 +72,20 @@
 
             if (loginResponse.IsSuccessStatusCode)
             {
-            
+
                 var userSession = JsonConvert.DeserializeObject<UserSessionDTO>(loginResponse.Content);
                 var customAuthStateProvider = (CustomAuthenticationStateProvider)authStateProvider;
                 await customAuthStateProvider.UpdateAuthenticationState(userSession);
                 navManager.NavigateTo("/", true);
             }    
-            else
+            else if (loginResponse.StatusCode == System.Net.HttpStatusCode.BadRequest)
             {
-                await js.InvokeVoidAsync("alert", loginResponse.Content);
+                errorMessage = "Username of password is incorrect.";
             }
         }
         catch
         {
-            await js.InvokeVoidAsync("alert", "Failed to login.");
+            errorMessage = "An error occured.";
         }
           
     }
