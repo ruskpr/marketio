@@ -96,5 +96,12 @@ namespace marketioBlazor.Authentication
 
             return result;
         }
+
+        public async Task LogoutUser()
+        {
+            await UpdateAuthenticationState(null);
+        }
     }
+
+    
 }

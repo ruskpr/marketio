@@ -3,7 +3,6 @@
 @inject AuthenticationStateProvider authStateProvider
 @inject NavigationManager navManager
 
-
 <PageTitle>marketioBlazor</PageTitle>
 
 <div class="page">
@@ -36,7 +35,7 @@
     private async Task Logout()
     {
         var customAuthStateProvider = (CustomAuthenticationStateProvider)authStateProvider;
-        await customAuthStateProvider.UpdateAuthenticationState(null);
+        await customAuthStateProvider.LogoutUser();
         navManager.NavigateTo("/", true);
     }
 

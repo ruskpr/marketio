@@ -1,14 +1,17 @@
 ﻿@page "/"
 @using Common
 @using Common.Models;
+@using marketioBlazor.Authentication;
 @using marketioBlazor.Components
+@using marketioBlazor.Components.UI
 @inject IJSRuntime js
+@inject NavigationManager navManager
 @inject AuthenticationStateProvider authStateProvider
 @inject Blazored.SessionStorage.ISessionStorageService session
 <PageTitle>Welcome to marketio</PageTitle>
 
 <div class="">
-    <div class="d-flex flex-column justify-content-center align-items-center bg-secondary">
+    <div class="d-flex flex-column justify-content-center align-items-center py-5">
 
         <AuthorizeView>
             <Authorized>
@@ -25,19 +28,20 @@
         <div>
             <AuthorizeView>
                 <Authorized>
-                    <a class="btn btn-primary" href="/listings">View Listings</a>
-                    <a class="btn btn-primary" href="/login">Login</a>
+                    <a class="btn btn-outline-primary" href="/listings">View Listings</a>
+                    <button class="btn btn-outline-primary" @onclick="Logout">Logout</button>
                 </Authorized>
                 <NotAuthorized>
-                    <a class="btn btn-primary" href="/login">Login</a>
-                    <a class="btn btn-primary" href="/register">Register</a>
+                    <a class="btn btn-outline-primary" href="/login">Login</a>
+                    <a class="btn btn-outline-primary" href="/register">Register</a>
                 </NotAuthorized>
             </AuthorizeView>
-
         </div>
    </div>
-
-
+    @*<Panel class="bg-dark">
+        Content here
+        <a class="btn btn-success">Hello</a>
+    </Panel>*@
 </div>
 
 @code {
@@ -48,5 +52,12 @@
         var user = authState.User;
         var message = $"Hello {user.Identity.Name}";
         await js.InvokeVoidAsync("alert", message);
+    }
+
+    private async Task Logout()
+    {
+        var customAuthStateProvider = (CustomAuthenticationStateProvider)authStateProvider;
+        await customAuthStateProvider.LogoutUser();
+        navManager.NavigateTo("/", true);
     }
 }
