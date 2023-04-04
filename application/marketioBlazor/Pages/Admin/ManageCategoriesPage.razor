@@ -1,4 +1,5 @@
 ﻿@page "/admin/manage-listing-categories"
+@attribute [Authorize(Roles = "Administrator")]
 @using marketioBlazor.Components.Forms.ListingCategories;
 @inject ApiClientService ApiClient
 <div>

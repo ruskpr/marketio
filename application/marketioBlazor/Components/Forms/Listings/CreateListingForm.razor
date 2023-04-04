@@ -26,6 +26,14 @@
 
     </div>
 
+    <label for="category">Category</label>
+    <InputSelect @bind-Value="_listing.Category">
+        @foreach(var category in _listingCategories)
+        {
+            <option value="@category">@category.Name</option>
+        }
+    </InputSelect>
+
     @*submit button*@
     <button type="submit" class="btn btn-outline-primary my-3">
         Register @*<Spinner />*@
@@ -46,13 +54,17 @@
 @code {
     private EditContext? editContext;
     private string errorMessage = "";
-    private Listing _listing = new Listing() { DateCreated = DateTime.UtcNow };
-    private RegisterDTO registerDTO = new RegisterDTO();
-    private LoginDTO loginDTO = new LoginDTO();
+    private Listing _listing = new Listing();
 
-    protected override void OnInitialized()
+    private List<ListingCategory> _listingCategories = new List<ListingCategory>();
+
+    protected override async Task OnInitializedAsync()
     {
-        editContext = new(registerDTO);
+        editContext = new(_listing);
+
+        // get categories with api
+        ApiClient = new ApiClientService();
+        _listingCategories = await ApiClient.GetAllAsync<ListingCategory>("listingcategories");
     }
 
     private async void HandleValidSubmit()
@@ -75,6 +87,6 @@
     {
         ApiClient = new ApiClientService();
         var registerResponse = await ApiClient.CreateAsync<Listing>(_listing);
-    }
+    }   
 
 }

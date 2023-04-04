@@ -61,15 +61,9 @@ namespace marketioBlazor.Authentication
 
                 try
                 {
-                    var itemJson = JsonConvert.SerializeObject(userSession);
-                    var itemJsonBytes = Encoding.UTF8.GetBytes(itemJson);
-                    var base64Json = Convert.ToBase64String(itemJsonBytes);
-                    await _sessionStorage.SetItemAsync("UserSession", base64Json);
+                    await _sessionStorage.SaveItemEncryptedAsync("UserSession", userSession);
                 }
-                catch 
-                {
-                    throw;
-                }
+                catch { }
             }
             else
             {

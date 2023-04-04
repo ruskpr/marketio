@@ -17,6 +17,7 @@ builder.Services.AddSingleton<WeatherForecastService>();
 builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthenticationStateProvider>(); // added
 builder.Services.AddBlazoredSessionStorage(); // added
 builder.Services.AddAuthenticationCore();
+builder.Services.AddAuthentication("Identity.Application").AddCookie();
 builder.Services.AddBlazoredToast(); // added
 
 var app = builder.Build();
@@ -28,10 +29,12 @@ if (!app.Environment.IsDevelopment())
 }
 
 
-
 app.UseStaticFiles();
 
 app.UseRouting();
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapBlazorHub();
 app.MapFallbackToPage("/_Host");
