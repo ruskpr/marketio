@@ -16,8 +16,9 @@ builder.Services.AddSingleton<ApiClientService>(); // added
 builder.Services.AddSingleton<WeatherForecastService>();
 builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthenticationStateProvider>(); // added
 builder.Services.AddBlazoredSessionStorage(); // added
-builder.Services.AddBlazoredToast();
 builder.Services.AddAuthenticationCore();
+builder.Services.AddBlazoredToast(); // added
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
