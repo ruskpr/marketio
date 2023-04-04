@@ -1,0 +1,22 @@
+﻿
+<EditForm Model="@Model" OnValidSubmit="@OnValidSubmit">
+    <DataAnnotationsValidator />
+
+    <div class="form-group d-grid gap-2">
+        @Fields
+    </div>
+</EditForm>
+
+@code {
+
+    [Parameter]
+    public object? Model { get; set; }
+
+    [Parameter]
+    public EventCallback<EditContext> OnValidSubmit { get; set; }
+
+    [Parameter]
+    public RenderFragment? Fields { get; set; }
+
+
+}

@@ -1,0 +1,80 @@
+﻿@using Common;
+@using Common.DTO;
+@using Common.Helpers;
+@using Newtonsoft.Json;
+@using marketioBlazor.Authentication;
+@using RestSharp;
+@using marketioBlazor.Components.UI
+@inject AuthenticationStateProvider authStateProvider
+@inject NavigationManager navManager
+@inject ApiClientService ApiClient
+
+<EditForm Model="_listing" OnValidSubmit="@HandleValidSubmit">
+    <DataAnnotationsValidator />
+    @*<ValidationSummary />*@
+
+    <div class="form-group d-grid gap-2">
+        @*title*@
+        <label for="email">Email address</label>
+        <InputText class="form-control" id="email" @bind-Value="_listing.Title" placeholder="enter your title here" />
+        <ValidationMessage For="@(() => _listing.Title)" />
+
+        @*first name*@
+        <label for="firstName">First name</label>
+        <InputText class="form-control" id="firstName" @bind-Value="_listing.Description" placeholder="description" />
+        <ValidationMessage For="@(() => _listing.Description)" />
+
+    </div>
+
+    @*submit button*@
+    <button type="submit" class="btn btn-outline-primary my-3">
+        Register @*<Spinner />*@
+    </button>
+
+    @*error message display *@
+    <label class="text-danger fw-bold">@errorMessage</label>
+
+    <br />
+
+    Already have an account?
+    <NavLink class="" href="login">
+        Go to login page
+    </NavLink>
+
+</EditForm>
+
+@code {
+    private EditContext? editContext;
+    private string errorMessage = "";
+    private Listing _listing = new Listing() { DateCreated = DateTime.UtcNow };
+    private RegisterDTO registerDTO = new RegisterDTO();
+    private LoginDTO loginDTO = new LoginDTO();
+
+    protected override void OnInitialized()
+    {
+        editContext = new(registerDTO);
+    }
+
+    private async void HandleValidSubmit()
+    {
+        try
+        {
+            if (editContext != null && editContext.Validate())
+            {
+                await CreateListing(); // create the account
+                navManager.NavigateTo("/listings", true);
+                return;
+            }
+        }
+        catch { }
+
+        errorMessage = "Something went wrong.";
+    }
+
+    public async Task CreateListing()
+    {
+        ApiClient = new ApiClientService();
+        var registerResponse = await ApiClient.CreateAsync<Listing>(_listing);
+    }
+
+}

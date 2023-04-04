@@ -1,0 +1,62 @@
+﻿@using Common;
+@using Common.DTO;
+@using Common.Helpers;
+@using Newtonsoft.Json;
+@using marketioBlazor.Authentication;
+@using RestSharp;
+@using marketioBlazor.Components.UI
+@inject IJSRuntime js
+@inject AuthenticationStateProvider authStateProvider
+@inject NavigationManager navManager
+@inject ApiClientService ApiClient
+
+<EditForm Model="_category" OnValidSubmit="@HandleValidSubmit">
+    <DataAnnotationsValidator />
+    @*<ValidationSummary />*@
+
+    <div class="form-group d-grid gap-2">
+        @*category name field*@
+        <label for="name">Category Name</label>
+        <InputText class="form-control" id="name" @bind-Value="_category.Name" placeholder="category name" />
+        <ValidationMessage For="@(() => _category.Name)" />
+       
+    </div>
+
+    @*submit button*@
+    <button type="submit" class="btn btn-outline-primary my-3">
+        Create @*<Spinner />*@
+    </button>
+
+    @*error message display *@
+    <label class="text-danger fw-bold">@errorMessage</label>
+
+</EditForm>
+
+@code {
+    private EditContext? editContext;
+    private string errorMessage = "";
+    private ListingCategory _category = new ListingCategory() { DateCreated = DateTime.UtcNow };
+
+    protected override void OnInitialized()
+    {
+        editContext = new(_category);
+    }
+
+    private async void HandleValidSubmit()
+    {
+        try
+        {
+            if (editContext != null && editContext.Validate())
+            {
+                ApiClient = new ApiClientService();
+                await ApiClient.CreateAsync<ListingCategory>(_category); 
+                //navManager.NavigateTo("/", true);
+                return;
+            }
+        }
+        catch { }
+
+        errorMessage = "Something went wrong.";
+    }
+
+}
