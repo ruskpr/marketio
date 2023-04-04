@@ -1,4 +1,6 @@
 ﻿using Microsoft.JSInterop;
+using Newtonsoft.Json;
+using System.Text;
 
 namespace marketioBlazor.Extensions
 {
@@ -40,8 +42,12 @@ namespace marketioBlazor.Extensions
 
         public async Task SetValueAsync<T>(string key, T value)
         {
+            var itemJson = JsonConvert.SerializeObject(value);
+            var itemJsonBytes = Encoding.UTF8.GetBytes(itemJson);
+            var base64Json = Convert.ToBase64String(itemJsonBytes);
+
             await WaitForReference();
-            await _accessorJsRef.Value.InvokeVoidAsync("set", key, value);
+            await _accessorJsRef.Value.InvokeVoidAsync("set", key, base64Json);
         }
 
         #endregion

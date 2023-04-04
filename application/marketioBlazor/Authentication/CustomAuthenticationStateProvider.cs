@@ -13,11 +13,14 @@ namespace marketioBlazor.Authentication
     public class CustomAuthenticationStateProvider : AuthenticationStateProvider
     {
         private readonly ISessionStorageService _sessionStorage;
+        private CookieStorageAccessor _cookieStorageAccessor;
         private ClaimsPrincipal _anonymous = new ClaimsPrincipal(new ClaimsIdentity());
 
-        public CustomAuthenticationStateProvider(ISessionStorageService sessionStorage)
+        // dependency injection to get the session storage service and cookie storage service
+        public CustomAuthenticationStateProvider(ISessionStorageService sessionStorage, CookieStorageAccessor cookieStorageAccessor)
         {
             _sessionStorage = sessionStorage;
+            _cookieStorageAccessor = cookieStorageAccessor;
         }
 
         public override async Task<AuthenticationState> GetAuthenticationStateAsync()
@@ -49,7 +52,6 @@ namespace marketioBlazor.Authentication
             ClaimsPrincipal claimsPrincipal;
 
 
-
             if (userSession != null)
             {
                 claimsPrincipal = new ClaimsPrincipal(new ClaimsIdentity(new List<Claim>
@@ -59,17 +61,21 @@ namespace marketioBlazor.Authentication
                 }));
 
                 userSession.ExpiryTimeStamp = DateTime.Now.AddMinutes(userSession.ExpiresIn);
-                //await _sessionStorage.SaveItemEncryptedAsync("UserSession", userSession);
 
                 try
                 {
+                    // set cookie
+                    await _cookieStorageAccessor.SetValueAsync("UserSession", userSession);
+                    // set session
                     await _sessionStorage.SaveItemEncryptedAsync("UserSession", userSession);
                 }
                 catch { }
             }
             else
             {
+                // clear session and cookie
                 claimsPrincipal = _anonymous;
+                await _cookieStorageAccessor.SetValueAsync("UserSession", string.Empty);
                 await _sessionStorage.RemoveItemAsync("UserSession");
             }
 
