@@ -1,0 +1,4 @@
+﻿@inject IToastService toastService
+
+<button class="btn btn-success" @onclick="@(() => toastService.ShowSuccess("I'm a SUCCESS message with a custom title"))">Success Toast</button>
+

@@ -1,6 +1,36 @@
 ﻿@page "/admin/manage-listing-categories"
 @using marketioBlazor.Components.Forms.ListingCategories;
-
+@inject ApiClientService ApiClient
 <div>
     <CreateListingCategoryForm />
+
+    <TableTemplate Items="_categories" Context="category">
+        <TableHeader>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Date Created</th>
+            <th>Actions</th>
+        </TableHeader>
+        <RowTemplate>
+            <td>@category.Id</td>
+            <td>@category.Name</td>
+            <td>@category.DateCreated</td>
+            <td>
+                <a href="/admin/manage-listing-categories/edit/@category.Id" class="btn btn-primary">Edit</a>
+                <a href="/admin/manage-listing-categories/delete/@category.Id" class="btn btn-danger">Delete</a>
+            </td>
+        </RowTemplate>
+    </TableTemplate>
+
 </div>
+
+@code {
+    private List<ListingCategory> _categories = new List<ListingCategory>();
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        ApiClient = new ApiClientService();
+        _categories = await ApiClient.GetAllAsync<ListingCategory>();
+    }
+}

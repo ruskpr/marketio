@@ -82,11 +82,13 @@ namespace Common
         #region get
 
         // create a method to get all users
-        public async Task<List<T>> GetAllAsync<T>() where T : IDbModel
+        public async Task<List<T>> GetAllAsync<T>(string? apiEnpointName = null) where T : IDbModel
         {
             List<T>? ret = new List<T>();
 
-            var request = new RestRequest($"api/{typeof(T).Name}s");
+            string endpoint = apiEnpointName ?? typeof(T).Name + "s";
+
+            var request = new RestRequest($"api/{endpoint}");
 
             var response = await _client.GetAsync(request);
             if (response.StatusCode == HttpStatusCode.OK)
