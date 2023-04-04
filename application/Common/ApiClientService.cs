@@ -114,12 +114,14 @@ namespace Common
 
         #region post
 
-        public async Task<RestResponse> CreateAsync<T>(T model) where T : IDbModel
+        public async Task<RestResponse> CreateAsync<T>(T model, string? apiEnpointName = null) where T : IDbModel
         {
             var bodyContent = new StringContent(JsonConvert.SerializeObject(model),
                                              Encoding.UTF8, "application/json");
 
-            var request = new RestRequest($"api/{typeof(T).Name}s").AddJsonBody(bodyContent);
+            string endpoint = apiEnpointName ?? typeof(T).Name + "s";
+
+            var request = new RestRequest($"api/{endpoint}").AddJsonBody(bodyContent);
 
             var response = await _client.PostAsync(request);
 
