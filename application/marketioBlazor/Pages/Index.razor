@@ -28,7 +28,7 @@
         <div>
             <AuthorizeView>
                 <Authorized>
-                    <a class="btn btn-outline-primary" href="/listings">View Listings</a>
+                    <a class="btn btn-primary" href="/listings">View Listings</a>
                     <button class="btn btn-outline-primary" @onclick="Logout">Logout</button>
                 </Authorized>
                 <NotAuthorized>
@@ -36,6 +36,11 @@
                     <a class="btn btn-outline-primary" href="/register">Register</a>
                 </NotAuthorized>
             </AuthorizeView>
+
+            <br />
+            <br />
+
+            <a href="#" class="btn btn-outline-dark">View market.io on Github</a>
         </div>
    </div>
     @*<Panel class="bg-dark">
@@ -46,18 +51,11 @@
 
 @code {
 
-    private async Task DisplayGreetingMessage()
-    {
-        var authState = await authStateProvider.GetAuthenticationStateAsync();
-        var user = authState.User;
-        var message = $"Hello {user.Identity.Name}";
-        await js.InvokeVoidAsync("alert", message);
-    }
-
     private async Task Logout()
     {
         var customAuthStateProvider = (CustomAuthenticationStateProvider)authStateProvider;
         await customAuthStateProvider.LogoutUser();
         navManager.NavigateTo("/", true);
     }
+
 }

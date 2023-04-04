@@ -1,0 +1,48 @@
+﻿@page "/listings"
+@inject ApiClientService ApiClient
+
+<h3>Admin Page</h3>
+
+<a href="/listings/create" class="btn btn-link">Create new listing</a>
+
+<TableTemplate Items="_listings" Context="listing">
+    <TableHeader>
+        <th>Id</th>
+        <th>Seller</th>
+        <th>Title</th>
+        <th>Description</th>
+        <th>Category</th>
+        <th>Price</th>
+        <th>Is negotiable</th>
+        <th>Date created</th>
+        <th>date last updated</th>
+        <th>Actions</th>
+    </TableHeader>
+    <RowTemplate>
+        <td>@listing.Id</td>
+        <td>@listing.User.FullName</td>
+        <td>@listing.Title</td>
+        <td>@listing.Description</td>
+        <td>@listing.Category.Name</td>
+        <td>@listing.Price</td>
+        <td>@listing.IsNegotiable</td>
+        <td>@listing.DateCreated</td>
+        <td>@listing.DateUpdated</td>
+        <td>
+            <a href="/listings/@listing.Id" class="btn btn-primary">View Listing</a>
+            <a href="/listings/edit/@listing.Id" class="btn btn-primary">Edit</a>
+            <a href="/listings/delete/@listing.Id" class="btn btn-danger">Delete</a>
+        </td>
+    </RowTemplate>
+</TableTemplate>
+
+
+@code {
+    private List<Listing> _listings = new List<Listing>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        ApiClient = new ApiClientService();
+        _listings = await ApiClient.GetAllAsync<Listing>();
+    }
+}
