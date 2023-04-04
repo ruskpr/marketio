@@ -47,11 +47,11 @@
         Register @*<Spinner />*@
     </button>
 
-    <br/>
-
     @*error message display *@
     <label class="text-danger fw-bold">@errorMessage</label>
     
+    <br/>
+
     Already have an account?
     <NavLink class="" href="login">
         Go to login page
@@ -76,14 +76,15 @@
         {
             if (editContext != null && editContext.Validate())
             {
-                await Register();
-            }
-            else
-            {
-                errorMessage = "Failed to register.";
+                await Register(); // create the account
+                await Authenticate(); // log the new user in 
+                navManager.NavigateTo("/", true);
+                return;
             }
         }
         catch { }
+
+        errorMessage = "Something went wrong.";
     }
 
     public async Task Register()
@@ -96,17 +97,13 @@
         if (registerResponse.IsSuccessStatusCode)
         {
             loginDTO = new LoginDTO()
-                {
-                    Email = registerDTO.Email,
-                    PasswordHash = registerDTO.PasswordHash,
-                };
-            await Authenticate();
-            navManager.NavigateTo("/", true);
+            {
+                Email = registerDTO.Email,
+                PasswordHash = registerDTO.PasswordHash,
+            };
+            return;
         }
-        else if (registerResponse.StatusCode == System.Net.HttpStatusCode.BadRequest)
-        {
-            errorMessage = registerResponse.Content;
-        }
+        
     }
 
     private async Task Authenticate()
@@ -116,21 +113,11 @@
 
         if (loginResponse.IsSuccessStatusCode)
         {
-            try
-            {
-                var userSession = JsonConvert.DeserializeObject<UserSessionDTO>(loginResponse.Content);
-                var customAuthStateProvider = (CustomAuthenticationStateProvider)authStateProvider;
-                await customAuthStateProvider.UpdateAuthenticationState(userSession);
-            }
-            catch
-            {
-                await js.InvokeVoidAsync("alert", "An error occured.");
-            }
-
-        }
-        else
-        {
-            await js.InvokeVoidAsync("alert", loginResponse.Content);
+            // deserialize the response into a UserSessionDTO object
+            var userSession = JsonConvert.DeserializeObject<UserSessionDTO>(loginResponse.Content);
+            // update session variable with new UserSessionDTO object
+            var customAuthStateProvider = (CustomAuthenticationStateProvider)authStateProvider;
+            await customAuthStateProvider.UpdateAuthenticationState(userSession); 
         }
     }
     

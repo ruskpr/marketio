@@ -22,15 +22,14 @@
     </div>
 
     @*submit button*@
-    <button type="submit" class="btn btn-secondary my-3">
+    <button type="submit" class="btn btn-outline-primary my-3">
         Login
     </button>
-
-    <br/>
 
     @*error message display *@
     <label class="text-danger fw-bold">@errorMessage</label>
 
+    <br/>
     Don't have an account?
     <NavLink class="" href="register">
         Register
@@ -51,14 +50,10 @@
 
     private async void HandleValidSubmit()
     {
-        try
+        if (editContext != null && editContext.Validate())
         {
-            if (editContext != null && editContext.Validate())
-            {
-                await Authenticate();
-            }
+            await Authenticate();
         }
-        catch { }
     }
 
     private async Task Authenticate()
@@ -83,7 +78,7 @@
         }
         catch
         {
-            errorMessage = "An error occured.";
+            errorMessage = "Failed to connected to server.";
         }
           
     }
