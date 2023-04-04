@@ -25,10 +25,19 @@ namespace marketioWebAPI.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Listing>>> GetListings()
         {
-          if (_context.Listings == null)
-          {
-              return NotFound();
-          }
+            if (_context.Listings == null)
+            {
+                return NotFound();
+            }
+
+            //get listings and include listing images and listing tags
+            var listings = await _context.Listings
+                .Include(l => l.ListingImages)
+                .Include(l => l.ListingTags)
+                .ToListAsync();
+
+            //var listings = await _context.Listings.ToListAsync();
+            
             return await _context.Listings.ToListAsync();
         }
 
@@ -36,10 +45,11 @@ namespace marketioWebAPI.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Listing>> GetListing(int id)
         {
-          if (_context.Listings == null)
-          {
-              return NotFound();
-          }
+            if (_context.Listings == null)
+            {
+                return NotFound();
+            }
+
             var listing = await _context.Listings.FindAsync(id);
 
             if (listing == null)
