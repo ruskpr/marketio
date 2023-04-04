@@ -18,6 +18,7 @@ builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthenticationStat
 builder.Services.AddBlazoredSessionStorage(); // added
 builder.Services.AddAuthenticationCore();
 builder.Services.AddAuthentication("Identity.Application").AddCookie();
+
 builder.Services.AddBlazoredToast(); // added
 
 var app = builder.Build();
