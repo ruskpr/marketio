@@ -1,4 +1,5 @@
 using Blazored.SessionStorage;
+using Blazored.Toast;
 using Common;
 using marketioBlazor.Authentication;
 using marketioBlazor.Data;
@@ -15,6 +16,7 @@ builder.Services.AddSingleton<ApiClientService>(); // added
 builder.Services.AddSingleton<WeatherForecastService>();
 builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthenticationStateProvider>(); // added
 builder.Services.AddBlazoredSessionStorage(); // added
+builder.Services.AddBlazoredToast();
 builder.Services.AddAuthenticationCore();
 var app = builder.Build();
 

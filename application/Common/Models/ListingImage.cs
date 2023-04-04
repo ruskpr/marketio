@@ -16,8 +16,6 @@ namespace Common.Models
         public bool IsPrimaryImage { get; set; }
 
         public DateTime DateAdded { get; set; }
-
-
-       
+               
     }
 }

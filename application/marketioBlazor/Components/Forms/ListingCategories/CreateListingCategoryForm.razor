@@ -49,7 +49,7 @@
             if (editContext != null && editContext.Validate())
             {
                 ApiClient = new ApiClientService();
-                await ApiClient.CreateAsync<ListingCategory>(_category); 
+                await ApiClient.CreateAsync<ListingCategory>(_category, "ListingCategories"); 
                 //navManager.NavigateTo("/", true);
                 return;
             }
