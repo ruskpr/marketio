@@ -27,7 +27,16 @@ namespace marketioBlazor.Authentication
         {
             try
             {
+                // try to get token from session storage
                 var userSession = await _sessionStorage.ReadEncryptedItemAsync<UserSessionDTO>("UserSession");
+
+                // if no token in session storage, try to get from cookie
+                if (userSession == null)
+                {
+                    userSession = await _cookieStorageAccessor.GetValueAsync<UserSessionDTO>("UserSession");
+                }
+
+                // if still null return un authenticated user
                 if (userSession == null)
                 {
                     return await Task.FromResult(new AuthenticationState(_anonymous));
@@ -47,10 +56,12 @@ namespace marketioBlazor.Authentication
             }
         }
 
+        
+        
+
         public async Task UpdateAuthenticationState(UserSessionDTO? userSession)
         {
             ClaimsPrincipal claimsPrincipal;
-
 
             if (userSession != null)
             {

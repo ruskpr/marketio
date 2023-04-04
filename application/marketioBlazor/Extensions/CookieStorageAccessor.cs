@@ -35,6 +35,8 @@ namespace marketioBlazor.Extensions
         public async Task<T> GetValueAsync<T>(string key)
         {
             await WaitForReference();
+
+
             var result = await _accessorJsRef.Value.InvokeAsync<T>("get", key);
 
             return result;
