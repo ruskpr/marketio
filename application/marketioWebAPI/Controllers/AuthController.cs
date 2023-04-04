@@ -133,7 +133,7 @@ namespace MarketIO.Server.Controllers
                 var jwt = tokenHandler.WriteToken(token);
 
                 UserSessionDTO userSessionDTO = new UserSessionDTO() {
-
+                    UserId = userToCompare.Id,
                     Email = userDTO.Email,
                     Token = jwt,
                     Role = userToCompare.IsSuperuser ? "Administrator" : "User",
