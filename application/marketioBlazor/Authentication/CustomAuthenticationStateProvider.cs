@@ -48,6 +48,8 @@ namespace marketioBlazor.Authentication
         {
             ClaimsPrincipal claimsPrincipal;
 
+
+
             if (userSession != null)
             {
                 claimsPrincipal = new ClaimsPrincipal(new ClaimsIdentity(new List<Claim>

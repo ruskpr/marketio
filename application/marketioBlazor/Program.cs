@@ -3,6 +3,7 @@ using Blazored.Toast;
 using Common;
 using marketioBlazor.Authentication;
 using marketioBlazor.Data;
+using marketioBlazor.Extensions;
 using Microsoft.AspNetCore.Components.Authorization;
 using RestSharp;
 
@@ -15,6 +16,7 @@ builder.Services.AddSingleton(new RestClient(new HttpClient())); // added
 builder.Services.AddSingleton<ApiClientService>(); // added
 builder.Services.AddSingleton<WeatherForecastService>();
 builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthenticationStateProvider>(); // added
+builder.Services.AddScoped<CookieStorageAccessor>();
 builder.Services.AddBlazoredSessionStorage(); // added
 builder.Services.AddAuthenticationCore();
 builder.Services.AddAuthentication("Identity.Application").AddCookie();
