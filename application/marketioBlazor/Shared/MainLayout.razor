@@ -14,8 +14,8 @@
         <div class="top-row px-4">
             <AuthorizeView>
                 <Authorized>
-                    <span>Hello, @context.User.Identity.Name!</span>
-                    <button @onclick="Logout">Logout</button>
+                    <span class="px-3 fw-bold">Hello, @context.User.Identity.Name!</span>
+                    <button class="btn btn-light" @onclick="Logout">Logout</button>
                 </Authorized>
                 <NotAuthorized>
                     <a href="/login">Login</a>

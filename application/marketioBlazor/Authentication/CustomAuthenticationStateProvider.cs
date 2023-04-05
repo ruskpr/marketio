@@ -38,8 +38,6 @@ namespace marketioBlazor.Authentication
                     userSession = await _cookieStorageAccessor.GetValueAsync<UserSessionDTO>(COOKIE_NAME);
                 }
 
-                //userSession = await _cookieStorageAccessor.GetValueAsync<UserSessionDTO>(COOKIE_NAME);
-
                 // if still null return un-authenticated user
                 if (userSession == null)
                 {
@@ -58,10 +56,7 @@ namespace marketioBlazor.Authentication
             {
                 return await Task.FromResult(new AuthenticationState(_anonymous));
             }
-        }
-
-        
-        
+        }      
 
         public async Task UpdateAuthenticationState(UserSessionDTO? userSession)
         {
