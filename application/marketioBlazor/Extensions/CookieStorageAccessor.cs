@@ -1,4 +1,5 @@
-﻿using Microsoft.JSInterop;
+﻿using Blazored.SessionStorage;
+using Microsoft.JSInterop;
 using Newtonsoft.Json;
 using System.Text;
 
@@ -34,12 +35,19 @@ namespace marketioBlazor.Extensions
 
         public async Task<T> GetValueAsync<T>(string key)
         {
-            await WaitForReference();
+            try
+            {
+                await WaitForReference();
+                var base64Json = await _accessorJsRef.Value.InvokeAsync<string>("get", key);
 
+                var itemJsonBytes = Convert.FromBase64String(base64Json.ToString());
+                var itemJson = Encoding.UTF8.GetString(itemJsonBytes);
+                var item = JsonConvert.DeserializeObject<T>(itemJson);
 
-            var result = await _accessorJsRef.Value.InvokeAsync<T>("get", key);
-
-            return result;
+                return (T)item;
+            }
+            catch { return default; }
+          
         }
 
         public async Task SetValueAsync<T>(string key, T value)

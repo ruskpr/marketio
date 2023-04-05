@@ -16,6 +16,8 @@ namespace marketioBlazor.Authentication
         private CookieStorageAccessor _cookieStorageAccessor;
         private ClaimsPrincipal _anonymous = new ClaimsPrincipal(new ClaimsIdentity());
 
+        private const string COOKIE_NAME = "marketio-jwt-auth-token";
+
         // dependency injection to get the session storage service and cookie storage service
         public CustomAuthenticationStateProvider(ISessionStorageService sessionStorage, CookieStorageAccessor cookieStorageAccessor)
         {
@@ -27,16 +29,18 @@ namespace marketioBlazor.Authentication
         {
             try
             {
-                // try to get token from session storage
-                var userSession = await _sessionStorage.ReadEncryptedItemAsync<UserSessionDTO>("UserSession");
+                //// try to get token from session storage
+                var userSession = await _sessionStorage.ReadEncryptedItemAsync<UserSessionDTO>(COOKIE_NAME);
 
                 // if no token in session storage, try to get from cookie
                 if (userSession == null)
                 {
-                    userSession = await _cookieStorageAccessor.GetValueAsync<UserSessionDTO>("UserSession");
+                    userSession = await _cookieStorageAccessor.GetValueAsync<UserSessionDTO>(COOKIE_NAME);
                 }
 
-                // if still null return un authenticated user
+                //userSession = await _cookieStorageAccessor.GetValueAsync<UserSessionDTO>(COOKIE_NAME);
+
+                // if still null return un-authenticated user
                 if (userSession == null)
                 {
                     return await Task.FromResult(new AuthenticationState(_anonymous));
@@ -76,9 +80,9 @@ namespace marketioBlazor.Authentication
                 try
                 {
                     // set cookie
-                    await _cookieStorageAccessor.SetValueAsync("UserSession", userSession);
+                    await _cookieStorageAccessor.SetValueAsync(COOKIE_NAME, userSession);
                     // set session
-                    await _sessionStorage.SaveItemEncryptedAsync("UserSession", userSession);
+                    await _sessionStorage.SaveItemEncryptedAsync(COOKIE_NAME, userSession);
                 }
                 catch { }
             }
@@ -86,8 +90,8 @@ namespace marketioBlazor.Authentication
             {
                 // clear session and cookie
                 claimsPrincipal = _anonymous;
-                await _cookieStorageAccessor.SetValueAsync("UserSession", string.Empty);
-                await _sessionStorage.RemoveItemAsync("UserSession");
+                await _cookieStorageAccessor.SetValueAsync(COOKIE_NAME, string.Empty);
+                await _sessionStorage.RemoveItemAsync(COOKIE_NAME);
             }
 
             NotifyAuthenticationStateChanged(Task.FromResult(new AuthenticationState(claimsPrincipal)));
@@ -99,7 +103,7 @@ namespace marketioBlazor.Authentication
 
             try
             {
-                var userSession = await _sessionStorage.ReadEncryptedItemAsync<UserSessionDTO>("UserSession");
+                var userSession = await _sessionStorage.ReadEncryptedItemAsync<UserSessionDTO>(COOKIE_NAME);
                 if (userSession != null && DateTime.Now < userSession.ExpiryTimeStamp)
                 {
                     result = userSession.Token;
