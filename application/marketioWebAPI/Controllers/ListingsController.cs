@@ -29,16 +29,36 @@ namespace marketioWebAPI.Controllers
             {
                 return NotFound();
             }
-
-            //get listings and include listing images and listing tags
             var listings = await _context.Listings
-                .Include(l => l.ListingImages)
-                .Include(l => l.ListingTags)
                 .ToListAsync();
 
+            //add images and tags user and category
+            for (int i = 0; i < listings.Count; i++)
+            {
+                var tags = await _context.ListingTags
+                    .Where(lt => lt.ListingId == listings[i].Id)
+                    .ToListAsync();
+
+                var images = await _context.ListingImages
+                    .Where(li => li.ListingId == listings[i].Id)
+                    .ToListAsync();
+
+                var user = await _context.Users
+                    .Where(u => u.Id == listings[i].UserId)
+                    .FirstOrDefaultAsync();
+
+                var category = await _context.ListingCategories
+                    .Where(lc => lc.Id == listings[i].CategoryId)
+                    .FirstOrDefaultAsync();
+
+                listings[i].ListingTags = tags;
+                listings[i].ListingImages = images;
+            }
+
+
             //var listings = await _context.Listings.ToListAsync();
-            
-            return await _context.Listings.ToListAsync();
+
+            return listings;
         }
 
         // GET: api/Listings/5
@@ -100,9 +120,38 @@ namespace marketioWebAPI.Controllers
           {
               return Problem("Entity set 'marketioContext.Listings'  is null.");
           }
+            // add listing
             _context.Listings.Add(listing);
             await _context.SaveChangesAsync();
 
+            // get listing that was added
+            var addedListing = await _context.Listings
+                .Where(u => u.Id == listing.Id)
+                .FirstOrDefaultAsync();
+
+            // add tags
+            foreach (var tag in listing.TagString)
+            {
+                _context.ListingTags.Add(new ListingTag()
+                {
+                    Name = tag,
+                    ListingId = addedListing.Id,
+                });
+            }
+
+            // add images
+            for (int i = 0; i < listing.ImagesBase64.Length; i++)
+            {
+                _context.ListingImages.Add(new ListingImage()
+                {
+                    ListingId = addedListing.Id,
+                    ImageAsBase64 = listing.ImagesBase64[i],
+                    IsPrimaryImage = i == 0 ? true : false,
+                    DateAdded = DateTime.UtcNow
+                });
+            }
+
+            await _context.SaveChangesAsync();
             return CreatedAtAction("GetListing", new { id = listing.Id }, listing);
         }
 

@@ -5,17 +5,20 @@
 @using marketioBlazor.Components
 @inject ApiClientService ApiClient
 
-<h3>Admin Page</h3>
+<div class="m-3">
+<h1>Admin Page</h1>
 <a href="/admin/manage-listings" class="btn btn-link">Manage listings</a>
 <a href="/admin/manage-listing-categories" class="btn btn-link">Manage Categories</a>
-
+<br/>
+<br/>
+<h3>Users</h3>
 <TableTemplate Items="_users" Context="user">
     <TableHeader>
         <th>Id</th>
         <th>Email</th>
         <th>First Name</th>
         <th>Last Name</th>
-        <th>Password Hash</th>
+        @*<th>Password Hash</th>*@
         <th>Address</th>
         <th>City</th>
         <th>Country</th>
@@ -33,7 +36,7 @@
         <td>@user.Email</td>
         <td>@user.FirstName</td>
         <td>@user.LastName</td>
-        <td>@user.PasswordHash</td>
+        @*<td>@user.PasswordHash</td>*@
         <td>@user.Address</td>
         <td>@user.City</td>
         <td>@user.Country</td>
@@ -52,6 +55,7 @@
     </RowTemplate>
 </TableTemplate>
 
+<h3>Transactions</h3>
 <TableTemplate Items="_transactions" Context="transaction">
     <TableHeader>
         <th>Id</th>
@@ -69,6 +73,7 @@
     </RowTemplate>
 </TableTemplate>
 
+</div>
 @code {
     private List<User> _users = new List<User>();
     private List<Transaction> _transactions = new List<Transaction>();

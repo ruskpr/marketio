@@ -99,9 +99,9 @@ namespace Common
             return ret;
         }
 
-        public async Task<T?> GetByIdAsync<T>(T obj) where T : IDbModel
+        public async Task<T> GetByIdAsync<T>(int id) where T : IDbModel
         {
-            var request = new RestRequest($"api/{typeof(T).Name}s/{obj.Id}");
+            var request = new RestRequest($"api/{typeof(T).Name}s/{id}");
 
             var response = await _client.GetAsync(request);
             if (response.StatusCode == HttpStatusCode.OK)
@@ -116,13 +116,14 @@ namespace Common
 
         #region post
 
-        public async Task<RestResponse> CreateAsync<T>(T model, string? apiEnpointName = null) where T : IDbModel
+        public async Task<RestResponse> CreateAsync<T>(IDbModel model, string? apiControllerName = null) where T : IDbModel
         {
-            var modelAsJson = JsonConvert.SerializeObject(model);
+            //var modelAsJson = JsonConvert.SerializeObject(model);
 
-            string endpoint = apiEnpointName ?? typeof(T).Name + "s";
+            string endpoint = apiControllerName ?? typeof(T).Name + "s";
 
-            var request = new RestRequest($"api/{endpoint}").AddStringBody(modelAsJson, ContentType.Json);
+            //var request = new RestRequest($"api/{endpoint}").AddStringBody(modelAsJson, ContentType.Json);
+            var request = new RestRequest($"api/{endpoint}").AddJsonBody(model);
 
             var response = await _client.PostAsync(request);
 

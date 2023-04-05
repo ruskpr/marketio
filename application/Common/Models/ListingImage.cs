@@ -9,7 +9,7 @@ namespace Common.Models
 
         public int ListingId { get; set; }
 
-        public Listing Listing { get; set; }
+        //public Listing Listing { get; set; }
 
         public string ImageAsBase64 { get; set; }
 

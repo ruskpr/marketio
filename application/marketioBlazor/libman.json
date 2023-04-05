@@ -2,10 +2,14 @@
   "version": "1.0",
   "defaultProvider": "cdnjs",
   "libraries": [
-    {
-      "provider": "unpkg",
-      "library": "font-awesome@4.7.0",
-      "destination": "wwwroot/css/font-awesome/"
-    }
+    //{
+    //  "provider": "unpkg",
+    //  "library": "font-awesome@4.7.0",
+    //  "destination": "wwwroot/css/font-awesome/"
+    //},
+    //{
+    //  "library": "font-awesome@6.4.0",
+    //  "destination": "wwwroot/css/font-awesome/"
+    //}
   ]
 }

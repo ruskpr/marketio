@@ -48,6 +48,7 @@ namespace marketioBlazor.Authentication
                 {
                     new Claim(ClaimTypes.Name, userSession.Email),
                     new Claim(ClaimTypes.Role, userSession.Role),
+                    new Claim(ClaimTypes.Sid, userSession.Token),
                 }, "JwtAuth"));
 
                 return await Task.FromResult(new AuthenticationState(claimsPrincipal));
@@ -56,7 +57,9 @@ namespace marketioBlazor.Authentication
             {
                 return await Task.FromResult(new AuthenticationState(_anonymous));
             }
-        }      
+        }     
+        
+
 
         public async Task UpdateAuthenticationState(UserSessionDTO? userSession)
         {
@@ -92,21 +95,24 @@ namespace marketioBlazor.Authentication
             NotifyAuthenticationStateChanged(Task.FromResult(new AuthenticationState(claimsPrincipal)));
         }
 
-        public async Task<string> GetToken()
+        public async Task<UserSessionDTO?> GetToken()
         {
-            var result = string.Empty;
 
             try
             {
-                var userSession = await _sessionStorage.ReadEncryptedItemAsync<UserSessionDTO>(COOKIE_NAME);
-                if (userSession != null && DateTime.Now < userSession.ExpiryTimeStamp)
+                var sessionToken = await _sessionStorage.ReadEncryptedItemAsync<UserSessionDTO>(COOKIE_NAME);
+
+                if (sessionToken == null)
+                    sessionToken = await _cookieStorageAccessor.GetValueAsync<UserSessionDTO>(COOKIE_NAME);
+
+                if (sessionToken != null)
                 {
-                    result = userSession.Token;
+                    return sessionToken;
                 }
             }
             catch { }
 
-            return result;
+            return null;
         }
 
         public async Task LogoutUser()

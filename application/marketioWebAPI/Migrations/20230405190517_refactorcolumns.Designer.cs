@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using marketioWebAPI.Data;
 
@@ -11,9 +12,11 @@ using marketioWebAPI.Data;
 namespace marketioWebAPI.Migrations
 {
     [DbContext(typeof(marketioContext))]
-    partial class marketioContextModelSnapshot : ModelSnapshot
+    [Migration("20230405190517_refactorcolumns")]
+    partial class refactorcolumns
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -63,7 +66,7 @@ namespace marketioWebAPI.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Listings", (string)null);
+                    b.ToTable("Listings");
                 });
 
             modelBuilder.Entity("Common.Models.ListingCategory", b =>
@@ -84,7 +87,7 @@ namespace marketioWebAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ListingCategories", (string)null);
+                    b.ToTable("ListingCategories");
                 });
 
             modelBuilder.Entity("Common.Models.ListingImage", b =>
@@ -112,7 +115,7 @@ namespace marketioWebAPI.Migrations
 
                     b.HasIndex("ListingId");
 
-                    b.ToTable("ListingImages", (string)null);
+                    b.ToTable("ListingImages");
                 });
 
             modelBuilder.Entity("Common.Models.ListingTag", b =>
@@ -132,7 +135,9 @@ namespace marketioWebAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ListingTags", (string)null);
+                    b.HasIndex("ListingId");
+
+                    b.ToTable("ListingTags");
                 });
 
             modelBuilder.Entity("Common.Models.Transaction", b =>
@@ -163,7 +168,7 @@ namespace marketioWebAPI.Migrations
 
                     b.HasIndex("SellerId");
 
-                    b.ToTable("Transactions", (string)null);
+                    b.ToTable("Transactions");
                 });
 
             modelBuilder.Entity("Common.Models.User", b =>
@@ -231,7 +236,7 @@ namespace marketioWebAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users", (string)null);
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("Common.Models.UserRating", b =>
@@ -255,7 +260,7 @@ namespace marketioWebAPI.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserRatings", (string)null);
+                    b.ToTable("UserRatings");
                 });
 
             modelBuilder.Entity("Common.Models.Listing", b =>
@@ -281,6 +286,17 @@ namespace marketioWebAPI.Migrations
                 {
                     b.HasOne("Common.Models.Listing", "Listing")
                         .WithMany("ListingImages")
+                        .HasForeignKey("ListingId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Listing");
+                });
+
+            modelBuilder.Entity("Common.Models.ListingTag", b =>
+                {
+                    b.HasOne("Common.Models.Listing", "Listing")
+                        .WithMany("ListingTags")
                         .HasForeignKey("ListingId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -329,6 +345,8 @@ namespace marketioWebAPI.Migrations
             modelBuilder.Entity("Common.Models.Listing", b =>
                 {
                     b.Navigation("ListingImages");
+
+                    b.Navigation("ListingTags");
                 });
 #pragma warning restore 612, 618
         }

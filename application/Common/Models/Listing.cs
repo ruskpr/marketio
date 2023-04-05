@@ -27,17 +27,17 @@ namespace Common.Models
 
         [Required]
         public int CategoryId { get; set; }
+
         public ListingCategory Category { get; set; }
 
-        [Required]
-        public List<ListingTag> ListingTags { get; set; }
+        public List<ListingTag>? ListingTags { get; set; } = new List<ListingTag> ();
 
-        [Required]
-        public List<ListingImage> ListingImages { get; set; }
+        public List<ListingImage>? ListingImages { get; set; } = new List<ListingImage> ();
 
         [Required]
         [Column (TypeName = "decimal(18,2)")]
-        public decimal Price { get; set; }
+        [Range(0, 50000, ErrorMessage = "Maximum price is $50000")]
+        public decimal? Price { get; set; }
 
         [Required]
         public bool IsNegotiable { get; set; }
@@ -45,7 +45,13 @@ namespace Common.Models
         [Required]
         public DateTime DateCreated { get; set; }
 
-        public DateTime DateUpdated { get; set; }
+        public DateTime? DateUpdated { get; set; }
+
+        [NotMapped]
+        public string[] TagString { get; set; }
+
+        [NotMapped]
+        public string[] ImagesBase64 {  get; set; }
     }
 
 }
