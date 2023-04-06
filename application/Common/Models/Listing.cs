@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -30,8 +31,6 @@ namespace Common.Models
 
         public ListingCategory Category { get; set; }
 
-        public List<ListingImage>? ListingImages { get; set; } = new List<ListingImage> ();
-
         [Required]
         [Column (TypeName = "decimal(18,2)")]
         [Range(0, 50000, ErrorMessage = "Maximum price is $50000")]
@@ -52,7 +51,7 @@ namespace Common.Models
         public string[]? Tags { get; set; }
 
         [NotMapped]
-        public string[] ImagesBase64 {  get; set; }
+        public List<ListingImage>? ImagesBase64 {  get; set; }
     }
 
 }

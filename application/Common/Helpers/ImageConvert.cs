@@ -6,12 +6,24 @@ using System.Threading.Tasks;
 
 namespace Common.Helpers
 {
-    public class ImageConvert
+    public static class ImageConvert
     {
-        // create a method that converts a byte array to base64
-        public static string ConvertByteArrayToBase64(byte[] imageBytes)
+        public static string ToDataUrl(this MemoryStream dataStream, string format)
         {
-            return $"data:image/png;base64,{Convert.ToBase64String(imageBytes)}";
+            var span = new Span<byte>(dataStream.GetBuffer()).Slice(0, (int)dataStream.Length);
+            return $"data:{format};base64,{Convert.ToBase64String(span)}";
+        }
+
+        public static byte[]? ToBytes(string url)
+        {
+            var commPos = url.IndexOf(',');
+            if (commPos >= 0)
+            {
+                var base64 = url.Substring(commPos + 1);
+                return Convert.FromBase64String(base64);
+            }
+
+            return null;
         }
 
     }

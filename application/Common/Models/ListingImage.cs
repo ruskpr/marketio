@@ -1,9 +1,7 @@
 ﻿
-using System.ComponentModel.DataAnnotations.Schema;
-
 namespace Common.Models
 {
-    public class ListingImage
+    public class ListingImage : IDbModel
     {
         public int Id { get; set; }
 
@@ -13,7 +11,7 @@ namespace Common.Models
 
         public string ImageAsBase64 { get; set; }
 
-        public bool IsPrimaryImage { get; set; }
+        public int Index { get; set; }
 
         public DateTime DateAdded { get; set; }
                
