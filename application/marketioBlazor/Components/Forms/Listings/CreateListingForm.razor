@@ -1,4 +1,5 @@
-﻿@using Common;
+﻿@using BlazorInputFile;
+@using Common;
 @using Common.DTO;
 @using Common.Helpers;
 @using Newtonsoft.Json;
@@ -62,14 +63,42 @@
             <small id="emailHelp" class="form-text text-muted">Tags will help other users when searching for your listing.</small
             <div class="mt-3">
                 Selected Tags:
-                @foreach (var tag in _tagString.Split(' '))
+                @if (_tagString.Length == 0)
                 {
-                    <span class=" me-2 badge rounded-pill bg-info">@tag</span>
+                     <span>none</span>
                 }
+                else
+                {
+                    @foreach (var tag in _tagString.Split(' '))
+                    {
+                        <span class=" me-2 badge rounded-pill bg-info">@tag</span>
+                    }
+                }
+                
             </div>
         </div>
 
+        <br/>
+
+        @* image selector *@
+        <label for="Images">Listing Images &nbsp;<span class="text-muted">(maximum of 10 images)</span></label>
+        <BlazorInputFile.InputFile class="form-control bg-info" id="image" OnChange="HandleImageSelected" accept="image/*" />
+        <br/>
+        Selected Images: &nbsp;
+        <div class="d-flex flex-wrap">
+            @if (_photoUrls.Count == 0) { <span>none</span> }
+            @for(int i = 1; i <= _photoUrls.Count; i++)
+            {
+                <div class="position-relative">
+                    <span class="position-absolute end-0 badge rounded-pill bg-info">@i</span>
+                    <img src="@_photoUrls[i-1]" style="max-height: 200px;" class="m-2"/>
+                </div>
+            }
+        </div>
     </div>
+
+    <br/>
+    <br/>
 
     @*submit button*@
     <button type="submit" class="btn btn-light my-3">
@@ -77,7 +106,7 @@
     </button>
 
     @*error message display *@
-    <label class="text-danger fw-bold">@errorMessage</label>
+    <label class="text-danger fw-bold ps-3">@errorMessage</label>
 
     <br />
 
@@ -89,14 +118,21 @@
 </EditForm>
 
 @code {
-    string _tagString = "";
-    private List<ListingTag> _tags;
+    #region 
 
     private EditContext? editContext;
     private string errorMessage = "";
     private Listing _listing = new Listing();
+    string _tagString = "";
+    private List<ListingTag> _tags;
 
+    // data to fill dropdown box
     private List<ListingCategory> _listingCategories = new List<ListingCategory>();
+
+    private string _photoUrl = "";
+    private List<string> _photoUrls = new List<string>();
+
+    #endregion
 
     protected override async Task OnInitializedAsync()
     {
@@ -127,13 +163,31 @@
                 _listing.Category = _listingCategories.FirstOrDefault(x => x.Id == _listing.CategoryId) ?? _listingCategories[0];
 
                 // add user to listing
-                //_listing.UserId = userSession.UserId;
+                _listing.UserId = userSession.UserId;
                 _listing.User = await ApiClient.GetByIdAsync<User>(userSession.UserId);
 
-                // add tags to listing
-                _listing.TagString = _tagString.Trim().Split(' ');
+                List<ListingImage> images = new List<ListingImage>();
+                if (_photoUrls.Count != 0)
+                {
+                    for (int i = 0; i < _photoUrls.Count; i++)
+                    {
+                        var tmpImage = new ListingImage()
+                        {
+                            ImageAsBase64 = _photoUrls[i],
+                            Index = i,
+                            DateAdded = DateTime.UtcNow,
+                        };
+                        images.Add(tmpImage);
+                    }
 
-                //_tags.ForEach(tag => _listing.ListingTags.Add(new ListingTag() { Name = tag, ListingId = _listing.Id }));
+                    _listing.ImagesBase64 = images;
+                }               
+
+
+                // add tags to listing
+                if (!string.IsNullOrEmpty(_tagString))
+                    _listing.TagString = _tagString.Trim();
+
 
                 _listing.DateCreated = DateTime.UtcNow;
 
@@ -143,20 +197,60 @@
                 if (response.IsSuccessStatusCode)
                     navManager.NavigateTo("/listings", true);
                 else
-                    errorMessage = "Failed to reach server.";
+                    errorMessage = response.ErrorMessage ?? "Something went wrong.";
 
                 return;
             }
         }
-        catch { }
+        catch
+        {
+        }
 
         errorMessage = "Something went wrong.";
     }
 
+
+    private async Task HandleImageSelected(IFileListEntry[] files)
+    {
+        if (_photoUrls.Count == 10)
+        {
+            errorMessage = "Maximum of 10 images allowed.";
+            return;
+        }
+
+        var sourceFile = files.FirstOrDefault();
+
+        if (sourceFile != null)
+        {
+            var imageFile = await sourceFile.ToImageFileAsync("image/jpeg", 800, 600);
+
+            MemoryStream bytes = await imageFile.ReadAllAsync();
+            var imageUrl = bytes.ToDataUrl("image/jpeg");
+
+            _photoUrls.Add(imageUrl);
+        }
+    }
+
+
+
+
+    private async Task AddImagesToDb(string[] imagesBase64, int listingId)
+    {
+
+        for (int i = 0; i < imagesBase64.Length; i++)
+        {
+                await ApiClient.CreateAsync<ListingImage>(new ListingImage()
+                {
+                    ListingId = listingId,
+                    ImageAsBase64 = imagesBase64[i],
+                    Index = i,
+                    DateAdded = DateTime.UtcNow,
+                });
+        }
+    }
+
     public async Task<RestResponse> CreateListing()
     {
-        ApiClient = new ApiClientService();
         return await ApiClient.CreateAsync<Listing>(_listing);
     }   
-
 }

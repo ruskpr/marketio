@@ -18,8 +18,8 @@ namespace marketioWebAPI.Data
         public DbSet<Transaction> Transactions { get; set; } = default!;
         public DbSet<UserRating> UserRatings { get; set; } = default!;
         public DbSet<Listing> Listings { get; set; } = default!;
-        public DbSet<ListingImage> ListingImages { get; set; } = default!;
         public DbSet<ListingCategory> ListingCategories { get; set; } = default!;
-        public DbSet<ListingTag> ListingTags { get; set; } = default!;
+        public DbSet<ListingImage> ListingImages { get; set; } = default!;
+        //public DbSet<ListingTag> ListingTags { get; set; } = default!;
     }
 }

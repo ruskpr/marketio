@@ -35,24 +35,21 @@ namespace marketioWebAPI.Controllers
             //add images and tags user and category
             for (int i = 0; i < listings.Count; i++)
             {
-                var tags = await _context.ListingTags
-                    .Where(lt => lt.ListingId == listings[i].Id)
-                    .ToListAsync();
-
-                var images = await _context.ListingImages
-                    .Where(li => li.ListingId == listings[i].Id)
-                    .ToListAsync();
-
                 var user = await _context.Users
                     .Where(u => u.Id == listings[i].UserId)
                     .FirstOrDefaultAsync();
+
+                // map tagstring to tags array
+                if (listings[i].TagString != null)
+                    listings[i].Tags = listings[i].TagString.Split(' ');
 
                 var category = await _context.ListingCategories
                     .Where(lc => lc.Id == listings[i].CategoryId)
                     .FirstOrDefaultAsync();
 
-                listings[i].ListingTags = tags;
-                listings[i].ListingImages = images;
+                listings[i].ImagesBase64 = 
+                    await _context.ListingImages.Where(li => li.ListingId == listings[i].Id).ToListAsync();
+                //listings[i].ListingImages = images;
             }
 
 
@@ -120,38 +117,26 @@ namespace marketioWebAPI.Controllers
           {
               return Problem("Entity set 'marketioContext.Listings'  is null.");
           }
-            // add listing
+
+
+            // ignore creating new category and user
+            _context.ListingCategories.Attach(listing.Category);
+            _context.Users.Attach(listing.User);
+
             _context.Listings.Add(listing);
             await _context.SaveChangesAsync();
 
-            // get listing that was added
-            var addedListing = await _context.Listings
-                .Where(u => u.Id == listing.Id)
-                .FirstOrDefaultAsync();
-
-            // add tags
-            foreach (var tag in listing.TagString)
-            {
-                _context.ListingTags.Add(new ListingTag()
-                {
-                    Name = tag,
-                    ListingId = addedListing.Id,
-                });
-            }
-
             // add images
-            for (int i = 0; i < listing.ImagesBase64.Length; i++)
+            if (listing.ImagesBase64 != null)
             {
-                _context.ListingImages.Add(new ListingImage()
+                for (int i = 0; i < listing.ImagesBase64.Count; i++)
                 {
-                    ListingId = addedListing.Id,
-                    ImageAsBase64 = listing.ImagesBase64[i],
-                    IsPrimaryImage = i == 0 ? true : false,
-                    DateAdded = DateTime.UtcNow
-                });
+                    listing.ImagesBase64[i].ListingId = listing.Id;
+                    _context.Add(listing.ImagesBase64[i]);
+                }
+                await _context.SaveChangesAsync();
             }
 
-            await _context.SaveChangesAsync();
             return CreatedAtAction("GetListing", new { id = listing.Id }, listing);
         }
 
