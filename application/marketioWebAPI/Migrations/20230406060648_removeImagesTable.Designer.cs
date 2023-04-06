@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using marketioWebAPI.Data;
 
@@ -11,9 +12,11 @@ using marketioWebAPI.Data;
 namespace marketioWebAPI.Migrations
 {
     [DbContext(typeof(marketioContext))]
-    partial class marketioContextModelSnapshot : ModelSnapshot
+    [Migration("20230406060648_removeImagesTable")]
+    partial class removeImagesTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -88,32 +91,6 @@ namespace marketioWebAPI.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("ListingCategories");
-                });
-
-            modelBuilder.Entity("Common.Models.ListingImage", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("DateAdded")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("ImageAsBase64")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Index")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ListingId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("ListingImages");
                 });
 
             modelBuilder.Entity("Common.Models.Transaction", b =>
