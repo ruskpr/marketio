@@ -8,7 +8,7 @@ using Common.DTO;
 using Common.Models;
 using Newtonsoft.Json;
 
-namespace MarketIO.Server.Controllers
+namespace marketioWebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -50,7 +50,7 @@ namespace MarketIO.Server.Controllers
             }
 
             // check if user already exists
-            if (_context.Users.Where(u => u.Email == registerDTO.Email).Any())
+            if (_context.Users.Where(u => u.Email.ToLower() == registerDTO.Email.ToLower()).Any())
             {
                 return BadRequest($"User with the email '{registerDTO.Email}' already exists");
             }
