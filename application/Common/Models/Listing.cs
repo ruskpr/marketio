@@ -30,8 +30,6 @@ namespace Common.Models
 
         public ListingCategory Category { get; set; }
 
-        public List<ListingTag>? ListingTags { get; set; } = new List<ListingTag> ();
-
         public List<ListingImage>? ListingImages { get; set; } = new List<ListingImage> ();
 
         [Required]
@@ -47,8 +45,11 @@ namespace Common.Models
 
         public DateTime? DateUpdated { get; set; }
 
+        [Column(TypeName = "varchar(50)")]
+        public string? TagString { get; set; }
+
         [NotMapped]
-        public string[] TagString { get; set; }
+        public string[]? Tags { get; set; }
 
         [NotMapped]
         public string[] ImagesBase64 {  get; set; }
