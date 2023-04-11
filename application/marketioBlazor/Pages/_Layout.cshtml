@@ -12,9 +12,15 @@
     <link href="css/site.css" rel="stylesheet" />
     <link href="marketioBlazor.styles.css" rel="stylesheet" />
 
-   @* <link rel="stylesheet" href="css/font-awesome/css/fontawesome.css" />
-    
-    <script src="css/font-awesome/js/all.min.js"></script>*@
+    <script type="text/javascript">
+        function startCarousel(carouselId) { // NOTE: this JavaScript function added
+            var myCarousel = document.getElementById(carouselId);
+            var carousel = new bootstrap.Carousel(myCarousel);
+            // change carousel cycle speed
+            carousel._config.interval = 5000;
+            carousel.cycle(); // NOTE: this will cause the carousel to start immediately
+        }
+    </script>
 
     <title>market.io</title>
     <component type="typeof(HeadOutlet)" render-mode="ServerPrerendered" />
@@ -34,6 +40,10 @@
     </div>
 
     <script src="_framework/blazor.server.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+
+
+
 </body>
 </html>
 

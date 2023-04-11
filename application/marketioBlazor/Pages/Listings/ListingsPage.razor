@@ -1,50 +1,25 @@
 ﻿@page "/listings"
+@using marketioBlazor.Components.UI
 @inject ApiClientService ApiClient
 
-<h3>Admin Page</h3>
+<div class="container">
+<br/>
+<h3>Listings</h3>
 
-<a href="/listings/create" class="btn btn-link">Create new listing</a>
+<span>All listings (@_listings.Count)</span>
 
-<TableTemplate Items="_listings" Context="listing">
-    <TableHeader>
-        <td>Thumbnail</td>
-        <th>Id</th>
-        <th>Seller</th>
-        <th>Title</th>
-        <th>Description</th>
-        <th>Category</th>
-        <th>Price</th>
-        <th>Is negotiable</th>
-        <th>Date created</th>
-        <th>date last updated</th>
-        <th>Actions</th>
-    </TableHeader>
-    <RowTemplate>
-        <td>@if (listing.ImagesBase64.Count > 0) {
-                <img src="@listing.ImagesBase64[0].ImageAsBase64" style="width: 100px; height: 100px;" />
-            }
-            else
-            {
-                <span>no images</span>
-            }
-        </td>
-        <td>@listing.Id</td>
-        <td>@listing.User.FullName</td>
-        <td>@listing.Title</td>
-        <td>@listing.Description</td>
-        <td>@listing.Category.Name</td>
-        <td>@listing.Price</td>
-        <td>@listing.IsNegotiable</td>
-        <td>@listing.DateCreated</td>
-        <td>@listing.DateUpdated</td>
-        <td>
-            <a href="/listings/@listing.Id" class="btn btn-primary">View Listing</a>
-            <a href="/listings/edit/@listing.Id" class="btn btn-primary">Edit</a>
-            <a href="/listings/delete/@listing.Id" class="btn btn-danger">Delete</a>
-        </td>
-    </RowTemplate>
-</TableTemplate>
+<a href="/listings/create" class="btn btn-link">Create a new listing</a>
 
+<div class="d-flex gap-3 flex-wrap">
+    @foreach (var listing in _listings)
+    {
+        <div class="">
+            <ListingCard Listing="listing" />
+        </div>
+    }
+</div>
+
+</div>
 
 @code {
     private List<Listing> _listings = new List<Listing>();

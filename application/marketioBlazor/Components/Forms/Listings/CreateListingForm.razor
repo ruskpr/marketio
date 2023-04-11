@@ -11,7 +11,7 @@
 @inject ApiClientService ApiClient
 @inject IToastService toastService
 
-<EditForm Model="_listing" OnValidSubmit="@HandleValidSubmit" class="bg-dark p-3 rounded text-white">
+<EditForm Model="_listing" OnValidSubmit="@HandleValidSubmit" class="">
     <DataAnnotationsValidator />
     @*<ValidationSummary />*@
 
@@ -101,19 +101,12 @@
     <br/>
 
     @*submit button*@
-    <button type="submit" class="btn btn-light my-3">
-        Create @*<Spinner />*@
+    <button type="submit" class="btn btn-primary my-3">
+        Create
     </button>
 
     @*error message display *@
     <label class="text-danger fw-bold ps-3">@errorMessage</label>
-
-    <br />
-
-    Already have an account?
-    <NavLink class="text-secondary" href="login">
-        Go to login page
-    </NavLink>
 
 </EditForm>
 
@@ -132,6 +125,8 @@
     private string _photoUrl = "";
     private List<string> _photoUrls = new List<string>();
 
+
+    private bool _processing = false;
     #endregion
 
     protected override async Task OnInitializedAsync()
@@ -149,6 +144,9 @@
         {
             if (editContext != null && editContext.Validate())
             {
+                if (_processing) return;
+
+                _processing = true;
                 // get user from session
                 var authState = (CustomAuthenticationStateProvider)authStateProvider;
                 UserSessionDTO userSession = await authState.GetToken();
@@ -202,10 +200,13 @@
                 return;
             }
         }
-        catch
+        catch (Exception ex)
         {
+            throw;
+            errorMessage = ex.Message;
         }
 
+        _processing = false;
         errorMessage = "Something went wrong.";
     }
 

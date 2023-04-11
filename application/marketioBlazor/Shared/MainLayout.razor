@@ -1,44 +1,22 @@
 ﻿@inherits LayoutComponentBase
-@using marketioBlazor.Authentication;
-@inject AuthenticationStateProvider authStateProvider
-@inject NavigationManager navManager
 
 <PageTitle>marketioBlazor</PageTitle>
 
 <div class="page">
-    <div class="sidebar">
-        <NavMenu />
-    </div>
-
     <main>
-        <div class="top-row px-4">
-            <AuthorizeView>
-                <Authorized>
-                    <span class="px-3 fw-bold">Hello, @context.User.Identity.Name!</span>
-                    <button class="btn btn-light" @onclick="Logout">Logout</button>
-                </Authorized>
-                <NotAuthorized>
-                    <a class="btn btn-link" href="/login">Login</a>
-                    <a class="btn btn-link" href="/register">Register</a>
-                </NotAuthorized>
-            </AuthorizeView>
-        </div>
+        <Header />            
 
         <div class="content m-0 p-0">
             @Body
         </div>
 
     </main>
+
     <BlazoredToasts />
 </div>
 
 @code {
 
-    private async Task Logout()
-    {
-        var customAuthStateProvider = (CustomAuthenticationStateProvider)authStateProvider;
-        await customAuthStateProvider.LogoutUser();
-        navManager.NavigateTo("/", true);
-    }
+    
 
 }

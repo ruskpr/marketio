@@ -118,12 +118,12 @@ namespace Common
 
         public async Task<RestResponse> CreateAsync<T>(IDbModel model, string? apiControllerName = null) where T : IDbModel
         {
-            //var modelAsJson = JsonConvert.SerializeObject(model);
+            var modelAsJson = JsonConvert.SerializeObject(model);
             RestResponse response;
             string endpoint = apiControllerName ?? typeof(T).Name + "s";
 
-            //var request = new RestRequest($"api/{endpoint}").AddStringBody(modelAsJson, ContentType.Json);
-            var request = new RestRequest($"api/{endpoint}").AddJsonBody(model);
+            var request = new RestRequest($"api/{endpoint}").AddStringBody(modelAsJson, ContentType.Json);
+            //var request = new RestRequest($"api/{endpoint}").AddJsonBody(model);
 
             try
             {

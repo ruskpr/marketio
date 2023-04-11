@@ -1,0 +1,53 @@
+﻿<div class="card rounded-3" style="max-width: 500px;">
+    <div class="bg-image">
+        @if (Listing.ImagesBase64.Count > 0)
+        {
+            <img src="@Listing.ImagesBase64[0].ImageAsBase64" class="img-fluid rounded-top " style="width: 100%; height: auto" />
+        }
+        else
+        {
+            <span>no images</span>
+        }
+      
+    </div>
+    <div class="card-body">
+        @* title*@
+        <h3 class="card-title font-weight-bold"><a>@Listing.Title</a></h3>
+        
+        @* price *@
+        <p class="mb-2">@Listing.PriceString</p>
+
+        @* description *@
+        <p class="card-text">
+            @if (Listing.Description.Length > 130)
+            {
+                if (showFullDescription)
+{
+                    <p class="lead">
+                            @Listing.Description
+                        <a href="javascript:void(0)" @onclick="() => showFullDescription = !showFullDescription">Show less</a>
+                    </p>
+                }
+                else
+                {
+                    <p class="lead">
+                        @Listing.Description.Substring(0, 130)<span>...</span>
+                    <a href="javascript:void(0)" @onclick="() => showFullDescription = !showFullDescription">Show more</a>
+                    </p>
+                    
+                }
+                
+            }
+            else{ @Listing.Description }
+        </p>
+        <a href="listings/@Listing.Id" class="btn btn-primary mb-0">View listing</a>
+    </div>
+</div>
+
+@code {
+    // add a parameter that takes in a listing object
+    [Parameter]
+    public Listing Listing { get; set; }
+
+    bool showFullDescription = false;
+}

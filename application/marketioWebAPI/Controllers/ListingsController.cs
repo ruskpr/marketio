@@ -52,9 +52,6 @@ namespace marketioWebAPI.Controllers
                 //listings[i].ListingImages = images;
             }
 
-
-            //var listings = await _context.Listings.ToListAsync();
-
             return listings;
         }
 
@@ -62,18 +59,28 @@ namespace marketioWebAPI.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Listing>> GetListing(int id)
         {
-            if (_context.Listings == null)
-            {
-                return NotFound();
-            }
+            if (_context.Listings == null) return NotFound();
 
             var listing = await _context.Listings.FindAsync(id);
 
-            if (listing == null)
-            {
-                return NotFound();
-            }
+            var user = await _context.Users
+                    .Where(u => u.Id == listing.UserId)
+                    .FirstOrDefaultAsync();
 
+            // map tagstring to tags array
+            if (listing.TagString != null)
+                listing.Tags = listing.TagString.Split(' ');
+
+            var category = await _context.ListingCategories
+                .Where(lc => lc.Id == listing.CategoryId)
+                .FirstOrDefaultAsync();
+
+            listing.ImagesBase64 =
+                await _context.ListingImages.Where(li => li.ListingId == listing.Id).ToListAsync();
+
+
+
+            if (listing == null) return NotFound();
             return listing;
         }
 

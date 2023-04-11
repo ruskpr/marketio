@@ -25,20 +25,21 @@
         <br />
         <br />
 
-        <div>
+        <div class="d-flex flex-column justify-content-center align-items-center gap-3">
             <AuthorizeView>
                 <Authorized>
                     <a class="btn btn-primary" href="/listings">View Listings</a>
                     <button class="btn btn-primary" @onclick="Logout">Logout</button>
                 </Authorized>
                 <NotAuthorized>
-                    <a class="btn btn-outline-primary" href="/login">Login</a>
-                    <a class="btn btn-outline-primary" href="/register">Register</a>
+                    <a class="btn btn-primary" href="/login">Login</a>
+                    or
+                    <a class="btn btn-success" href="/register"><strong>Sign up </strong>to start selling!</a>
                 </NotAuthorized>
             </AuthorizeView>
 
             <br />
-            <br />
+          
 
             <a href="https://github.com/ruskpr/buy-and-sell-marketplace-webapp" class="btn btn-outline-dark">View market.io on Github &nbsp;<span class="oi oi-external-link"></span></a>
         </div>

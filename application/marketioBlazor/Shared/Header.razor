@@ -1,0 +1,84 @@
+﻿@using marketioBlazor.Authentication;
+@inject AuthenticationStateProvider authStateProvider
+@inject NavigationManager navManager
+
+
+
+<div class="container d-flex justify-content-between  w-100" @onclick="ToggleNavMenu">
+
+    @* logo *@
+    <a class="logo btn fs-4" href="">market.io</a>
+    <button title="Navigation menu" class="btn d-sm-block d-none" @onclick="ToggleNavMenu">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <nav class="">
+
+        @* home button link *@
+        <div class="btn nav-item px-3">
+            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
+                <span class="oi oi-home" aria-hidden="true"></span> Home
+            </NavLink>
+        </div>
+
+        @* nav left *@
+        <AuthorizeView>
+         
+            @* show register & login for user that are not signed in *@
+            <NotAuthorized>
+
+                <div class="btn nav-item px-3">
+                    <NavLink class="nav-link" href="register">
+                        <span class="oi oi-people" aria-hidden="true"></span> Register
+                    </NavLink>
+                </div>
+                <div class="btn nav-item px-3">
+                    <NavLink class="nav-link" href="login">
+                        <span class="oi oi-account-login" aria-hidden="true"></span> Login
+                    </NavLink>
+                </div>
+
+            </NotAuthorized>
+
+        </AuthorizeView>
+
+        @* show admin link if user is admin*@
+        <AuthorizeView Roles="Administrator">
+            <div class="btn nav-item px-3 text-warning">
+                <NavLink class="nav-link" href="admin">
+                    <span class="oi oi-key" aria-hidden="true"></span> Admin
+                </NavLink>
+            </div>
+        </AuthorizeView>
+
+        <AuthorizeView>
+
+            @* show register & login for user that are not signed in *@
+            <Authorized>
+                <div class="btn nav-item px-3">
+                    <span class="oi oi-account-login" @onclick="Logout" aria-hidden="true"></span> Logout
+
+                </div>
+            </Authorized>
+
+        </AuthorizeView>
+    </nav>
+</div>
+
+@code {
+    private bool collapseNavMenu = true;
+
+    private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+
+    private void ToggleNavMenu()
+    {
+        collapseNavMenu = !collapseNavMenu;
+    }
+
+    private async Task Logout()
+    {
+        var customAuthStateProvider = (CustomAuthenticationStateProvider)authStateProvider;
+        await customAuthStateProvider.LogoutUser();
+        navManager.NavigateTo("/", true);
+    }
+}

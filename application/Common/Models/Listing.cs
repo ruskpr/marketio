@@ -33,7 +33,7 @@ namespace Common.Models
 
         [Required]
         [Column (TypeName = "decimal(18,2)")]
-        [Range(0, 50000, ErrorMessage = "Maximum price is $50000")]
+        //[Range(0, 50000, ErrorMessage = "Maximum price is $50000")]
         public decimal? Price { get; set; }
 
         [Required]
@@ -52,6 +52,38 @@ namespace Common.Models
 
         [NotMapped]
         public List<ListingImage>? ImagesBase64 {  get; set; }
+
+        [NotMapped]
+        // format currency property
+        public string PriceString
+        {
+            get
+            {
+                if (Price.HasValue)
+                {
+                    var str = Price.Value.ToString("C");
+                    return str.Substring(0, str.Length - 3);
+                }
+                else
+                {
+                    return "N/A";
+                }
+            }
+        }
+
+        // location info
+        [NotMapped]
+        public string Address { get; set; }
+
+        [NotMapped]
+        public string City { get; set; }
+
+        [NotMapped]
+        public string Country { get; set; }
+
+        [NotMapped]
+        public string PostalCode { get; set; }
+
     }
 
 }
