@@ -3,6 +3,7 @@
 @inject IJSRuntime JsRuntime;
 
 @page "/listings/{Id:int}"
+@using System.ComponentModel.DataAnnotations;
 
 @if (Listing != null)
 {
@@ -27,8 +28,16 @@
             }
             else
             {
-                <span>This listing has no images.</span>
                 <br/>
+                <br/>
+                <br/>
+                <div class="d-flex flex-column justify-content-center align-items-center" style="height: 100%;">
+                    <h3 class="fw-bold">¯\_(ツ)_/¯</h3>
+                    <span>This listing has no images.</span>
+                </div>               
+                <br/>
+                <br />
+                <hr/>
             }
 
             <br/>
@@ -43,13 +52,24 @@
                 <p class="lead">@Listing.Description</p>
 
                 <br/>
-                <div class="d-flex">
-                    <button @onclick="SendMessage" class="btn btn-outline-dark flex-shrink-0" type="button">
-                        <i class="bi-cart-fill me-1"></i>
-                        Message Seller
+
+                <p class="fs-4 fw-bold">Send a message to @Listing.User.FullName</p>
+                <EditForm Model="Message" OnValidSubmit="@HandleValidSubmit" class="form-group d-flex gap-2">
+                    @*title*@
+                    <InputText class="form-control" id="message" @bind-Value="Message" placeholder="message..." style="width: 300px;" />
+
+                    @* submit button *@
+                    <button class="btn btn-outline-dark flex-shrink-0" type="button">
+                            <i class="bi-cart-fill me-1"></i>
+                            Message Seller
                     </button>
-                </div>
+
+                </EditForm>
             </div>
+
+            <br/>
+            <a href="/listings"><i class="oi oi-arrow-circle-left"></i>Back to listings</a>
+
         </div>
 </section>
 
@@ -164,6 +184,7 @@
     </div>
 </section>
 
+
 }
 
 @code {
@@ -172,10 +193,13 @@
 
     public Listing Listing { get; set; }
 
-    string _message = "";
+    [Required]
+    public string Message { get; set; } = "";
+    private EditContext? editContext;
 
     protected override async Task OnInitializedAsync()
     {        
+        editContext = new(Message);
         Listing = await ApiClient.GetByIdAsync<Listing>(Id);
 
 
@@ -192,6 +216,7 @@
     }
 
 
+
     private string _selectedImage = "";
 
     private void SetSelectedImage(int index)
@@ -200,11 +225,11 @@
     }
 
 
-    #region messaging
+    #region create transaction
 
-    private void SendMessage()
+    private void HandleValidSubmit()
     {
-        
+        JsRuntime.InvokeVoidAsync("alert", Message);
     }
 
     #endregion

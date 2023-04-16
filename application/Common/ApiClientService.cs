@@ -130,9 +130,8 @@ namespace Common
                 response = await _client.PostAsync(request);
 
             }
-            catch (Exception)
+            catch (HttpRequestException)
             {
-
                 throw;
             }
 

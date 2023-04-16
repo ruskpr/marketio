@@ -70,20 +70,6 @@ namespace Common.Models
                 }
             }
         }
-
-        // location info
-        [NotMapped]
-        public string Address { get; set; }
-
-        [NotMapped]
-        public string City { get; set; }
-
-        [NotMapped]
-        public string Country { get; set; }
-
-        [NotMapped]
-        public string PostalCode { get; set; }
-
     }
 
 }

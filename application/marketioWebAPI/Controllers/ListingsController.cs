@@ -78,8 +78,6 @@ namespace marketioWebAPI.Controllers
             listing.ImagesBase64 =
                 await _context.ListingImages.Where(li => li.ListingId == listing.Id).ToListAsync();
 
-
-
             if (listing == null) return NotFound();
             return listing;
         }
@@ -120,11 +118,10 @@ namespace marketioWebAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<Listing>> PostListing(Listing listing)
         {
-          if (_context.Listings == null)
-          {
-              return Problem("Entity set 'marketioContext.Listings'  is null.");
-          }
-
+            if (_context.Listings == null)
+            {
+                return Problem("Entity set 'marketioContext.Listings'  is null.");
+            }
 
             // ignore creating new category and user
             _context.ListingCategories.Attach(listing.Category);
