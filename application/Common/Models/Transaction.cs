@@ -17,6 +17,8 @@ namespace Common.Models
         public Listing Listing { get; set; }
 
         public DateTime DateCreated { get; set; }
+        public bool Completed { get; set; }
+        public DateTime DateCompleted { get; set; }
 
     }
 }

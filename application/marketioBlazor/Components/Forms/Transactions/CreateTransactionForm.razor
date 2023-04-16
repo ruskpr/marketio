@@ -3,11 +3,9 @@
 @inject NavigationManager navManager;
 @inject AuthenticationStateProvider authStateProvider
 
-<AuthorizeView>
-    <Authorized>
-        <EditForm Model="Message" OnValidSubmit="@HandleValidSubmit" class="form-group d-flex gap-2">
+<EditForm Model="Message" OnValidSubmit="HandleValidSubmit" class="form-group d-flex gap-2">
     @*title*@
-    <InputText class="form-control" id="message" @bind-Value="Message" placeholder="message..." style="width: 300px;" />
+    <input class="form-control" id="message" @bind-value="Message" placeholder="message..." style="width: 300px;" />
 
     @* submit button *@
     <button class="btn btn-outline-dark flex-shrink-0" type="button">
@@ -16,13 +14,6 @@
     </button>
 
 </EditForm>
-    </Authorized>
-    <NotAuthorized>
-        <div class="alert alert-danger" role="alert">
-            You must be logged in to message the seller.
-        </div>
-    </NotAuthorized>
-</AuthorizeView>
 
 @code {
     @*
@@ -48,6 +39,14 @@
 
     private void HandleValidSubmit()
     {
+// 1. Create a new transaction
+_transaction = new Transaction
+        {
+            ListingId = ListingId,
+            BuyerId = BuyerId,
+            SellerId = SellerId,
+        };
+
         JsRuntime.InvokeVoidAsync("alert", Message);
     }
 }
