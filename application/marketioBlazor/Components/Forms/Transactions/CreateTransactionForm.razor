@@ -1,0 +1,53 @@
+@inject IJSRuntime JsRuntime;
+@inject ApiClientService ApiClient
+@inject NavigationManager navManager;
+@inject AuthenticationStateProvider authStateProvider
+
+<AuthorizeView>
+    <Authorized>
+        <EditForm Model="Message" OnValidSubmit="@HandleValidSubmit" class="form-group d-flex gap-2">
+    @*title*@
+    <InputText class="form-control" id="message" @bind-Value="Message" placeholder="message..." style="width: 300px;" />
+
+    @* submit button *@
+    <button class="btn btn-outline-dark flex-shrink-0" type="button">
+        <i class="bi-cart-fill me-1"></i>
+        Message Seller
+    </button>
+
+</EditForm>
+    </Authorized>
+    <NotAuthorized>
+        <div class="alert alert-danger" role="alert">
+            You must be logged in to message the seller.
+        </div>
+    </NotAuthorized>
+</AuthorizeView>
+
+@code {
+    @*
+        1. Create a new transaction
+        2. Send a message to the seller
+        3. Redirect to the transaction detail page
+    *@
+
+    public string Message { get; set; } = "";
+
+    private EditContext? editContext;
+
+    private Transaction _transaction;
+
+    [Parameter] public int ListingId { get; set; }
+    [Parameter] public int BuyerId { get; set; }
+    [Parameter] public int SellerId { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        editContext = new(Message);
+    }
+
+    private void HandleValidSubmit()
+    {
+        JsRuntime.InvokeVoidAsync("alert", Message);
+    }
+}
