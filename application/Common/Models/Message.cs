@@ -12,6 +12,9 @@ namespace Common.Models
 
         public string Content { get; set; }
 
+        public int TransactionId { get; set; }
+        public Transaction Transaction { get; set; }
+
         public int SenderId { get; set; }
         public User Sender { get; set; }
 
