@@ -31,6 +31,6 @@
     protected override async Task OnInitializedAsync()
     {
         ApiClient = new ApiClientService();
-        _listings = await ApiClient.GetAllAsync<Listing>();
+        _listings = await ApiClient.GetAsync<Listing>();
     }
 }

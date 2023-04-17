@@ -53,7 +53,7 @@
             if (editContext != null && editContext.Validate())
             {
                 ApiClient = new ApiClientService();
-                var response = await ApiClient.CreateAsync<ListingCategory>(_category, "ListingCategories"); 
+                var response = await ApiClient.PostAsync<ListingCategory>(_category, "ListingCategories"); 
 
                 if (response.IsSuccessStatusCode)
                 {

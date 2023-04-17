@@ -135,7 +135,7 @@
 
         // get categories with api
         ApiClient = new ApiClientService();
-        _listingCategories = await ApiClient.GetAllAsync<ListingCategory>("listingcategories");
+        _listingCategories = await ApiClient.GetAsync<ListingCategory>("listingcategories");
     }
 
     private async void HandleValidSubmit()
@@ -240,7 +240,7 @@
 
         for (int i = 0; i < imagesBase64.Length; i++)
         {
-                await ApiClient.CreateAsync<ListingImage>(new ListingImage()
+                await ApiClient.PostAsync<ListingImage>(new ListingImage()
                 {
                     ListingId = listingId,
                     ImageAsBase64 = imagesBase64[i],
@@ -252,6 +252,6 @@
 
     public async Task<RestResponse> CreateListing()
     {
-        return await ApiClient.CreateAsync<Listing>(_listing);
+        return await ApiClient.PostAsync<Listing>(_listing);
     }   
 }

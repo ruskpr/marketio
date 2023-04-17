@@ -82,7 +82,7 @@ namespace Common
         #region get
 
         // create a method to get all users
-        public async Task<List<T>> GetAllAsync<T>(string? apiEnpointName = null) where T : IDbModel
+        public async Task<List<T>> GetAsync<T>(string? apiEnpointName = null) where T : IDbModel
         {
             List<T>? ret = new List<T>();
 
@@ -116,7 +116,7 @@ namespace Common
 
         #region post
 
-        public async Task<RestResponse> CreateAsync<T>(IDbModel model, string? apiControllerName = null) where T : IDbModel
+        public async Task<RestResponse> PostAsync<T>(IDbModel model, string? apiControllerName = null) where T : IDbModel
         {
             var modelAsJson = JsonConvert.SerializeObject(model);
             RestResponse response;
@@ -128,7 +128,6 @@ namespace Common
             try
             {
                 response = await _client.PostAsync(request);
-
             }
             catch (HttpRequestException)
             {

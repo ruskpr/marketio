@@ -29,7 +29,18 @@ namespace marketioWebAPI.Controllers
           {
               return NotFound();
           }
-            return await _context.Transactions.ToListAsync();
+
+          var transactions = await _context.Transactions.ToListAsync();
+            foreach (var t in transactions)
+            {
+
+                var seller = await _context.Users.FindAsync(t.SellerId);
+
+                if (seller != null)
+                    t.Seller = seller;
+            }
+
+            return transactions;
         }
 
         // GET: api/Transactions/5
@@ -90,8 +101,22 @@ namespace marketioWebAPI.Controllers
           {
               return Problem("Entity set 'marketioContext.Transactions'  is null.");
           }
-            _context.Transactions.Add(transaction);
-            await _context.SaveChangesAsync();
+
+            transaction.Buyer = null;
+            transaction.Seller = null;
+            transaction.Listing = null;
+
+            try
+            {
+                _context.Transactions.Add(transaction);
+                await _context.SaveChangesAsync();
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
 
             return CreatedAtAction("GetTransaction", new { id = transaction.Id }, transaction);
         }

@@ -18,7 +18,7 @@ namespace Common.Models
 
         public DateTime DateCreated { get; set; }
         public bool Completed { get; set; }
-        public DateTime DateCompleted { get; set; }
+        public DateTime? DateCompleted { get; set; }
 
     }
 }

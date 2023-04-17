@@ -1,4 +1,8 @@
+@using System.ComponentModel.DataAnnotations;
+@using Newtonsoft.Json;
+@using marketioBlazor.Authentication;
 @inject IJSRuntime JsRuntime;
+@inject IToastService toastService;
 @inject ApiClientService ApiClient
 @inject NavigationManager navManager;
 @inject AuthenticationStateProvider authStateProvider
@@ -8,7 +12,7 @@
     <input class="form-control" id="message" @bind-value="Message" placeholder="message..." style="width: 300px;" />
 
     @* submit button *@
-    <button class="btn btn-outline-dark flex-shrink-0" type="button">
+    <button class="btn btn-outline-dark flex-shrink-0" type="submit">
         <i class="bi-cart-fill me-1"></i>
         Message Seller
     </button>
@@ -21,31 +25,91 @@
         2. Send a message to the seller
         3. Redirect to the transaction detail page
     *@
-
     public string Message { get; set; } = "";
 
     private EditContext? editContext;
 
     private Transaction _transaction;
 
-    [Parameter] public int ListingId { get; set; }
-    [Parameter] public int BuyerId { get; set; }
-    [Parameter] public int SellerId { get; set; }
+    [Parameter] public Listing Listing { get; set; }
+    public int? BuyerId { get; set; }
+
+    private bool isLoggedIn;
 
     protected override async Task OnInitializedAsync()
     {
         editContext = new(Message);
+
+        // check for auth state
+        var customAuthStateProvider = (CustomAuthenticationStateProvider)authStateProvider;
+        var userSession = await customAuthStateProvider.GetToken();
+        isLoggedIn = userSession != null;
+
+        BuyerId = isLoggedIn ? userSession.UserId : null;
     }
 
-    private void HandleValidSubmit()
+    private async void HandleValidSubmit()
     {
-// 1. Create a new transaction
-_transaction = new Transaction
+        #region validation
+
+        if (BuyerId == Listing.User.Id)
         {
-            ListingId = ListingId,
-            BuyerId = BuyerId,
-            SellerId = SellerId,
+            toastService.ShowWarning("This is your own listing.");
+            return;
+        }
+
+        if (BuyerId == null) {
+            toastService.ShowWarning("You must be logged in to message other users");
+            return;
+        }
+
+        if (string.IsNullOrWhiteSpace(Message))
+        {
+            toastService.ShowWarning("Please enter a message");
+            return;
+        }
+
+        #endregion
+
+        var user = await ApiClient.GetByIdAsync<User>((int)BuyerId);
+
+        // 1. Create a new transaction
+        _transaction = new Transaction
+        {
+            ListingId = Listing.Id,
+            Listing = Listing,
+            BuyerId = (int)BuyerId,
+            Buyer = user,
+            SellerId = Listing.User.Id,
+            Seller = Listing.User,
+            DateCreated = DateTime.UtcNow,
+            Completed = false,
+            DateCompleted = null
         };
+
+        // send to api
+        var res = await ApiClient.PostAsync<Transaction>(_transaction);
+
+        if (res == null)
+            return;
+
+        if (res.IsSuccessStatusCode)
+        {
+            // success
+            // redirect to transaction detail page
+            var t = JsonConvert.DeserializeObject<Transaction>(res.Content);
+
+
+            //navManager.NavigateTo($"/transactions/{t.Id}");
+        }
+        else
+        {
+            // error
+            return;
+        }
+
+        // 2. Send a message to the seller
+
 
         JsRuntime.InvokeVoidAsync("alert", Message);
     }

@@ -85,7 +85,7 @@
     protected override async Task OnInitializedAsync()
     {
         ApiClient = new ApiClientService();
-        _users = await ApiClient.GetAllAsync<User>();
-        _transactions = await ApiClient.GetAllAsync<Transaction>();
+        _users = await ApiClient.GetAsync<User>();
+        _transactions = await ApiClient.GetAsync<Transaction>();
     }
 }

@@ -1,0 +1,59 @@
+﻿@page "/messages"
+@using Authentication;
+@inject ApiClientService ApiClient
+@inject AuthenticationStateProvider authStateProvider
+
+<div class="container">
+<AuthorizeView>
+   <Authorized>
+        @if (_transactions == null)
+        {
+            <span>Loading conversations...</span>
+        }
+        else if (_transactions.Count == 0)
+        {
+            <span>You currently have no messages.</span>
+        }
+        else
+        {
+            <span>Conversations (@_transactions.Count)</span>
+
+            <div class="d-grid gap-3 list-group">
+                @foreach(var t in _transactions)
+                {
+                    <div class="list-group-item">@t.Seller.FullName</div>
+                }
+            </div>
+        }
+    </Authorized>
+    <NotAuthorized>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <span><a href="/login">Login</a> to view your messages</span>
+    </NotAuthorized>
+</AuthorizeView>
+</div>
+@code {
+    private List<Transaction>? _transactions;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var res = await ApiClient.GetAsync<Transaction>();
+        if (res == null)
+            return;
+
+        var authState = (CustomAuthenticationStateProvider)authStateProvider;
+        var userSession = await authState.GetToken();
+        if (userSession == null)
+            return;
+
+        if (res.Count > 0)
+        {
+            _transactions = res.Where(x => x.BuyerId == userSession.UserId).ToList();
+        }
+      
+    }
+
+}

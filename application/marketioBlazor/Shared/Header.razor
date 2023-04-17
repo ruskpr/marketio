@@ -1,6 +1,7 @@
 ﻿@using marketioBlazor.Authentication;
 @inject AuthenticationStateProvider authStateProvider
 @inject NavigationManager navManager
+@inject ApiClientService ApiClient
 
 
 
@@ -19,14 +20,24 @@
                 <span class="oi oi-home" aria-hidden="true"></span> Home
             </NavLink>
         </div>
-        @* home button link *@
+        @* listings page link *@
         <div class="btn nav-item px-3">
             <NavLink class="nav-link" href="listings" Match="NavLinkMatch.All">
                 <span class="oi oi-dollar" aria-hidden="true"></span> Listings
             </NavLink>
         </div>
 
-        @* nav left *@
+        @* messages page link *@
+        <div class="btn nav-item px-3">
+            <NavLink class="position-relative nav-link" href="messages" Match="NavLinkMatch.All">
+                <span class="oi oi-envelope-closed" aria-hidden="true"></span> Messages&nbsp;
+            @if (_hasNotifications)
+            {
+                <i class="oi oi-bell position-absolute top-0 badge text-white bg-danger rounded-pill">&#8203;</i>
+            }
+            </NavLink>
+        </div>
+
         <AuthorizeView>
          
             @* show register & login for user that are not signed in *@
@@ -78,6 +89,24 @@
     private void ToggleNavMenu()
     {
         collapseNavMenu = !collapseNavMenu;
+    }
+
+    private bool _hasNotifications = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var customAuthStateProvider = (CustomAuthenticationStateProvider)authStateProvider;
+        var userSession = await customAuthStateProvider.GetToken();
+
+        if (userSession == null)
+        {
+            _hasNotifications = false;
+            return;
+        }
+
+        var res = await ApiClient.GetByIdAsync<User>(userSession.UserId);
+
+
     }
 
     private async Task Logout()
