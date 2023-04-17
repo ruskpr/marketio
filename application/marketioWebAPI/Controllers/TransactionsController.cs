@@ -106,17 +106,8 @@ namespace marketioWebAPI.Controllers
             transaction.Seller = null;
             transaction.Listing = null;
 
-            try
-            {
-                _context.Transactions.Add(transaction);
-                await _context.SaveChangesAsync();
-
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
+            _context.Transactions.Add(transaction);
+            await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetTransaction", new { id = transaction.Id }, transaction);
         }

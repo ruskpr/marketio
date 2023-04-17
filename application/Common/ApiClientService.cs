@@ -159,9 +159,16 @@ namespace Common
 
 
             string endpoint = controllerName ?? typeof(T).Name + "s";
-            var request = new RestRequest(endpoint+$"/{model.Id}").AddStringBody(modelAsJson, ContentType.Json);
-
-            var response = await _client.PutAsync(request);
+            var request = new RestRequest("api/"+endpoint+$"/{model.Id}").AddStringBody(modelAsJson, ContentType.Json);
+            RestResponse response;
+            try
+            {
+                response = await _client.ExecutePutAsync(request);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
 
             return response;
         }

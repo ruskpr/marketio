@@ -9,20 +9,52 @@
 }
 else
 {
-<div @onclick="() => GoToConversation(Transaction.Id)" class="border p-3 row" style="cursor: pointer;">
-    @if (Transaction.Listing.ImagesBase64.Count > 0)
-    {
-        <div class="col-4">
-        <img width="120" class="rounded" src="@Transaction.Listing.ImagesBase64[0].ImageAsBase64"/>
-        </div>
-    }
-    <div class="col">
-    <span class="text-decoration-none text-dark">
+<div class="d-flex position-relative border justify-content-between gap-2 flex-wrap rounded" style="cursor: pointer;">
+    <div class="d-flex gap-3 flex-wrap p-3 w-100" @onclick="() => GoToConversation(Transaction.Id)">
+        <div class="d-none d-sm-block">
+        @if (Transaction.Listing.ImagesBase64.Count > 0)
+        {
+            <img width="120" class="rounded" src="@Transaction.Listing.ImagesBase64[0].ImageAsBase64"/>
+        }
+        else
+        {
+            <span>No image</span>
+        }
+            </div>
+     <div @onclick="() => GoToConversation(Transaction.Id)" class="">
+        <span class="text-decoration-none text-dark">
         <h5 class="mb-1">@Transaction.Listing.Title</h5>
+                <h5 class="mb-1">@Transaction.Listing.PriceString</h5>
         </span>
-    @usernameToDisplay
+        <span>
+            @lastSender: <span class="fw-bold">@lastMessage </span>
+        </span><br/>
+            <span class="fw-bold">@lastMessageTime</span>
+    </div>
+    </div>
+    <div class="">
+        @if (Transaction.Completed)
+        {
+            <span class="d-flex gap-1 ps-2 py-1">
+                Completed on: @Transaction.DateCompleted.Value.ToLocalTime().ToShortDateString()
+                <i class="oi oi-check"></i>
+            </span>
+        }
+        else
+        {
+            <div class="position-absolute end-0 top-0 p-2">
+                <button class="btn btn-outline-primary rounded btn-sm py-1" @onclick="MarkAsComplete">Mark as completed</button>
+            </div>
+        }
+
+        @if (_hasUnreadMessages)
+        {
+            <div class="position-absolute end-0 bottom-0 bg-danger badge rounded px-2 m-2">
+                new message(s)
+            </div>
+        } 
         </div>
-</div>
+    </div>
 }
 
 
@@ -32,8 +64,11 @@ else
     string usernameToDisplay = "";
 
     string lastMessage = "";
-
+    string lastSender = "";
+    string lastMessageTime = "";
     bool _loading = true;
+    bool _hasUnreadMessages = false;
+    bool _showModal = false;
 
     protected override async Task OnInitializedAsync()
     {
@@ -53,6 +88,18 @@ else
             usernameToDisplay = Transaction.Seller.FullName;
         }
 
+        var messages = await ApiClient.GetMessagesByTransactionId(Transaction.Id);
+
+        var sender = await ApiClient.GetByIdAsync<User>(messages.LastOrDefault().SenderId);
+        lastSender = sender.FullName;
+        lastMessage = messages.LastOrDefault().Content;
+
+        var y = messages.LastOrDefault().DateSent.ToLocalTime().ToShortTimeString();
+        var x = messages.LastOrDefault().DateSent.ToLocalTime().ToShortDateString();
+        lastMessageTime = x + " " + y;
+
+        _hasUnreadMessages = messages.ToList().Any(x => x.ReadByReceiver == false);
+
         _loading = false;
     }
 
@@ -61,4 +108,16 @@ else
         navManager.NavigateTo($"/messages/{id}");
     }
 
+    private async void MarkAsComplete()
+    {
+        var t = Transaction;
+        t.Completed = true;
+        t.DateCompleted = DateTime.UtcNow;
+        await ApiClient.PutAsync<Transaction>(t);
+
+        _showModal = true;
+
+        //navManager.NavigateTo("/messages");
+        
+    }
 }

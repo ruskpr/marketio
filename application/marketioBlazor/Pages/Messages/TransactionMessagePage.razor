@@ -18,15 +18,15 @@ else if (_transaction != null)
 {
     <div class="position-relative container py-5 px-0">
         <div class="card rounded">
-            <div class="card-header d-flex justify-content-start align-items-center p-3">
+            <div class="card-header d-flex justify-content-between flex-wrap flex-sm-nowrap align-items-center p-3">
                 @if (_transaction.Listing.ImagesBase64.Count > 0)
                 {
                     <img height="100" class="rounded" src="@_transaction.Listing.ImagesBase64[0].ImageAsBase64"/>  
                 }
-                <h5 class="mb-0 ms-3">
+                <h5 class="mt-sm-0 mt-2 mb-0 ms-3">
                     <a href="/listings/@_transaction.Listing.Id">
                         @_transaction.Listing.Title</a><br/>
-                    <span>@_transaction.Listing.PriceString</span><br/><br/>
+                    <span>@_transaction.Listing.PriceString</span><br/>
                     <span class="fw-light">Posted by: @_transaction.Seller.FullName</span>
                 </h5>
             </div>
@@ -38,7 +38,7 @@ else if (_transaction != null)
             </div>
             <div class="card-footer">
                 <EditForm class="d-flex" Model="_messageText" OnSubmit="SendMessage">
-                    <InputText @bind-Value="_messageText" class="form-control rounded-start" placeholder="message..." />
+                    <InputText @bind-Value="_messageText" class="form-control rounded-start border" placeholder="message..." />
                     <button class="btn btn-primary rounded-end">Send</button>
                 </EditForm>
             </div>
@@ -98,8 +98,9 @@ else if (_transaction != null)
 
         // update message to read
         var messages = await ApiClient.GetMessagesByTransactionId(_transaction.Id);
-
-        foreach (var msg in messages)
+        _messages = messages;
+        var tmpMessages = _messages;
+        foreach (var msg in tmpMessages)
         {
             if (msg.ReceiverId == _userSession.UserId && msg.ReadByReceiver == false)
             {
@@ -108,13 +109,18 @@ else if (_transaction != null)
             }
         }
 
-        _messages = messages;
 
         _loading = false;
     }
 
     private async void SendMessage()
     {
+        if (_transaction.Completed)
+        {
+            toastService.ShowWarning("This transaction has been completed.");
+            return;
+        }
+
         if (_userSession == null)
         {
             return;

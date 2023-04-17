@@ -24,13 +24,25 @@
         else
         {
             <span>Conversations (@_transactions.Count)</span>
+            <hr class="mb-3" />
 
             <div class="d-grid gap-3 list-group">
-                @foreach(var t in _transactions)
+                @foreach(var t in _transactions.Where(x => x.Completed == false))
                 {
                     <TransactionListItem Transaction="t"/>
                 }
             </div>
+
+            <br/>
+            <span>Completed (@_transactions.Where(x => x.Completed == true).ToList().Count)</span>
+            <hr class="mb-3"/>
+
+                <div class="d-grid gap-3 list-group">
+                    @foreach (var t in _transactions.Where(x => x.Completed == true))
+                    {
+                        <TransactionListItem Transaction="t" />
+                    }
+                </div>
         }
     </Authorized>
     <NotAuthorized>
