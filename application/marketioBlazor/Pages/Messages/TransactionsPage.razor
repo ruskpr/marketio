@@ -1,5 +1,6 @@
 ﻿@page "/messages"
 @using Authentication;
+@using marketioBlazor.Components.UI
 @inject ApiClientService ApiClient
 @inject AuthenticationStateProvider authStateProvider
 @inject NavigationManager navManager
@@ -27,7 +28,7 @@
             <div class="d-grid gap-3 list-group">
                 @foreach(var t in _transactions)
                 {
-                    <div class="list-group-item">@t.Seller.FullName</div>
+                    <TransactionListItem Transaction="t"/>
                 }
             </div>
         }
@@ -58,17 +59,22 @@
         var userSession = await authState.GetToken();
         if (userSession == null)
         {
-            toastService.ShowError("Failed to validate session. Please login again.");
+            toastService.ShowInfo("Please login to view messages.");
             navManager.NavigateTo("/login");
             return;
         }
 
         if (res.Count > 0)
         {
-            _transactions = res.Where(x => x.BuyerId == userSession.UserId).ToList();
+            _transactions = res.Where(x => x.BuyerId == userSession.UserId || x.SellerId == userSession.UserId).ToList();
         }
       
         _loading = false;
+    }
+
+    private void GoToConversation(int id)
+    {
+        navManager.NavigateTo($"/messages/{id}");
     }
 
 }

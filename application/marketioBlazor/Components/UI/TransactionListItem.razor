@@ -1,0 +1,64 @@
+@using marketioBlazor.Authentication;
+@inject AuthenticationStateProvider authStateProvider
+@inject ApiClientService ApiClient
+@inject NavigationManager navManager
+
+@if (_loading)
+{
+    <span>Loading...</span>
+}
+else
+{
+<div @onclick="() => GoToConversation(Transaction.Id)" class="border p-3 row" style="cursor: pointer;">
+    @if (Transaction.Listing.ImagesBase64.Count > 0)
+    {
+        <div class="col-4">
+        <img width="120" class="rounded" src="@Transaction.Listing.ImagesBase64[0].ImageAsBase64"/>
+        </div>
+    }
+    <div class="col">
+    <span class="text-decoration-none text-dark">
+        <h5 class="mb-1">@Transaction.Listing.Title</h5>
+        </span>
+    @usernameToDisplay
+        </div>
+</div>
+}
+
+
+@code {
+    [Parameter] public Transaction Transaction { get; set; }
+
+    string usernameToDisplay = "";
+
+    string lastMessage = "";
+
+    bool _loading = true;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = (CustomAuthenticationStateProvider)authStateProvider;
+        var userSession = await authState.GetToken();
+
+        Transaction.Buyer = await ApiClient.GetByIdAsync<User>(Transaction.BuyerId);
+        Transaction.Seller = await ApiClient.GetByIdAsync<User>(Transaction.SellerId);
+        Transaction.Listing = await ApiClient.GetByIdAsync<Listing>(Transaction.ListingId);
+
+        if (Transaction.SellerId == userSession.UserId)
+        {
+            usernameToDisplay = Transaction.Buyer.FullName;
+        }
+        else
+        {
+            usernameToDisplay = Transaction.Seller.FullName;
+        }
+
+        _loading = false;
+    }
+
+    private void GoToConversation(int id)
+    {
+        navManager.NavigateTo($"/messages/{id}");
+    }
+
+}

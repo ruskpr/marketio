@@ -8,25 +8,53 @@
 @using marketioBlazor.Authentication;
 @using marketioBlazor.Components.UI
 
+<div class="container">
+
 @if (_loading)
 {
     <span>Loading messages...</span>
 }
-else
+else if (_transaction != null)
 {
-    <div class="d-flex flex-column">
-        @foreach (var msg in _messages)
-        {
-            <MessageBubble Message="msg" IsCurrentUser="true"/>
-        }
+    <div class="position-relative container py-5 px-0">
+        <div class="card rounded">
+            <div class="card-header d-flex justify-content-start align-items-center p-3">
+                @if (_transaction.Listing.ImagesBase64.Count > 0)
+                {
+                    <img height="100" class="rounded" src="@_transaction.Listing.ImagesBase64[0].ImageAsBase64"/>  
+                }
+                <h5 class="mb-0 ms-3">
+                    <a href="/listings/@_transaction.Listing.Id">
+                        @_transaction.Listing.Title</a><br/>
+                    <span>@_transaction.Listing.PriceString</span><br/><br/>
+                    <span class="fw-light">Posted by: @_transaction.Seller.FullName</span>
+                </h5>
+            </div>
+            <div class="card-body" data-mdb-perfect-scrollbar="true" style="position: relative; height: 100%">
+                    @foreach(var msg in _messages)
+                    {
+                        <MessageBubble Message="msg" IsCurrentUser="msg.SenderId == _userSession.UserId" />
+                    }
+            </div>
+            <div class="card-footer">
+                <EditForm class="d-flex" Model="_messageText" OnSubmit="SendMessage">
+                    <InputText @bind-Value="_messageText" class="form-control rounded-start" placeholder="message..." />
+                    <button class="btn btn-primary rounded-end">Send</button>
+                </EditForm>
+            </div>
+        </div>
+
     </div>
 }
+
+</div>
+
 
 @code {
     [Parameter]
     public int Id { get; set; }
 
-    public Transaction Transaction { get; set; }
+    public Transaction _transaction;
 
     private List<Message> _messages = new List<Message>();
 
@@ -47,17 +75,29 @@ else
             return;
         }
 
-        Transaction = await ApiClient.GetByIdAsync<Transaction>(Id);
-
-        if (Transaction == null)
+        _transaction = await ApiClient.GetByIdAsync<Transaction>(Id);
+        if (_transaction == null)
         {
             navManager.NavigateTo("/error");
             _loading = false;
             return;
         }
 
+        _transaction.Buyer = await ApiClient.GetByIdAsync<User>(_transaction.BuyerId);
+        _transaction.Seller = await ApiClient.GetByIdAsync<User>(_transaction.SellerId);
+        _transaction.Listing = await ApiClient.GetByIdAsync<Listing>(_transaction.ListingId);
+
+
+        if (_userSession.UserId != _transaction.SellerId && _userSession.UserId != _transaction.BuyerId)
+        {
+            navManager.NavigateTo("/error");
+            _loading = false;
+            return;
+        }
+
+
         // update message to read
-        var messages = await ApiClient.GetMessagesByTransactionId(Transaction.Id);
+        var messages = await ApiClient.GetMessagesByTransactionId(_transaction.Id);
 
         foreach (var msg in messages)
         {
@@ -86,12 +126,20 @@ else
             return;
         }
 
+        var currentUser = await ApiClient.GetByIdAsync<User>(_userSession.UserId);
+        if (currentUser is null) return;
+
+
+        var receiver = currentUser.Id == _transaction.SellerId ? _transaction.Buyer : _transaction.Seller;
         var message = new Message
         {
-            Content = _messageText,
-            TransactionId = Transaction.Id,
+            Content = _messageText.Trim(),
+            TransactionId = _transaction.Id,
+            Transaction = _transaction,
             SenderId = _userSession.UserId,
-            ReceiverId = Transaction.SellerId,
+            Sender = currentUser,
+            ReceiverId = _transaction.SellerId,
+            Receiver = receiver,
             DateSent = DateTime.UtcNow,
             ReadByReceiver = false,
         };
@@ -103,6 +151,7 @@ else
             _messages.Add(message);
             _messageText = "";
         }
+        StateHasChanged();
     }
 
 }
