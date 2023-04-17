@@ -2,16 +2,22 @@
 @using Authentication;
 @inject ApiClientService ApiClient
 @inject AuthenticationStateProvider authStateProvider
+@inject NavigationManager navManager
+@inject IToastService toastService
 
 <div class="container">
 <AuthorizeView>
    <Authorized>
-        @if (_transactions == null)
+        @if (_loading)
         {
             <span>Loading conversations...</span>
         }
         else if (_transactions.Count == 0)
         {
+            <br/>
+            <br/>
+            <br/>
+            <br/>
             <span>You currently have no messages.</span>
         }
         else
@@ -36,24 +42,33 @@
 </AuthorizeView>
 </div>
 @code {
-    private List<Transaction>? _transactions;
+    private List<Transaction> _transactions = new List<Transaction>();
+
+    private bool _loading = true;
 
     protected override async Task OnInitializedAsync()
     {
         var res = await ApiClient.GetAsync<Transaction>();
         if (res == null)
-            return;
+        {
+            _transactions = res ?? new List<Transaction>();
+        }
 
         var authState = (CustomAuthenticationStateProvider)authStateProvider;
         var userSession = await authState.GetToken();
         if (userSession == null)
+        {
+            toastService.ShowError("Failed to validate session. Please login again.");
+            navManager.NavigateTo("/login");
             return;
+        }
 
         if (res.Count > 0)
         {
             _transactions = res.Where(x => x.BuyerId == userSession.UserId).ToList();
         }
       
+        _loading = false;
     }
 
 }

@@ -114,6 +114,10 @@
                 ReadByReceiver = false
             };
 
+            message.Transaction.Seller = Listing.User;
+            message.Transaction.Buyer = clientUser;
+            message.Transaction.Listing = Listing;
+
             await ApiClient.PostAsync<Message>(message);
 
             navManager.NavigateTo($"/messages/{t.Id}");

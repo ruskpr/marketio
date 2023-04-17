@@ -5,12 +5,10 @@
 @inject IToastService toastService
 @inject AuthenticationStateProvider authStateProvider
 
-@using System.ComponentModel.DataAnnotations;
 @using marketioBlazor.Authentication;
-@using marketioBlazor.Components.Forms.Transactions
 @using marketioBlazor.Components.UI
 
-@if (_messages == null)
+@if (_loading)
 {
     <span>Loading messages...</span>
 }
@@ -19,7 +17,6 @@ else
     <div class="d-flex flex-column">
         @foreach (var msg in _messages)
         {
-            
             <MessageBubble Message="msg" IsCurrentUser="true"/>
         }
     </div>
@@ -31,11 +28,13 @@ else
 
     public Transaction Transaction { get; set; }
 
-    private List<Message>? _messages = null;
+    private List<Message> _messages = new List<Message>();
 
     private string _messageText = "";
 
     private UserSessionDTO? _userSession;
+
+    private bool _loading = true;
 
     protected override async Task OnInitializedAsync()
     {
@@ -48,12 +47,12 @@ else
             return;
         }
 
-
         Transaction = await ApiClient.GetByIdAsync<Transaction>(Id);
 
         if (Transaction == null)
         {
             navManager.NavigateTo("/error");
+            _loading = false;
             return;
         }
 
@@ -69,7 +68,9 @@ else
             }
         }
 
+        _messages = messages;
 
+        _loading = false;
     }
 
     private async void SendMessage()

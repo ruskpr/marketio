@@ -6,6 +6,15 @@
 <br/>
 <h3>Listings</h3>
 
+    @if (_loading)
+    {
+        <br/>
+        <span>Loading listings...</span>
+    }
+    else
+    {
+        
+
 <span>All listings (@_listings.Count)</span>
 
 <a href="/listings/create" class="btn btn-link">Create a new listing</a>
@@ -23,14 +32,19 @@
 <br/>
 <br/>
 <br/>
+    }
 </div>
 
 @code {
     private List<Listing> _listings = new List<Listing>();
 
+    private bool _loading = true;
+
     protected override async Task OnInitializedAsync()
     {
         ApiClient = new ApiClientService();
         _listings = await ApiClient.GetAsync<Listing>();
+
+        _loading = false;
     }
 }
