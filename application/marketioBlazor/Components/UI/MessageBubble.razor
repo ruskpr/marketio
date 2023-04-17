@@ -1,0 +1,15 @@
+<div class="d-flex flex-column">
+    <span>@Message.Content</span>
+    <span>@Message.DateSent.ToLocalTime()</span>
+</div>
+
+@code {
+    [Parameter] public Message Message { get; set; }
+
+    [Parameter] public bool IsCurrentUser { get; set; }
+
+    private void CustomStyle()
+    {
+        
+    }
+}

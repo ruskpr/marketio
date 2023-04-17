@@ -1,7 +1,6 @@
 @using System.ComponentModel.DataAnnotations;
 @using Newtonsoft.Json;
 @using marketioBlazor.Authentication;
-@inject IJSRuntime JsRuntime;
 @inject IToastService toastService;
 @inject ApiClientService ApiClient
 @inject NavigationManager navManager;
@@ -99,18 +98,30 @@
             // redirect to transaction detail page
             var t = JsonConvert.DeserializeObject<Transaction>(res.Content);
 
+            var clientUser = await ApiClient.GetByIdAsync<User>((int)BuyerId);
 
-            //navManager.NavigateTo($"/transactions/{t.Id}");
+            // create a message and post to api
+            var message = new Message()
+            {
+                Content = Message,
+                TransactionId = t.Id,
+                Transaction = t,
+                SenderId = clientUser.Id,
+                Sender = clientUser,
+                ReceiverId = Listing.User.Id,
+                Receiver = Listing.User,
+                DateSent = DateTime.UtcNow,
+                ReadByReceiver = false
+            };
+
+            await ApiClient.PostAsync<Message>(message);
+
+            navManager.NavigateTo($"/messages/{t.Id}");
         }
         else
         {
-            // error
+            toastService.ShowError("An error occured.");
             return;
         }
-
-        // 2. Send a message to the seller
-
-
-        JsRuntime.InvokeVoidAsync("alert", Message);
     }
 }

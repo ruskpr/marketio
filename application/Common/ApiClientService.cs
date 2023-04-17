@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using System.Reflection;
 using System.Text;
 using Common.DTO;
 using Common.Helpers;
@@ -82,11 +83,11 @@ namespace Common
         #region get
 
         // create a method to get all users
-        public async Task<List<T>> GetAsync<T>(string? apiEnpointName = null) where T : IDbModel
+        public async Task<List<T>> GetAsync<T>(string? controllerName = null) where T : IDbModel
         {
             List<T>? ret = new List<T>();
 
-            string endpoint = apiEnpointName ?? typeof(T).Name + "s";
+            string endpoint = controllerName ?? typeof(T).Name + "s";
 
             var request = new RestRequest($"api/{endpoint}");
 
@@ -112,15 +113,25 @@ namespace Common
             return default;
         }
 
+        public async Task<List<Message>> GetMessagesByTransactionId(int transactionId)
+        {
+            var request = new RestRequest($"api/Messages");
+            var response = await _client.GetAsync(request);
+
+            List<Message> messages = JsonConvert.DeserializeObject<List<Message>>(response.Content) ?? new List<Message>();
+
+            return messages.Where(m => m.TransactionId == transactionId).ToList();
+        }
+
         #endregion
 
         #region post
 
-        public async Task<RestResponse> PostAsync<T>(IDbModel model, string? apiControllerName = null) where T : IDbModel
+        public async Task<RestResponse> PostAsync<T>(IDbModel model, string? controllerName = null) where T : IDbModel
         {
             var modelAsJson = JsonConvert.SerializeObject(model);
             RestResponse response;
-            string endpoint = apiControllerName ?? typeof(T).Name + "s";
+            string endpoint = controllerName ?? typeof(T).Name + "s";
 
             var request = new RestRequest($"api/{endpoint}").AddStringBody(modelAsJson, ContentType.Json);
             //var request = new RestRequest($"api/{endpoint}").AddJsonBody(model);
@@ -142,12 +153,13 @@ namespace Common
         #region put
 
         // create a generic method to update any object
-        public async Task<RestResponse> UpdateAsync<T>(T obj) where T : IDbModel
+        public async Task<RestResponse> PutAsync<T>(T model, string? controllerName = null) where T : IDbModel
         {
-            var bodyContent = new StringContent(JsonConvert.SerializeObject(obj),
-                                              Encoding.UTF8, "application/json");
+            var modelAsJson = JsonConvert.SerializeObject(model);
 
-            var request = new RestRequest($"api/{typeof(T).Name}/{obj.Id}").AddJsonBody(bodyContent);
+
+            string endpoint = controllerName ?? typeof(T).Name + "s";
+            var request = new RestRequest(endpoint+$"/{model.Id}").AddStringBody(modelAsJson, ContentType.Json);
 
             var response = await _client.PutAsync(request);
 

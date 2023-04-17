@@ -1,0 +1,108 @@
+﻿@page "/messages/{Id:int}"
+
+@inject ApiClientService ApiClient
+@inject NavigationManager navManager
+@inject IToastService toastService
+@inject AuthenticationStateProvider authStateProvider
+
+@using System.ComponentModel.DataAnnotations;
+@using marketioBlazor.Authentication;
+@using marketioBlazor.Components.Forms.Transactions
+@using marketioBlazor.Components.UI
+
+@if (_messages == null)
+{
+    <span>Loading messages...</span>
+}
+else
+{
+    <div class="d-flex flex-column">
+        @foreach (var msg in _messages)
+        {
+            
+            <MessageBubble Message="msg" IsCurrentUser="true"/>
+        }
+    </div>
+}
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+
+    public Transaction Transaction { get; set; }
+
+    private List<Message>? _messages = null;
+
+    private string _messageText = "";
+
+    private UserSessionDTO? _userSession;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = (CustomAuthenticationStateProvider)authStateProvider;
+        _userSession = await authState.GetToken();
+
+        if (_userSession == null)
+        {
+            navManager.NavigateTo("/login");
+            return;
+        }
+
+
+        Transaction = await ApiClient.GetByIdAsync<Transaction>(Id);
+
+        if (Transaction == null)
+        {
+            navManager.NavigateTo("/error");
+            return;
+        }
+
+        // update message to read
+        var messages = await ApiClient.GetMessagesByTransactionId(Transaction.Id);
+
+        foreach (var msg in messages)
+        {
+            if (msg.ReceiverId == _userSession.UserId && msg.ReadByReceiver == false)
+            {
+                msg.ReadByReceiver = true;
+                await ApiClient.PutAsync(msg);
+            }
+        }
+
+
+    }
+
+    private async void SendMessage()
+    {
+        if (_userSession == null)
+        {
+            return;
+        }
+
+        if (string.IsNullOrWhiteSpace(_messageText))
+        {
+            toastService.ShowWarning("Enter a message.");
+            return;
+        }
+
+        var message = new Message
+        {
+            Content = _messageText,
+            TransactionId = Transaction.Id,
+            SenderId = _userSession.UserId,
+            ReceiverId = Transaction.SellerId,
+            DateSent = DateTime.UtcNow,
+            ReadByReceiver = false,
+        };
+
+        await ApiClient.PostAsync<Message>(message);
+
+        if (_messages != null)
+        {
+            _messages.Add(message);
+            _messageText = "";
+        }
+    }
+
+}
+
