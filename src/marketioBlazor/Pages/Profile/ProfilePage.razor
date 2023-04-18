@@ -1,5 +1,8 @@
 ﻿@page "/profile/{Id:int}"
+@using Blazored.Modal.Services;
+@using Blazored.Modal;
 @using marketioBlazor.Authentication;
+@using marketioBlazor.Components.UI;
 @inject IToastService toastService
 @inject ApiClientService ApiClient
 @inject NavigationManager navManager
@@ -101,8 +104,12 @@
                                         <span>@listing.Category.Name</span>
                                         <p>@listing.PriceString</p>
                                     </div>
-                                    <div>
+                                    <div class="d-flex flex-column gap-1">
                                         <a class="btn btn-primary rounded btn-sm" href="/listings/@listing.Id">View Listing</a>
+                                        @if (IsCurrentUser)
+                                        {
+                                            <button class="btn btn-danger rounded btn-sm" @onclick="() => ShowModal(listing)">Delete Listing</button>
+                                        }
                                     </div>
                                 </div>
                                 <br/>
@@ -123,6 +130,7 @@
 
 @code {
     [Parameter] public int Id { get; set; }
+    [CascadingParameter] public IModalService Modal { get; set; }
 
     public User User { get; set; }
     private EditContext? editContext;
@@ -181,6 +189,14 @@
         ToggleEditMode();
         StateHasChanged();
 
+    }
+
+    private void ShowModal(Listing listing)
+    {
+        var parameters = new ModalParameters()
+        .Add(nameof(DeleteListingModal.Listing), listing);
+
+        Modal.Show<DeleteListingModal>("Delete Listing", parameters);
     }
 
     private void ToggleEditMode()

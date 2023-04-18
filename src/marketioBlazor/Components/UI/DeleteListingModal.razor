@@ -1,0 +1,56 @@
+﻿@using Blazored.Modal;
+@using marketioBlazor.Authentication;
+@inject ApiClientService ApiClient
+@inject AuthenticationStateProvider authStateProvider
+@inject NavigationManager navManager
+@inject IToastService toastService
+
+@if (Listing != null)
+{
+    
+<div>
+    <p>Are you sure you want to delete '@Listing.Title' ?</p>
+
+    <button class="btn btn-outline-danger rounded" @onclick="HandleDeleteListing">Yes</button>
+    <button class="btn btn-primary rounded" @onclick="Close">No</button>
+</div>
+
+}
+
+@code {
+    [CascadingParameter] BlazoredModalInstance BlazoredModal { get; set; } = default!;
+
+    [Parameter] public Listing Listing { get; set; }
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        var auth = (CustomAuthenticationStateProvider)authStateProvider;
+        var userSession = await auth.GetToken();
+
+        if (userSession == null)
+        {
+            navManager.NavigateTo("/login");
+            return;
+        }
+    }
+
+    public async void HandleDeleteListing()
+    {
+        var res = await ApiClient.DeleteAsync<Listing>(Listing.Id);
+
+        if (res.IsSuccessStatusCode)
+        {
+            toastService.ShowInfo($"You have successfully delete '{Listing.Title}'");
+        }
+        else
+        {
+            toastService.ShowError("An error occured.");
+        }
+
+        await Close();
+        navManager.NavigateTo($"/profile/{Listing.UserId}");
+    }
+
+    private async Task Close() => await BlazoredModal.CloseAsync();
+}
