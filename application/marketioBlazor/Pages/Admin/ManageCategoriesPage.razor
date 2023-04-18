@@ -2,9 +2,12 @@
 @attribute [Authorize(Roles = "Administrator")]
 @using marketioBlazor.Components.Forms.ListingCategories;
 @inject ApiClientService ApiClient
-<div>
+<div class="container">
     <CreateListingCategoryForm />
 
+
+    <h3>All Categories</h3>
+    <hr/>
     <TableTemplate Items="_categories" Context="category">
         <TableHeader>
             <th>Id</th>
@@ -30,7 +33,6 @@
 
     protected override async Task OnInitializedAsync()
     {
-        ApiClient = new ApiClientService();
-        _categories = await ApiClient.GetAsync<ListingCategory>();
+        _categories = await ApiClient.GetAsync<ListingCategory>("ListingCategories");
     }
 }

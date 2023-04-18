@@ -27,7 +27,7 @@
     </button>
 
     @*error message display *@
-    <label class="text-danger fw-bold">@errorMessage</label>
+    <label class="text-danger fw-bold px-2">@errorMessage</label>
 
     <br/>
     Don't have an account?
@@ -73,12 +73,12 @@
             }    
             else if (loginResponse.StatusCode == System.Net.HttpStatusCode.BadRequest)
             {
-                errorMessage = "Username of password is incorrect.";
+                errorMessage = "Username or password is incorrect.";
             }
         }
         catch
         {
-            errorMessage = "Failed to connected to server.";
+            errorMessage = "Username or password is incorrect.";
         }
           
     }
