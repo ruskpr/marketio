@@ -15,20 +15,20 @@
 
     <nav>
         @* home button link *@
-        <div class="btn nav-item px-3">
+        <div class="btn">
             <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
                 <span class="oi oi-home" aria-hidden="true"></span> Home
             </NavLink>
         </div>
         @* listings page link *@
-        <div class="btn nav-item px-3">
+        <div class="btn">
             <NavLink class="nav-link" href="listings" Match="NavLinkMatch.All">
-                <span class="oi oi-dollar" aria-hidden="true"></span> Listings
+                <span class="oi oi-dollar text-success" aria-hidden="true"></span> Listings
             </NavLink>
         </div>
 
         @* messages page link *@
-        <div class="btn nav-item px-3">
+        <div class="btn">
             <NavLink class="position-relative nav-link" href="messages" Match="NavLinkMatch.All">
                 <span class="oi oi-envelope-closed" aria-hidden="true"></span> Messages&nbsp;
             @if (_hasNotifications)
@@ -38,9 +38,9 @@
             </NavLink>
         </div>
         @* profile link *@
-        <div class="btn nav-item px-3">
-            @if (userSession != null)
-            {
+        @if (userSession != null)
+        {
+        <div class="btn">
             <a class="position-relative nav-link" href="profile/@userSession.UserId" Match="NavLinkMatch.All">
                 <span class="oi oi-person" aria-hidden="true"></span> Profile&nbsp;
                 @if (_hasNotifications)
@@ -48,20 +48,20 @@
                     <i class="oi oi-bell position-absolute top-0 badge text-white bg-danger rounded-pill">&#8203;</i>
                 }
             </a>
-            }
         </div>
+        }
 
         <AuthorizeView>
          
             @* show register & login for user that are not signed in *@
             <NotAuthorized>
 
-                <div class="btn nav-item px-3">
+                <div class="btn">
                     <NavLink class="nav-link" href="register">
                         <span class="oi oi-people" aria-hidden="true"></span> Register
                     </NavLink>
                 </div>
-                <div class="btn nav-item px-3">
+                <div class="btn">
                     <NavLink class="nav-link" href="login">
                         <span class="oi oi-account-login" aria-hidden="true"></span> Login
                     </NavLink>
@@ -73,7 +73,7 @@
 
         @* show admin link if user is admin*@
         <AuthorizeView Roles="Administrator">
-            <div class="btn nav-item px-3 text-warning">
+            <div class="btn text-warning">
                 <NavLink class="nav-link" href="admin">
                     <span class="oi oi-key" aria-hidden="true"></span> Admin
                 </NavLink>
@@ -84,7 +84,7 @@
 
             @* show register & login for user that are not signed in *@
             <Authorized>
-                <div class="btn nav-item px-3" @onclick="Logout">
+                <div class="btn" @onclick="Logout">
                     <span class="oi oi-account-login"  aria-hidden="true"></span> Logout
 
                 </div>
