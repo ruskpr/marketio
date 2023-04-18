@@ -25,7 +25,10 @@
                         }
                         <div class="card rounded">
                             <div class="card-header d-flex justify-content-between align-items-center">
-                                <h1 class="text-center">@User.FullName</h1>
+                                <h2 class="text-center pt-2">
+                                    <span class="badge-pill py-2 px-4 bg-primary text-white "><i class="oi oi-star text-warning">&nbsp;</i>@UserRatings.Average(x=>x.Rating).ToString("n1")</span>
+                                    @User.FullName
+                                </h2>
                                 @if (IsCurrentUser)
                                 {
                                 <button class="btn btn-outline-secondary rounded" @onclick="ToggleEditMode">Edit <i class="oi oi-pencil"></i></button>
@@ -70,12 +73,12 @@
                                 }
                                 else
                                 {
-                                <p><span class="fw-bold">Email:</span> @User.Email</p>
-                                <p><span class="fw-bold">Address:</span> @User.Address</p>
-                                <p><span class="fw-bold">City:</span> @User.City</p>
-                                <p><span class="fw-bold">Country:</span> @User.Country</p>
-                                <p><span class="fw-bold">Postal Code:</span> @User.PostalCode</p>
-                                <p><span class="fw-bold">Phone:</span> @User.Phone</p>
+                                    <p><span class="fw-bold">Email:</span> @User.Email</p>
+                                    <p><span class="fw-bold">Address:</span> @User.Address</p>
+                                    <p><span class="fw-bold">City:</span> @User.City</p>
+                                    <p><span class="fw-bold">Country:</span> @User.Country</p>
+                                    <p><span class="fw-bold">Postal Code:</span> @User.PostalCode</p>
+                                    <p><span class="fw-bold">Phone:</span> @User.Phone</p>
                                 }
 
                                
@@ -87,15 +90,19 @@
                         <br/>
                         <br/>
                         <div>
-                            <span>Ratings (@UserRatings.Count)</span>
+                            <span>@User.FullName's Listings (@UserRatings.Count)</span>
                             <hr/>
 
-                            @foreach (var rating in UserRatings)
+                            @foreach (var listing in Listings)
                             {
-                                <div class="list-group">
-                                    <div class="list-group-item rounded bg-secondary d-flex justify-content-start gap-2 flex-wrap align-items-center">
-                                        <span class="badge bg-primary rounded-pill"><i class="oi oi-star text-warning"></i>@rating.Rating</span>
-                                        <span>on @rating.DateCreated.ToLocalTime().ToShortDateString()</span>
+                                <div class="border rounded p-2 d-flex justify-content-between">
+                                    <div class="rounded bg-secondary">
+                                        <span class="fs-4 fw-bold"><i class="oi oi-tag">&nbsp;</i>@listing.Title</span>
+                                        <span>@listing.Category.Name</span>
+                                        <p>@listing.PriceString</p>
+                                    </div>
+                                    <div>
+                                        <a class="btn btn-primary rounded btn-sm" href="/listings/@listing.Id">View Listing</a>
                                     </div>
                                 </div>
                                 <br/>
@@ -107,7 +114,7 @@
         }
     </Authorized>
     <NotAuthorized>
-
+        Un-authorized. <a href="/login">Login</a>
     </NotAuthorized>
 </AuthorizeView>
 <div>
@@ -121,6 +128,8 @@
     private EditContext? editContext;
 
     public List<UserRating> UserRatings { get; set; } = new List<UserRating>();
+
+    public List<Listing> Listings { get; set; }
 
     public bool IsCurrentUser { get; set; } = false;
 
@@ -152,7 +161,10 @@
 
         UserRatings = await ApiClient.GetUserRatingByUserId(User.Id);
 
+        var l = await ApiClient.GetAsync<Listing>();
+        Listings = l.Where(x => x.UserId == User.Id).ToList();
 
+        if (Listings == null) Listings = new List<Listing>();
 
         _loading = false;
     }
