@@ -123,6 +123,14 @@ namespace Common
             return messages.Where(m => m.TransactionId == transactionId).ToList();
         }
 
+        public async Task<List<UserRating>> GetUserRatingByUserId(int userId)
+        {
+            var request = new RestRequest($"api/UserRatings");
+            var response = await _client.GetAsync(request);
+            List<UserRating> userRatings = JsonConvert.DeserializeObject<List<UserRating>>(response.Content) ?? new List<UserRating>();
+            return userRatings.Where(m => m.UserId == userId).ToList();
+        }
+
         #endregion
 
         #region post

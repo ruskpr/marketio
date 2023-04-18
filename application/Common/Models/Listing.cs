@@ -59,6 +59,9 @@ namespace Common.Models
         {
             get
             {
+                if (Price == 0.0m)
+                    return "Free";
+
                 if (Price.HasValue)
                 {
                     var str = Price.Value.ToString("C");

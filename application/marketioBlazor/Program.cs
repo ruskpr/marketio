@@ -1,3 +1,4 @@
+using Blazored.Modal;
 using Blazored.SessionStorage;
 using Blazored.Toast;
 using Common;
@@ -18,6 +19,7 @@ builder.Services.AddSingleton<WeatherForecastService>();
 builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthenticationStateProvider>(); // added
 builder.Services.AddScoped<CookieStorageAccessor>();
 builder.Services.AddBlazoredSessionStorage(); // added
+builder.Services.AddBlazoredModal();
 builder.Services.AddAuthenticationCore();
 builder.Services.AddAuthentication("Identity.Application").AddCookie();
 

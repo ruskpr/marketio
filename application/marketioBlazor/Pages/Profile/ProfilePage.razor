@@ -1,0 +1,181 @@
+﻿@page "/profile/{Id:int}"
+@using marketioBlazor.Authentication;
+@inject IToastService toastService
+@inject ApiClientService ApiClient
+@inject NavigationManager navManager
+@inject AuthenticationStateProvider authStateProvider
+
+<AuthorizeView>
+    <Authorized>
+        @if (_loading)
+        {
+            <span>loading user details...</span>
+        }
+        else if (User != null)
+        {
+            <div class="container mt-3">
+                <div class="row justify-content-center">
+                    <div class="col-md-6">
+                        @if (IsCurrentUser)
+                        {
+                        <h1>My Profile</h1>
+                        <br/>
+                        <br/>
+                        }
+                        <div class="card rounded">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h1 class="text-center">@User.FullName</h1>
+                                @if (IsCurrentUser)
+                                {
+                                <button class="btn btn-outline-secondary rounded" @onclick="ToggleEditMode">Edit <i class="oi oi-pencil"></i></button>
+                                }
+                            </div>
+                            <div class="card-body">
+                                @if (_editMode)
+                                {
+                                    <EditForm Context="formContext" Model="User" OnValidSubmit="OnValidSubmit" class="">
+                                        @* address *@
+                                        <div class="pb-3">
+                                            <span class="form-label">Address</span>
+                                            <InputText @bind-Value="@User.Address" class="form-control border rounded"/>
+                                        </div>
+
+                                        @* city *@
+                                        <div class="pb-3">
+                                            <span class="form-label">City</span>
+                                            <InputText @bind-Value="@User.City" class="form-control border rounded" />
+                                        </div>
+
+                                        @* country *@
+                                        <div class="pb-3">
+                                            <span class="form-label">Country</span>
+                                            <InputText @bind-Value="@User.Country" class="form-control border rounded" />
+                                        </div>
+
+                                        @* postal code *@
+                                        <div class="pb-3">
+                                            <span class="form-label">PostalCode</span>
+                                            <InputText @bind-Value="@User.PostalCode" class="form-control border rounded" />
+                                        </div>
+
+                                        @* phone *@
+                                        <div class="pb-3">
+                                            <span class="form-label">Phone</span>
+                                            <InputText @bind-Value="@User.Phone" class="form-control border rounded" />
+                                        </div>
+
+                                        <button type="submit" class="btn btn-primary rounded">Save</button>
+                                    </EditForm>
+                                }
+                                else
+                                {
+                                <p><span class="fw-bold">Email:</span> @User.Email</p>
+                                <p><span class="fw-bold">Address:</span> @User.Address</p>
+                                <p><span class="fw-bold">City:</span> @User.City</p>
+                                <p><span class="fw-bold">Country:</span> @User.Country</p>
+                                <p><span class="fw-bold">Postal Code:</span> @User.PostalCode</p>
+                                <p><span class="fw-bold">Phone:</span> @User.Phone</p>
+                                }
+
+                               
+                            </div>
+
+                            
+                        </div>
+
+                        <br/>
+                        <br/>
+                        <div>
+                            <span>Ratings (@UserRatings.Count)</span>
+                            <hr/>
+
+                            @foreach (var rating in UserRatings)
+                            {
+                                <div class="list-group">
+                                    <div class="list-group-item rounded bg-secondary d-flex justify-content-start gap-2 flex-wrap align-items-center">
+                                        <span class="badge bg-primary rounded-pill"><i class="oi oi-star text-warning"></i>@rating.Rating</span>
+                                        <span>on @rating.DateCreated.ToLocalTime().ToShortDateString()</span>
+                                    </div>
+                                </div>
+                                <br/>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </Authorized>
+    <NotAuthorized>
+
+    </NotAuthorized>
+</AuthorizeView>
+<div>
+
+</div>
+
+@code {
+    [Parameter] public int Id { get; set; }
+
+    public User User { get; set; }
+    private EditContext? editContext;
+
+    public List<UserRating> UserRatings { get; set; } = new List<UserRating>();
+
+    public bool IsCurrentUser { get; set; } = false;
+
+    bool _loading = true;
+    bool _editMode = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        User = await ApiClient.GetByIdAsync<User>(Id);
+
+        if (User is null)
+            navManager.NavigateTo("/error");
+
+        editContext = new EditContext(User);
+        // get auth token 
+        var auth = (CustomAuthenticationStateProvider)authStateProvider;
+        var userSession = await auth.GetToken();
+
+        if (userSession == null)
+        {
+            navManager.NavigateTo("/login");
+            return;
+        }
+
+        if (userSession.UserId == User.Id)
+        {
+            IsCurrentUser = true;
+        }
+
+        UserRatings = await ApiClient.GetUserRatingByUserId(User.Id);
+
+
+
+        _loading = false;
+    }
+
+    private async void OnValidSubmit()
+    {
+        var result = await ApiClient.PutAsync<User>(User);
+
+        if (result.IsSuccessStatusCode)
+            toastService.ShowSuccess("Your profile was updated successfully.");
+        else
+            toastService.ShowError("An error occured.");
+
+        ToggleEditMode();
+        StateHasChanged();
+
+    }
+
+    private void ToggleEditMode()
+    {
+        _editMode = !_editMode;
+    }
+
+}
+
+
+

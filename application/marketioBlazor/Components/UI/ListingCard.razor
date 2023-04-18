@@ -1,9 +1,17 @@
-﻿<div class="row border rounded-3">
+﻿@inject ApiClientService ApiClient
+
+<div class="row border rounded-3">
     <div class="col-5 p-0">
         @if (Listing.ImagesBase64.Count > 0)
         {
-            <a href="listings/@Listing.Id" class="overflow-hidden" >
-            <img src="@Listing.ImagesBase64[0].ImageAsBase64" class="rounded-start img-fluid" />
+            <a href="listings/@Listing.Id" class="position-relative h-100 border"  >
+            <img src="@Listing.ImagesBase64[0].ImageAsBase64" class="rounded img-fluid"/>
+            @if (Listing.ImagesBase64.Count > 1)
+            {
+                <div class="position-absolute bottom-0">
+                    <span class="badge text-black pt-1">+@moreImages more images</span>
+                </div>
+            }
             </a>
         }
         else
@@ -20,11 +28,19 @@
             @* title*@
             <h2 class="card-title font-weight-bold"><a class="text-decoration-none" href="listings/@Listing.Id">@Listing.Title</a></h2>
             @* price *@
+            <div>
             <h2 class="fw-light">@Listing.PriceString</h2>
+                @if (@Listing.IsNegotiable)
+                {
+                    <p style="text-align:right;" class="fw-bold">Negotiable&nbsp;<i class="oi oi-tags"></i></p>
+                }
+            </div>
        </div>
 
        @* category *@
-        <span class="">@Listing.Category.Name</span>
+        <span class="">@Listing.Category.Name</span><br />
+        Posted by: <a href="/profile/@Listing.User.Id" class="fw-bold">@Listing.User.FullName</a>
+        <span><i class="oi oi-star text-warning"></i> @avgRating.ToString("n1") (@totalRatings)</span>
         <br/>
         <br/>
         @* description *@
@@ -64,9 +80,11 @@
 
         <br/>
         <br/>
+        <br/>
+        <br/>
         <div class="position-absolute p-3 bottom-0 end-0">
 
-        <a href="listings/@Listing.Id" class="btn btn-primary mb-0">View listing</a>
+        <a href="listings/@Listing.Id" class="btn btn-primary rounded mb-0">View listing</a>
         </div>
     </div>
 </div>
@@ -77,4 +95,29 @@
     public Listing Listing { get; set; }
 
     bool showFullDescription = false;
+
+    int moreImages = 0;
+    double avgRating = 0;
+    string totalRatings = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        var ratings = await ApiClient.GetUserRatingByUserId(Listing.UserId);
+        totalRatings = ratings.Count + " ratings";
+        if (ratings.Count == 1)
+            totalRatings = ratings.Count + " rating";
+
+
+        if (ratings.Count > 0)
+        {
+            avgRating = ratings.Average(r => r.Rating);
+        }
+
+        if (Listing.ImagesBase64.Count > 1)
+        {
+            moreImages = Listing.ImagesBase64.Count - 1;
+        }
+        StateHasChanged();
+
+    }
 }

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Common.Models;
 using marketioWebAPI.Data;
+using Microsoft.AspNetCore.Identity;
 
 namespace marketioWebAPI.Controllers
 {
@@ -90,10 +91,13 @@ namespace marketioWebAPI.Controllers
           {
               return Problem("Entity set 'marketioContext.UserRatings'  is null.");
           }
+
+            userRating.User = null;
+
             _context.UserRatings.Add(userRating);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetUserRating", new { id = userRating.Id }, userRating);
+            return NoContent();
         }
 
         // DELETE: api/UserRatings/5

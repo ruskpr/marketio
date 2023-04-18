@@ -37,6 +37,19 @@
             }
             </NavLink>
         </div>
+        @* profile link *@
+        <div class="btn nav-item px-3">
+            @if (userSession != null)
+            {
+            <a class="position-relative nav-link" href="profile/@userSession.UserId" Match="NavLinkMatch.All">
+                <span class="oi oi-person" aria-hidden="true"></span> Profile&nbsp;
+                @if (_hasNotifications)
+                {
+                    <i class="oi oi-bell position-absolute top-0 badge text-white bg-danger rounded-pill">&#8203;</i>
+                }
+            </a>
+            }
+        </div>
 
         <AuthorizeView>
          
@@ -93,10 +106,12 @@
 
     private bool _hasNotifications = false;
 
+    private UserSessionDTO userSession;
+
     protected override async Task OnInitializedAsync()
     {
         var customAuthStateProvider = (CustomAuthenticationStateProvider)authStateProvider;
-        var userSession = await customAuthStateProvider.GetToken();
+        userSession = await customAuthStateProvider.GetToken();
 
         if (userSession == null)
         {
@@ -104,7 +119,7 @@
             return;
         }
 
-        var res = await ApiClient.GetByIdAsync<User>(userSession.UserId);
+        //var res = await ApiClient.GetByIdAsync<User>(userSession.UserId);
 
 
     }

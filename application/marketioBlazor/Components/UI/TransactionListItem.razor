@@ -1,3 +1,5 @@
+@using Blazored.Modal.Services;
+@using Blazored.Modal;
 @using marketioBlazor.Authentication;
 @inject AuthenticationStateProvider authStateProvider
 @inject ApiClientService ApiClient
@@ -55,11 +57,15 @@ else
         } 
         </div>
     </div>
+
+
 }
 
 
 @code {
     [Parameter] public Transaction Transaction { get; set; }
+    [CascadingParameter] public IModalService Modal { get; set; }
+
 
     string usernameToDisplay = "";
 
@@ -101,6 +107,8 @@ else
         _hasUnreadMessages = messages.ToList().Any(x => x.ReadByReceiver == false);
 
         _loading = false;
+
+
     }
 
     private void GoToConversation(int id)
@@ -110,6 +118,9 @@ else
 
     private async void MarkAsComplete()
     {
+        ShowModal();
+        return;
+
         var t = Transaction;
         t.Completed = true;
         t.DateCompleted = DateTime.UtcNow;
@@ -118,6 +129,14 @@ else
         _showModal = true;
 
         //navManager.NavigateTo("/messages");
-        
+
+    }
+
+    private void ShowModal()
+    {
+        var parameters = new ModalParameters()
+        .Add(nameof(ReviewModal.Transaction), Transaction);
+
+        Modal.Show<ReviewModal>("Review", parameters);
     }
 }

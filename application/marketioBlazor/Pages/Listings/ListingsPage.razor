@@ -1,50 +1,109 @@
 ﻿@page "/listings"
 @using marketioBlazor.Components.UI
 @inject ApiClientService ApiClient
+@inject IToastService toastService
 
 <div class="container">
 <br/>
 <h3>Listings</h3>
+<a href="/listings/create" class="btn btn-success btn-sm rounded mb-3 py-2">Create a new listing</a>
 
-    @if (_loading)
+<EditForm Model="SearchTerm" OnSubmit="Search" class="input-group mb-3">
+    <InputText type="text" class="form-control rounded-start border" placeholder="Search" @bind-Value="@SearchTerm" />
+    <div class="input-group-append">
+        <button class="btn btn-primary rounded-end" type="submit">Search</button>
+        <button class="btn btn-outline-secondary rounded" type="button" @onclick="ClearSearch">Clear</button>
+    </div>
+</EditForm>
+
+@if (_loading)
+{
+    <br/>
+    <span>Loading listings...</span>
+}
+else
+{
+        
+    @if (_listings.Count == 0)
     {
         <br/>
-        <span>Loading listings...</span>
+        <br/>
+        <br/>
+        <br/>
+        <span>No listings found.</span>
+        <br />
+        <br />
+        <button @onclick="ClearSearch" class="btn btn-primary rounded">reset search filters</button>
     }
+    else if (!string.IsNullOrWhiteSpace(SearchTerm))
+    {
+        <span>Showing results for "@SearchTerm" (@_listings.Count)</span>
+    }
+
     else
     {
-        
-
-<span>All listings (@_listings.Count)</span>
-
-<a href="/listings/create" class="btn btn-link">Create a new listing</a>
-
-<div class="d-grid gap-3">
-    @foreach (var listing in _listings)
-    {
-        <div class="">
-            <ListingCard Listing="listing" />
-        </div>
+        <span>All listings (@_listings.Count)</span>
     }
-</div>
 
-<br/>
-<br/>
-<br/>
-<br/>
-    }
+
+    <div class="d-grid gap-3">
+        @foreach (var listing in _listings)
+        {
+            <div class="">
+                <ListingCard Listing="listing" />
+            </div>
+        }
+    </div>
+
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+}
 </div>
 
 @code {
     private List<Listing> _listings = new List<Listing>();
-
+    private EditContext? _editContext;
     private bool _loading = true;
+
+    public string SearchTerm { get; set; } = "";
 
     protected override async Task OnInitializedAsync()
     {
+        _editContext = new EditContext(SearchTerm);
+
         ApiClient = new ApiClientService();
         _listings = await ApiClient.GetAsync<Listing>();
 
         _loading = false;
+    }
+
+    private async Task Search()
+    {
+        if (string.IsNullOrWhiteSpace(SearchTerm))
+        {
+            toastService.ShowInfo("Enter a search term.");
+            return;
+        }
+
+        _loading = true;
+        _listings = await ApiClient.GetAsync<Listing>();
+        _listings = _listings.Where(x => x.Title.ToLower().Contains(SearchTerm.ToLower()) ||
+                    x.TagString.ToLower().Contains(SearchTerm.ToLower()) ||
+                    x.PriceString.ToLower().Contains(SearchTerm.ToLower()) ||
+                    x.Description.ToLower().Contains(SearchTerm.ToLower())).ToList();
+
+        _loading = false;
+
+    }
+
+    private async Task ClearSearch()
+    {
+        _loading = true;
+        SearchTerm = "";
+        _listings = await ApiClient.GetAsync<Listing>();
+        _loading = false;
+
     }
 }
