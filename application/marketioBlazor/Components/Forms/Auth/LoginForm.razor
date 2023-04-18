@@ -65,20 +65,19 @@
 
             if (loginResponse.IsSuccessStatusCode)
             {
-
                 var userSession = JsonConvert.DeserializeObject<UserSessionDTO>(loginResponse.Content);
                 var customAuthStateProvider = (CustomAuthenticationStateProvider)authStateProvider;
                 await customAuthStateProvider.UpdateAuthenticationState(userSession);
                 navManager.NavigateTo("/", true);
             }    
-            else if (loginResponse.StatusCode == System.Net.HttpStatusCode.BadRequest)
+            else
             {
                 errorMessage = "Username or password is incorrect.";
             }
         }
         catch
         {
-            errorMessage = "Username or password is incorrect.";
+            errorMessage = "Failed to reach server.";
         }
           
     }
