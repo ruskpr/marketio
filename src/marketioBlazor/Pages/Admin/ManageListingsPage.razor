@@ -1,11 +1,14 @@
 ﻿@page "/admin/manage-listings"
 @attribute [Authorize(Roles = "Administrator")]
+@using Blazored.Modal;
+@using Blazored.Modal.Services;
 @using marketioBlazor.Components.Forms.ListingCategories;
+@using marketioBlazor.Components.UI;
 @inject ApiClientService ApiClient
 <PageTitle>market.io - Manage Categories</PageTitle>
 
 <div class="container my-5">
-    <a href="/admin"><i class="oi oi-arrow-circle-left pe-1"></i>Back</a>
+    <a href="/admin"><i class="oi oi-arrow-circle-left pe-1 mb-3"></i>Back</a>
 
     <h3>All Listings</h3>
     <hr/>
@@ -23,7 +26,8 @@
             <td>@listing.PriceString</td>
             <td>@listing.DateCreated</td>
             <td>
-                <a href="/listings/@listing.Id" class="btn btn-primary">View Listing</a>
+                <a href="/listings/@listing.Id" class="btn btn-primary btn-sm rounded">View Listing</a>
+                <button @onclick="() => ShowModal(listing)" class="btn btn-danger btn-sm rounded">Delete Listing</button>
             </td>
         </RowTemplate>
     </TableTemplate>
@@ -32,10 +36,19 @@
 
 @code {
     private List<Listing> _listings = new List<Listing>();
+    [CascadingParameter] public IModalService Modal { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
         _listings = await ApiClient.GetAsync<Listing>();
 
+    }
+
+    private void ShowModal(Listing listing)
+    {
+        var parameters = new ModalParameters()
+        .Add(nameof(DeleteListingModal.Listing), listing);
+
+        Modal.Show<DeleteListingModal>("Delete Listing", parameters);
     }
 }

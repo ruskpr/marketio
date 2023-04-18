@@ -49,7 +49,6 @@
         }
 
         await Close();
-        navManager.NavigateTo($"/profile/{Listing.UserId}");
     }
 
     private async Task Close() => await BlazoredModal.CloseAsync();
