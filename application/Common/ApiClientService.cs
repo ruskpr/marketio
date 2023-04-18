@@ -61,6 +61,12 @@ namespace Common
             return response;
         }
 
+        /// <summary>
+        /// 
+        /// Send 'RegisterDTO' object to api,
+        /// if successful, the api will return add user to database
+        /// 
+        /// </summary>
         public async Task<RestResponse> RegisterUserAsync(RegisterDTO regDTO)
         {
             var newUser = new RegisterDTO()
@@ -82,7 +88,11 @@ namespace Common
 
         #region get
 
-        // create a method to get all users
+        /// <summary>
+        /// 
+        /// This method will get all items from a table
+        /// 
+        /// </summary>
         public async Task<List<T>> GetAsync<T>(string? controllerName = null) where T : IDbModel
         {
             List<T>? ret = new List<T>();
@@ -160,7 +170,11 @@ namespace Common
 
         #region put
 
-        // create a generic method to update any object
+        /// <summary>
+        /// 
+        /// Generic method that is able to update and IDbModel object
+        /// 
+        /// </summary>
         public async Task<RestResponse> PutAsync<T>(T model, string? controllerName = null) where T : IDbModel
         {
             var modelAsJson = JsonConvert.SerializeObject(model);
@@ -183,6 +197,21 @@ namespace Common
 
         #endregion
 
+        #region delete
+
+        /// <summary>
+        /// 
+        /// Deletes the item with the given id
+        /// 
+        /// </summary>
+        public async Task<RestResponse> DeleteAsync<T>(int id, string? controllerName = null) where T : IDbModel
+        {
+            string endpoint = controllerName ?? typeof(T).Name + "s";
+            var request = new RestRequest($"api/{endpoint}/{id}");
+            return await _client.DeleteAsync(request);
+        }
+
+        #endregion
 
     }
 }
