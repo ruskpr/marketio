@@ -13,7 +13,7 @@ namespace Common
     {
 
         private RestClient _client;
-        private const string DEFAULT_ENDPOINT = "https://localhost:7244/";
+        private const string DEFAULT_ENDPOINT = "http://172.18.31.108:7244/";
 
         #region constructors
 

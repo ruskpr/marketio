@@ -4,10 +4,11 @@
 @using Common.Models;
 @using marketioBlazor.Components
 @inject ApiClientService ApiClient
+<PageTitle>market.io - Admin</PageTitle>
 
  <AuthorizeView Roles="Administrator">
     
-<div class="m-3">
+<div class="container">
 <h1>Admin Page</h1>
 <a href="/admin/manage-listings" class="btn btn-link">Manage listings</a>
 <a href="/admin/manage-listing-categories" class="btn btn-link">Manage Categories</a>
@@ -21,15 +22,6 @@
         <th>First Name</th>
         <th>Last Name</th>
         @*<th>Password Hash</th>*@
-        <th>Address</th>
-        <th>City</th>
-        <th>Country</th>
-        <th>PostalCode</th>
-        <th>Phone</th>
-        <th>DOB</th>
-        <th>RegisterDate</th>
-        <th>LastLogin</th>
-        <th>LastLogout</th>
         <th>IsSuperuser</th>
         <th>Actions</th>
     </TableHeader>
@@ -39,20 +31,9 @@
         <td>@user.FirstName</td>
         <td>@user.LastName</td>
         @*<td>@user.PasswordHash</td>*@
-        <td>@user.Address</td>
-        <td>@user.City</td>
-        <td>@user.Country</td>
-        <td>@user.PostalCode</td>
-        <td>@user.Phone</td>
-        <td>@user.DOB</td>
-        <td>@user.RegisterDate</td>
-        <td>@user.LastLogin</td>
-        <td>@user.LastLogout</td>
         <td>@user.IsSuperuser</td>
         <td>
             <a href="/profile/@user.Id" class="btn btn-primary">View Profile</a>
-            <a href="/profile/edit/@user.Id" class="btn btn-primary">Edit</a>
-            <a href="/profile/delete/@user.Id" class="btn btn-danger">Delete</a>
         </td>
     </RowTemplate>
 </TableTemplate>

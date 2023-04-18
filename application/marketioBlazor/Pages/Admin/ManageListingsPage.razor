@@ -1,0 +1,41 @@
+﻿@page "/admin/manage-listings"
+@attribute [Authorize(Roles = "Administrator")]
+@using marketioBlazor.Components.Forms.ListingCategories;
+@inject ApiClientService ApiClient
+<PageTitle>market.io - Manage Categories</PageTitle>
+
+<div class="container my-5">
+    <a href="/admin"><i class="oi oi-arrow-circle-left pe-1"></i>Back</a>
+
+    <h3>All Listings</h3>
+    <hr/>
+    <TableTemplate Items="_listings" Context="listing">
+        <TableHeader>
+            <th>Id</th>
+            <th>Title</th>
+            <th>Price</th>
+            <th>Date Created</th>
+            <th>Actions</th>
+        </TableHeader>
+        <RowTemplate>
+            <td>@listing.Id</td>
+            <td>@listing.Title</td>
+            <td>@listing.PriceString</td>
+            <td>@listing.DateCreated</td>
+            <td>
+                <a href="/listings/@listing.Id" class="btn btn-primary">View Listing</a>
+            </td>
+        </RowTemplate>
+    </TableTemplate>
+
+</div>
+
+@code {
+    private List<Listing> _listings = new List<Listing>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        _listings = await ApiClient.GetAsync<Listing>();
+
+    }
+}
