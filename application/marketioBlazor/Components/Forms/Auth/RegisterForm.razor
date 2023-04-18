@@ -17,33 +17,33 @@
     <div class="form-group d-grid gap-2">
         @*email*@
         <label for="email">Email address</label>
-        <InputText class="form-control" id="email" @bind-Value="registerDTO.Email" placeholder="someone@example.com" />
+        <InputText class="form-control rounded border" id="email" @bind-Value="registerDTO.Email" placeholder="someone@example.com" />
         <ValidationMessage For="@(() => registerDTO.Email)" />
 
         @*first name*@
         <label for="firstName">First name</label>
-        <InputText class="form-control" id="firstName" @bind-Value="registerDTO.FirstName" placeholder="John" />
+        <InputText class="form-control rounded border" id="firstName" @bind-Value="registerDTO.FirstName" placeholder="John" />
         <ValidationMessage For="@(() => registerDTO.FirstName)" />
 
         @*last name*@
         <label for="lastName">Last name</label>
-        <InputText class="form-control" id="lastName" @bind-Value="registerDTO.LastName" placeholder="Smith" />
+        <InputText class="form-control rounded border" id="lastName" @bind-Value="registerDTO.LastName" placeholder="Smith" />
         <ValidationMessage For="@(() => registerDTO.LastName)" />
 
         @*password*@
         <label for="password">Password</label>
-        <InputText class="form-control" id="password" @bind-Value="registerDTO.PasswordHash" placeholder="password" />
+        <InputText class="form-control rounded border" id="password" @bind-Value="registerDTO.PasswordHash" placeholder="password" />
         <ValidationMessage For="@(() => registerDTO.PasswordHash)" />
 
         @*confirm password*@
         <label for="confirmPassword">Confirm Password</label>
-        <InputText class="form-control" id="confirmPassword" @bind-Value="registerDTO.ConfirmPasswordHash" placeholder="confirm password" />
+        <InputText class="form-control rounded border" id="confirmPassword" @bind-Value="registerDTO.ConfirmPasswordHash" placeholder="confirm password" />
         <ValidationMessage For="@(() => registerDTO.ConfirmPasswordHash)" />
 
     </div>
     
     @*submit button*@
-    <button type="submit" class="btn btn-primary my-3">
+    <button type="submit" class="btn btn-primary rounded my-3">
         Register
     </button>
 

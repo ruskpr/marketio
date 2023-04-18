@@ -13,16 +13,16 @@
 
     <div class="form-group d-grid gap-2">
         <label for="email">Email address</label>
-        <InputText @bind-Value="loginDTO.Email" type="text" class="form-control" id="email" placeholder="Enter email"/>
+        <InputText @bind-Value="loginDTO.Email" type="text" class="form-control rounded border" id="email" placeholder="Enter email"/>
         <ValidationMessage For="@(() => loginDTO.Email)" />
 
         <label for="password">Password</label>
-        <input @bind="loginDTO.PasswordHash" type="password" class="form-control" id="password" placeholder="Password"/>
+        <input @bind="loginDTO.PasswordHash" type="password" class="form-control rounded border" id="password" placeholder="Password"/>
         <ValidationMessage For="@(() => loginDTO.PasswordHash)" />
     </div>
 
     @*submit button*@
-    <button type="submit" class="btn btn-primary my-3">
+    <button type="submit" class="btn btn-primary rounded my-3">
         Login
     </button>
 

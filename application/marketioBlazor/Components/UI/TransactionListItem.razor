@@ -4,6 +4,7 @@
 @inject AuthenticationStateProvider authStateProvider
 @inject ApiClientService ApiClient
 @inject NavigationManager navManager
+@inject IToastService toastService
 
 @if (_loading)
 {
@@ -74,7 +75,6 @@ else
     string lastMessageTime = "";
     bool _loading = true;
     bool _hasUnreadMessages = false;
-    bool _showModal = false;
 
     protected override async Task OnInitializedAsync()
     {
@@ -118,15 +118,22 @@ else
 
     private async void MarkAsComplete()
     {
-        ShowModal();
-        return;
 
         var t = Transaction;
         t.Completed = true;
         t.DateCompleted = DateTime.UtcNow;
-        await ApiClient.PutAsync<Transaction>(t);
+        var res = await ApiClient.PutAsync<Transaction>(t);
 
-        _showModal = true;
+        if (res.IsSuccessStatusCode)
+        {
+            ShowModal();
+            toastService.ShowInfo($"You marked '{Transaction.Listing.Title}' as completed.");
+        }
+        else
+        {
+            toastService.ShowError("An error ocurred.");
+        }
+
 
         //navManager.NavigateTo("/messages");
 
