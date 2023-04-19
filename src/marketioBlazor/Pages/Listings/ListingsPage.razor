@@ -4,9 +4,9 @@
 @inject IToastService toastService
 <PageTitle>market.io - Listings</PageTitle>
 
-<div class="container">
+<div class="container mt-3">
 <br/>
-<h3>Listings</h3>
+<h3 class="ps-1">Listings</h3>
 <a href="/listings/create" class="btn btn-success btn-sm rounded mb-3 py-2">Create a new listing</a>
 
     <EditForm Model="SearchTerm" OnSubmit="Search" class="input-group mb-3" style="width: 600px">
@@ -24,7 +24,7 @@
 }
 else
 {
-        
+    <div class="ps-2"> 
     @if (_listings.Count == 0)
     {
         <br/>
@@ -44,9 +44,9 @@ else
     {
         <span>All listings (@_listings.Count)</span>
     }
+    </div>
 
-
-    <div class="d-grid gap-3">
+    <div class="d-grid gap-3 mt-1">
         @foreach (var listing in _listings)
         {
             <div class="">

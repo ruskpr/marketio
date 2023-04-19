@@ -45,9 +45,11 @@
             <br/>
             <div class="mt-6">
                 <h1 class="display-5 fw-bolder">@Listing.Title</h1>
-                <div class="fs-5 mb-5">
+                <div class="fs-5">
                     <h2>@Listing.PriceString</h2>
                 </div>
+
+                <p class="mb-5 fw-bold fs-2">Posted by <a href="/profile/@Listing.UserId">@Listing.User.FullName</a></p>
 
                 <span class="fw-bold lead">Description</span>
                 <p class="lead">@Listing.Description</p>

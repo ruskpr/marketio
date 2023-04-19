@@ -43,7 +43,7 @@
         <label class="">Price</label>
         <div class="input-group m-0 p-0 rounded border">
             <span class="input-group-text">$</span>
-            <input disabled="@_listing.IsNegotiable" type="number" class="form-control" @bind-value="_listing.Price" aria-label="Amount (to the nearest dollar)">
+            <input type="number" class="form-control" @bind-value="_listing.Price" aria-label="Amount (to the nearest dollar)">
             <span class="input-group-text">.00</span><br/>
         </div>
         <ValidationMessage For="@(() => _listing.Price)" />
@@ -51,11 +51,7 @@
         @* is negotiable *@
         <div class="d-flex gap-3">
             <span class="form-label">Price is Negotiable?</span>
-            <InputCheckbox @onclick="(() => {
-                        if (_listing.IsNegotiable)
-                            _listing.Price = 0;
-                        })" 
-            @bind-Value="_listing.IsNegotiable" class="form-check-input" id="isNegotiable" />
+            <InputCheckbox @bind-Value="_listing.IsNegotiable" class="form-check-input" id="isNegotiable" />
         </div>
 
         @* tags *@
@@ -214,7 +210,6 @@
         errorMessage = "Something went wrong.";
     }
 
-
     private async Task HandleImageSelected(IFileListEntry[] files)
     {
         if (_photoUrls.Count == 10)
@@ -235,9 +230,6 @@
             _photoUrls.Add(imageUrl);
         }
     }
-
-
-
 
     private async Task AddImagesToDb(string[] imagesBase64, int listingId)
     {

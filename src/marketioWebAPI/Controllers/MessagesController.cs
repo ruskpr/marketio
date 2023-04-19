@@ -60,6 +60,10 @@ namespace marketioWebAPI.Controllers
                 return BadRequest();
             }
 
+            message.Sender = null;
+            message.Receiver = null;
+            message.Transaction = null;
+
             _context.Entry(message).State = EntityState.Modified;
 
             try

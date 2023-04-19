@@ -101,8 +101,17 @@ else if (_transaction != null)
         var messages = await ApiClient.GetMessagesByTransactionId(_transaction.Id);
         _messages = messages;
         var tmpMessages = _messages;
+
+
         foreach (var msg in tmpMessages)
         {
+            msg.Sender = await ApiClient.GetByIdAsync<User>(msg.SenderId);
+            msg.Receiver = await ApiClient.GetByIdAsync<User>(msg.ReceiverId);
+            msg.Transaction = await ApiClient.GetByIdAsync<Transaction>(msg.TransactionId);
+            msg.Transaction.Buyer = await ApiClient.GetByIdAsync<User>(msg.Transaction.BuyerId);
+            msg.Transaction.Seller = await ApiClient.GetByIdAsync<User>(msg.Transaction.SellerId);
+            msg.Transaction.Listing = await ApiClient.GetByIdAsync<Listing>(msg.Transaction.ListingId);
+
             if (msg.ReceiverId == _userSession.UserId && msg.ReadByReceiver == false)
             {
                 msg.ReadByReceiver = true;
@@ -118,7 +127,7 @@ else if (_transaction != null)
     {
         if (_transaction.Completed)
         {
-            toastService.ShowWarning("This transaction has been completed.");
+            toastService.ShowWarning("This transaction has been marked as complete.");
             return;
         }
 

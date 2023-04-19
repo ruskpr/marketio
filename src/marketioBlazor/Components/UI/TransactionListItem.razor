@@ -104,7 +104,18 @@ else
         var x = messages.LastOrDefault().DateSent.ToLocalTime().ToShortDateString();
         lastMessageTime = x + " " + y;
 
-        _hasUnreadMessages = messages.ToList().Any(x => x.ReadByReceiver == false);
+        foreach (var m in messages.ToList())
+        {
+            if (m.ReadByReceiver == false && m.ReceiverId == userSession.UserId)
+            {
+                _hasUnreadMessages = true;
+                break;
+            }
+            else
+            {    
+                _hasUnreadMessages = false;
+            }
+        }
 
         _loading = false;
 
