@@ -16,18 +16,20 @@
     <DataAnnotationsValidator />
     @*<ValidationSummary />*@
 
-    <div class="form-group d-grid gap-2">
+    <div class="form-group">
         @*category name field*@
-        <label for="name">Category Name</label>
-        <InputText class="form-control" id="name" @bind-Value="_category.Name" placeholder="category name" />
-        <ValidationMessage For="@(() => _category.Name)" />
+        <label for="name">Add a new category</label>
+            <div class="d-flex">
+            <InputText class="form-control rounded-start border" id="name" @bind-Value="_category.Name" placeholder="Enter a category name..." />
        
+        @*submit button*@
+        <button type="submit" class="btn btn-primary rounded-end">
+            Create @*<Spinner />*@
+        </button>
+        </div>
+            <ValidationMessage For="@(() => _category.Name)" />
     </div>
 
-    @*submit button*@
-    <button type="submit" class="btn btn-outline-primary my-3">
-        Create @*<Spinner />*@
-    </button>
 
     @*error message display *@
     <label class="text-danger fw-bold">@errorMessage</label>

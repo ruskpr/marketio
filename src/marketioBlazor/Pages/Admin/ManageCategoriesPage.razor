@@ -4,8 +4,10 @@
 @inject ApiClientService ApiClient
 <PageTitle>market.io - Manage Categories</PageTitle>
 
-<div class="container">
-    <CreateListingCategoryForm />
+<div class="container my-4">
+    <div class="col-md-4 col">
+        <CreateListingCategoryForm />
+    </div>
 
 
     <h3>All Categories</h3>
@@ -22,8 +24,7 @@
             <td>@category.Name</td>
             <td>@category.DateCreated</td>
             <td>
-                <a href="/admin/manage-listing-categories/edit/@category.Id" class="btn btn-primary">Edit</a>
-                <a href="/admin/manage-listing-categories/delete/@category.Id" class="btn btn-danger">Delete</a>
+                <a href="/admin/manage-listing-categories/delete/@category.Id" class="btn btn-outline-danger rounded">Delete</a>
             </td>
         </RowTemplate>
     </TableTemplate>

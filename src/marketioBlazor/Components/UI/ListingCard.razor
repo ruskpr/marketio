@@ -1,8 +1,8 @@
 ﻿@inject ApiClientService ApiClient
 @inject NavigationManager navManager
 
-<div class="row border rounded-3">
-    <div class="col-5 p-0">
+<div class="container-fluid px-0 d-flex border rounded-3">
+    <div class="  p-0">
         @if (Listing.ImagesBase64.Count > 0)
         {
             <div class="rounded-start position-relative" style="width: 530px; height:430px; cursor: pointer;" @onclick="GoToListing">
@@ -25,14 +25,14 @@
         }
       
     </div>
-    <div class="col p-3 position-relative">
+    <div class=" p-3 position-relative">
        <div class="d-flex justify-content-between">
            <div>
             @* title, category, and user's name*@
             <h2 class="card-title font-weight-bold"><a class="text-decoration-none" href="listings/@Listing.Id">@Listing.Title</a></h2>
             <span class="">@Listing.Category.Name</span><br />
-            Posted by: <a href="/profile/@Listing.User.Id" class="fw-bold">@Listing.User.FullName</a>
-            <span><i class="oi oi-star text-warning"></i> @avgRating.ToString("n1") (@totalRatings)</span>
+                Posted by: <a href="/profile/@Listing.User.Id" class="fw-bold">@Listing.User.FullName</a>&nbsp;&nbsp;
+                <span><i class="oi oi-star text-warning"></i> @avgRating.ToString("n1") (@totalRatings)</span>
             </div>
             @* price *@
             <div>
@@ -107,6 +107,7 @@
     protected override async Task OnInitializedAsync()
     {
         var ratings = await ApiClient.GetUserRatingByUserId(Listing.UserId);
+
         totalRatings = ratings.Count + " ratings";
         if (ratings.Count == 1)
             totalRatings = ratings.Count + " rating";
