@@ -99,7 +99,7 @@
 @code {
     private bool collapseNavMenu = true;
 
-    private string? NavMenuCssClass => collapseNavMenu ? "d-flex justify-content-center border-top w-100 flex-wrap" : "d-none d-xl-flex";
+    private string? NavMenuCssClass => collapseNavMenu ? "d-none d-xl-flex": "d-flex justify-content-center border-top w-100 flex-wrap";
 
     private void ToggleNavMenu()
     {
