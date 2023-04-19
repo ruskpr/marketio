@@ -3,17 +3,19 @@
 @inject NavigationManager navManager
 @inject ApiClientService ApiClient
 
-
-
-<div class="container d-flex justify-content-between  w-100" @onclick="ToggleNavMenu">
+<div class="container navbar py-1 w-100">
 
     @* logo *@
     <a class="logo btn fs-4" href="">market.io</a>
-    <button title="Navigation menu" class="btn d-sm-block d-none" @onclick="ToggleNavMenu">
-        <span class="navbar-toggler-icon"></span>
+
+    @* navigation menu icon *@
+    <button title="Navigation menu" class="navbar-toggler border-0 d-block d-xl-none" @onclick="ToggleNavMenu">
+        <i class="oi oi-menu fs-2"></i>
     </button>
 
-    <nav>
+
+    @* regular nav*@
+    <nav class="@NavMenuCssClass " @onclick="ToggleNavMenu">
         @* home button link *@
         <div class="btn">
             <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
@@ -96,8 +98,8 @@
 
 @code {
     private bool collapseNavMenu = true;
-
-    private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+     
+    private string? NavMenuCssClass => collapseNavMenu ? "d-none d-xl-flex" : "d-flex justify-content-center border-top w-100 flex-wrap";
 
     private void ToggleNavMenu()
     {

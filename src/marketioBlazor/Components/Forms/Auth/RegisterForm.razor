@@ -12,9 +12,8 @@
 
 <EditForm Model="registerDTO" OnValidSubmit="@HandleValidSubmit">
     <DataAnnotationsValidator />
-    @*<ValidationSummary />*@
 
-    <div class="form-group d-grid gap-2">
+    <div class="form-group d-grid gap-2 col-md-6 col">
         @*email*@
         <label for="email">Email address</label>
         <InputText class="form-control rounded border" id="email" @bind-Value="registerDTO.Email" placeholder="someone@example.com" />

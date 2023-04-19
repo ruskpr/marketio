@@ -11,7 +11,7 @@
 <EditForm Model="loginDTO" OnValidSubmit="@HandleValidSubmit">
     <DataAnnotationsValidator />
 
-    <div class="form-group d-grid gap-2">
+    <div class="form-group d-grid gap-2 col-md-6 col">
         <label for="email">Email address</label>
         <InputText @bind-Value="loginDTO.Email" type="text" class="form-control rounded border" id="email" placeholder="Enter email"/>
         <ValidationMessage For="@(() => loginDTO.Email)" />
