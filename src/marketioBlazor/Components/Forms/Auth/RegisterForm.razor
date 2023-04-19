@@ -31,12 +31,12 @@
 
         @*password*@
         <label for="password">Password</label>
-        <InputText class="form-control rounded border" id="password" @bind-Value="registerDTO.PasswordHash" placeholder="password" />
+        <InputText type="password" class="form-control rounded border" id="password" @bind-Value="registerDTO.PasswordHash" placeholder="password" />
         <ValidationMessage For="@(() => registerDTO.PasswordHash)" />
 
         @*confirm password*@
         <label for="confirmPassword">Confirm Password</label>
-        <InputText class="form-control rounded border" id="confirmPassword" @bind-Value="registerDTO.ConfirmPasswordHash" placeholder="confirm password" />
+        <InputText type="password" class="form-control rounded border" id="confirmPassword" @bind-Value="registerDTO.ConfirmPasswordHash" placeholder="confirm password" />
         <ValidationMessage For="@(() => registerDTO.ConfirmPasswordHash)" />
 
     </div>

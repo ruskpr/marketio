@@ -10,6 +10,14 @@
         <span class="fw-light" style="font-size: 11px; color: #999">
             @_dateTime
         </span>
+        @if (Message.ReadByReceiver)
+        {
+            <br />
+            <span class="fw-bold" style="font-size: 11px; color: #999">   
+                read
+            </span>
+        }
+        
                        
     </div>
     <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava6-bg.webp"
@@ -28,6 +36,14 @@ else{
             <span class="fw-light" style="font-size: 11px; color: #333">
                 @_dateTime
             </span>
+            @if (Message.ReadByReceiver)
+            {
+                <br />
+                <span class="fw-bold" style="font-size: 11px; color: #333">
+                    read
+                </span>
+            }
+
         </div>
     </div>
 }
