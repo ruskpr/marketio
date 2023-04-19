@@ -75,12 +75,15 @@
         </div>
 
         @* tags *@
-        <div class="d-flex gap-3">
-            @foreach (var tag in Listing.Tags)
+            @if (Listing.Tags != null)
             {
-                <span class="fs-5 badge bg-info rounded-pill">@tag</span>
+            <div class="d-flex gap-3">
+                    @foreach (var tag in Listing.Tags)
+                    {
+                        <span class="fs-5 badge bg-info rounded-pill">@tag</span>
+                    }
+            </div>
             }
-        </div>
 
         <br/>
         <br/>

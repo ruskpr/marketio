@@ -79,7 +79,15 @@
 
     protected override async Task OnInitializedAsync()
     {        
-        Listing = await ApiClient.GetByIdAsync<Listing>(Id);
+        try
+        {
+            Listing = await ApiClient.GetByIdAsync<Listing>(Id);
+        }
+        catch
+        {
+            navManager.NavigateTo("/error");
+            return;
+        }
 
         if (Listing == null)
         {

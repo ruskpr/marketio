@@ -8,8 +8,10 @@
             <NotFound>
                 <PageTitle>Not found</PageTitle>
                 <LayoutView Layout="@typeof(MainLayout)">
+                    <div class="container my-5">
                     <p role="alert">Sorry, there's nothing at this address.</p>
-                    <a class="btn btn-primary" href="/">Go to home page</a>
+                    <a class="btn btn-primary rounded" href="/">Go to home page</a>
+                    </div>
                 </LayoutView>
             </NotFound>
         </Router>

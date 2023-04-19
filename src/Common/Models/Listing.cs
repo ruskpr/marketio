@@ -45,7 +45,7 @@ namespace Common.Models
         public DateTime? DateUpdated { get; set; }
 
         [Column(TypeName = "varchar(50)")]
-        public string? TagString { get; set; }
+        public string? TagString { get; set; } = "";
 
         [NotMapped]
         public string[]? Tags { get; set; }

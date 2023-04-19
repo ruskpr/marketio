@@ -149,10 +149,21 @@
 
     protected override async Task OnInitializedAsync()
     {
-        User = await ApiClient.GetByIdAsync<User>(Id);
+        try
+        {
+            User = await ApiClient.GetByIdAsync<User>(Id);
+        }
+        catch
+        {
+            navManager.NavigateTo("/error");
+            return;
+        }
 
         if (User is null)
+        {
             navManager.NavigateTo("/error");
+            return;
+        }
 
         editContext = new EditContext(User);
         // get auth token 

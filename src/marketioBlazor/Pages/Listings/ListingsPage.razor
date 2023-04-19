@@ -90,7 +90,7 @@ else
         _loading = true;
         _listings = await ApiClient.GetAsync<Listing>();
         _listings = _listings.Where(x => x.Title.ToLower().Contains(SearchTerm.ToLower()) ||
-                    x.TagString.ToLower().Contains(SearchTerm.ToLower()) ||
+                    x.TagString != null && x.TagString.ToLower().Contains(SearchTerm.ToLower()) ||
                     x.PriceString.ToLower().Contains(SearchTerm.ToLower()) ||
                     x.User.FullName.ToLower().Contains(SearchTerm.ToLower()) ||
                     x.Description.ToLower().Contains(SearchTerm.ToLower())).ToList();
