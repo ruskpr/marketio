@@ -10,12 +10,12 @@
 {
 
 <!-- Product section-->
-<section class="container">
+<section class="container my-5">
         <div class="">
             @if (Listing.ImagesBase64.Count > 0)
             {
                 <div class="d-flex justify-content-center bg-black mb-2">
-                    <img src="@_selectedImage" style="width: 100%" />
+                    <img src="@_selectedImage" style="width: 100%; height: 800px; object-fit: contain" />
                 </div>
                 
                 <div class="d-flex overflow-auto">

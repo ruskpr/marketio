@@ -27,12 +27,16 @@
     </div>
     <div class="col p-3 position-relative">
        <div class="d-flex justify-content-between">
-            @* title*@
+           <div>
+            @* title, category, and user's name*@
             <h2 class="card-title font-weight-bold"><a class="text-decoration-none" href="listings/@Listing.Id">@Listing.Title</a></h2>
-            
+            <span class="">@Listing.Category.Name</span><br />
+            Posted by: <a href="/profile/@Listing.User.Id" class="fw-bold">@Listing.User.FullName</a>
+            <span><i class="oi oi-star text-warning"></i> @avgRating.ToString("n1") (@totalRatings)</span>
+            </div>
             @* price *@
             <div>
-            <h2 class="fw-light">@Listing.PriceString</h2>
+            <h2 class="fw-lighter border py-1 px-2 text-center rounded bg-dark text-white">@Listing.PriceString</h2>
                 @if (@Listing.IsNegotiable)
                 {
                     <p style="text-align:right;" class="fw-bold">Negotiable&nbsp;<i class="oi oi-tags"></i></p>
@@ -41,10 +45,7 @@
        </div>
 
        @* category *@
-        <span class="">@Listing.Category.Name</span><br />
-        Posted by: <a href="/profile/@Listing.User.Id" class="fw-bold">@Listing.User.FullName</a>
-        <span><i class="oi oi-star text-warning"></i> @avgRating.ToString("n1") (@totalRatings)</span>
-        <br/>
+        
         <br/>
         @* description *@
         <div class="card-text">

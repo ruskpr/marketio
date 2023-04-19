@@ -13,7 +13,7 @@
     <InputText type="text" class="form-control rounded-start border" placeholder="Search" @bind-Value="@SearchTerm" />
     <div class="input-group-append">
         <button class="btn btn-primary rounded-end" type="submit">Search</button>
-        <button class="btn btn-outline-secondary rounded" type="button" @onclick="ClearSearch">Clear</button>
+        <button class="btn btn-outline-dark rounded" type="button" @onclick="ClearSearch">Clear</button>
     </div>
 </EditForm>
 
@@ -40,7 +40,6 @@ else
     {
         <span>Showing results for "@SearchTerm" (@_listings.Count)</span>
     }
-
     else
     {
         <span>All listings (@_listings.Count)</span>
@@ -93,6 +92,7 @@ else
         _listings = _listings.Where(x => x.Title.ToLower().Contains(SearchTerm.ToLower()) ||
                     x.TagString.ToLower().Contains(SearchTerm.ToLower()) ||
                     x.PriceString.ToLower().Contains(SearchTerm.ToLower()) ||
+                    x.User.FullName.ToLower().Contains(SearchTerm.ToLower()) ||
                     x.Description.ToLower().Contains(SearchTerm.ToLower())).ToList();
 
         _loading = false;

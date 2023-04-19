@@ -6,12 +6,12 @@
 @inject NavigationManager navManager;
 @inject AuthenticationStateProvider authStateProvider
 
-<EditForm Model="Message" OnValidSubmit="HandleValidSubmit" class="form-group d-flex gap-2">
+<EditForm Model="Message" OnValidSubmit="HandleValidSubmit" class="form-group d-flex">
     @*title*@
-    <input class="form-control" id="message" @bind-value="Message" placeholder="message..." style="width: 300px;" />
+    <input class="form-control rounded-start border" id="message" @bind-value="Message" placeholder="message..." style="width: 300px;" />
 
     @* submit button *@
-    <button class="btn btn-outline-dark flex-shrink-0" type="submit">
+    <button class="btn btn-dark rounded-end flex-shrink-0" type="submit">
         <i class="bi-cart-fill me-1"></i>
         Message Seller
     </button>
