@@ -1,6 +1,8 @@
 # market.io
 ### A web application that allows you to connect with users to buy, sell, and advertise items, services, real estate, and many more... 
+
 ![plot](./images/home.png)
+
 ## Project Overview
 market.io allows users to register and login to personal accounts to list their items, homes for sale/rent, jobs, and other types of listings to the public. This includes the ability to enquire and send private chat messages between each other to negotiate and agree upon transactions.
 
@@ -8,6 +10,8 @@ market.io allows users to register and login to personal accounts to list their 
 - Backend: SQL Entity Framework Core / SQL design with stored proecdures and LINQ
 - Frontend: Blazor Web App
 - Web API: ASP.NET Core Web API (to handle REST/HTTP operations, token authentication) 
+
+![plot](./images/listings.png)
 
 ## Software Architechture
 ### Blazor Server App
@@ -26,6 +30,8 @@ market.io allows users to register and login to personal accounts to list their 
 ### 'Common' C# Library 
 - Contains models, helper classes/methods
 - Used between all applications
+
+![plot](./images/listing-detail-page.png)
 
 ### Testing
 - Postman API for Web API tests
