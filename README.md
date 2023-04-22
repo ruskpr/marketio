@@ -34,5 +34,4 @@ market.io allows users to register and login to personal accounts to list their 
 ![plot](./images/listing-detail-page.png)
 
 ### Testing
-- Postman API for Web API tests
-- GET, PUT, POST, DELETE
+- https://www.postman.com/ for Web API testing and quality assurance
