@@ -7,9 +7,9 @@
 market.io allows users to register and login to personal accounts to list their items, homes for sale/rent, jobs, and other types of listings to the public. This includes the ability to enquire and send private chat messages between each other to negotiate and agree upon transactions.
 
 ## Project Technologies
-- Backend: SQL Entity Framework Core / SQL design with stored proecdures and LINQ
-- Frontend: Blazor Web App
-- Web API: ASP.NET Core Web API (to handle REST/HTTP operations, token authentication) 
+- Backend: SQL Entity Framework Core / SQL schema & C# LINQ
+- Frontend: Blazor
+- Web API: ASP.NET Core Web API (to handle REST/HTTP operations, token authentication, and SQL data manipulation) 
 
 ![plot](./images/listings.png)
 
@@ -32,6 +32,3 @@ market.io allows users to register and login to personal accounts to list their 
 - Used between all applications
 
 ![plot](./images/listing-detail-page.png)
-
-### Testing
-- https://www.postman.com/ is used for Web API testing and quality assurance
