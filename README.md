@@ -34,4 +34,4 @@ market.io allows users to register and login to personal accounts to list their 
 ![plot](./images/listing-detail-page.png)
 
 ### Testing
-- https://www.postman.com/ for Web API testing and quality assurance
+- https://www.postman.com/ is used for Web API testing and quality assurance
